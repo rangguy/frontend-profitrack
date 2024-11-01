@@ -1,16 +1,15 @@
 function Footer() {
   return (
     <div>
-      <footer className="main-footer">
-        <strong>
-          Copyright © 2014-2021{"{"}" "{"}"}
-          <a href="https://adminlte.io">AdminLTE.io</a>.
-        </strong>
-        All rights reserved.
-        <div className="float-right d-none d-sm-inline-block">
-          <b>Version</b> 3.2.0
+      {/* Footer */}
+      <footer className="sticky-footer bg-white">
+        <div className="container my-auto">
+          <div className="copyright text-center my-auto">
+            <span>Copyright © Your Website 2021</span>
+          </div>
         </div>
       </footer>
+      {/* End of Footer */}
     </div>
   );
 }

@@ -6,11 +6,11 @@ import SideNav from "./components/SideNav";
 
 function App() {
   return (
-    <div className="wrapper">
-      <Header />
-      <Footer />
-      <Home />
+    <div id="wrapper">
       <SideNav />
+      <Header />
+      <Home />
+      <Footer />
     </div>
   );
 }

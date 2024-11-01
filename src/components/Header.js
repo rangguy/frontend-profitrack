@@ -1,207 +1,287 @@
 function Header() {
   return (
     <div>
-      {/* Navbar */}
-      <nav className="main-header navbar navbar-expand navbar-white navbar-light">
-        {/* Left navbar links */}
-        <ul className="navbar-nav">
-          <li className="nav-item">
-            <a
-              className="nav-link"
-              data-widget="pushmenu"
-              href="#"
-              role="button"
-            >
-              <i className="fas fa-bars" />
-            </a>
-          </li>
-          <li className="nav-item d-none d-sm-inline-block">
-            <a href="index3.html" className="nav-link">
-              Home
-            </a>
-          </li>
-          <li className="nav-item d-none d-sm-inline-block">
-            <a href="#" className="nav-link">
-              Contact
-            </a>
-          </li>
-        </ul>
-        {/* Right navbar links */}
+      {/* Topbar */}
+      <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+        {/* Sidebar Toggle (Topbar) */}
+        <button
+          id="sidebarToggleTop"
+          className="btn btn-link d-md-none rounded-circle mr-3"
+        >
+          <i className="fa fa-bars" />
+        </button>
+        {/* Topbar Search */}
+        <form className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+          <div className="input-group">
+            <input
+              type="text"
+              className="form-control bg-light border-0 small"
+              placeholder="Search for..."
+              aria-label="Search"
+              aria-describedby="basic-addon2"
+            />
+            <div className="input-group-append">
+              <button className="btn btn-primary" type="button">
+                <i className="fas fa-search fa-sm" />
+              </button>
+            </div>
+          </div>
+        </form>
+        {/* Topbar Navbar */}
         <ul className="navbar-nav ml-auto">
-          {/* Navbar Search */}
-          <li className="nav-item">
+          {/* Nav Item - Search Dropdown (Visible Only XS) */}
+          <li className="nav-item dropdown no-arrow d-sm-none">
             <a
-              className="nav-link"
-              data-widget="navbar-search"
+              className="nav-link dropdown-toggle"
               href="#"
+              id="searchDropdown"
               role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
             >
-              <i className="fas fa-search" />
+              <i className="fas fa-search fa-fw" />
             </a>
-            <div className="navbar-search-block">
-              <form className="form-inline">
-                <div className="input-group input-group-sm">
+            {/* Dropdown - Messages */}
+            <div
+              className="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+              aria-labelledby="searchDropdown"
+            >
+              <form className="form-inline mr-auto w-100 navbar-search">
+                <div className="input-group">
                   <input
-                    className="form-control form-control-navbar"
-                    type="search"
-                    placeholder="Search"
+                    type="text"
+                    className="form-control bg-light border-0 small"
+                    placeholder="Search for..."
                     aria-label="Search"
+                    aria-describedby="basic-addon2"
                   />
                   <div className="input-group-append">
-                    <button className="btn btn-navbar" type="submit">
-                      <i className="fas fa-search" />
-                    </button>
-                    <button
-                      className="btn btn-navbar"
-                      type="button"
-                      data-widget="navbar-search"
-                    >
-                      <i className="fas fa-times" />
+                    <button className="btn btn-primary" type="button">
+                      <i className="fas fa-search fa-sm" />
                     </button>
                   </div>
                 </div>
               </form>
             </div>
           </li>
-          {/* Messages Dropdown Menu */}
-          <li className="nav-item dropdown">
-            <a className="nav-link" data-toggle="dropdown" href="#">
-              <i className="far fa-comments" />
-              <span className="badge badge-danger navbar-badge">3</span>
+          {/* Nav Item - Alerts */}
+          <li className="nav-item dropdown no-arrow mx-1">
+            <a
+              className="nav-link dropdown-toggle"
+              href="#"
+              id="alertsDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <i className="fas fa-bell fa-fw" />
+              {/* Counter - Alerts */}
+              <span className="badge badge-danger badge-counter">3+</span>
             </a>
-            <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-              <a href="#" className="dropdown-item">
-                {/* Message Start */}
-                <div className="media">
-                  <img
-                    src="dist/img/user1-128x128.jpg"
-                    alt="User Avatar"
-                    className="img-size-50 mr-3 img-circle"
-                  />
-                  <div className="media-body">
-                    <h3 className="dropdown-item-title">
-                      Brad Diesel
-                      <span className="float-right text-sm text-danger">
-                        <i className="fas fa-star" />
-                      </span>
-                    </h3>
-                    <p className="text-sm">Call me whenever you can...</p>
-                    <p className="text-sm text-muted">
-                      <i className="far fa-clock mr-1" /> 4 Hours Ago
-                    </p>
+            {/* Dropdown - Alerts */}
+            <div
+              className="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+              aria-labelledby="alertsDropdown"
+            >
+              <h6 className="dropdown-header">Alerts Center</h6>
+              <a className="dropdown-item d-flex align-items-center" href="#">
+                <div className="mr-3">
+                  <div className="icon-circle bg-primary">
+                    <i className="fas fa-file-alt text-white" />
                   </div>
                 </div>
-                {/* Message End */}
+                <div>
+                  <div className="small text-gray-500">December 12, 2019</div>
+                  <span className="font-weight-bold">
+                    A new monthly report is ready to download!
+                  </span>
+                </div>
               </a>
-              <div className="dropdown-divider" />
-              <a href="#" className="dropdown-item">
-                {/* Message Start */}
-                <div className="media">
-                  <img
-                    src="dist/img/user8-128x128.jpg"
-                    alt="User Avatar"
-                    className="img-size-50 img-circle mr-3"
-                  />
-                  <div className="media-body">
-                    <h3 className="dropdown-item-title">
-                      John Pierce
-                      <span className="float-right text-sm text-muted">
-                        <i className="fas fa-star" />
-                      </span>
-                    </h3>
-                    <p className="text-sm">I got your message bro</p>
-                    <p className="text-sm text-muted">
-                      <i className="far fa-clock mr-1" /> 4 Hours Ago
-                    </p>
+              <a className="dropdown-item d-flex align-items-center" href="#">
+                <div className="mr-3">
+                  <div className="icon-circle bg-success">
+                    <i className="fas fa-donate text-white" />
                   </div>
                 </div>
-                {/* Message End */}
+                <div>
+                  <div className="small text-gray-500">December 7, 2019</div>
+                  $290.29 has been deposited into your account!
+                </div>
               </a>
-              <div className="dropdown-divider" />
-              <a href="#" className="dropdown-item">
-                {/* Message Start */}
-                <div className="media">
-                  <img
-                    src="dist/img/user3-128x128.jpg"
-                    alt="User Avatar"
-                    className="img-size-50 img-circle mr-3"
-                  />
-                  <div className="media-body">
-                    <h3 className="dropdown-item-title">
-                      Nora Silvester
-                      <span className="float-right text-sm text-warning">
-                        <i className="fas fa-star" />
-                      </span>
-                    </h3>
-                    <p className="text-sm">The subject goes here</p>
-                    <p className="text-sm text-muted">
-                      <i className="far fa-clock mr-1" /> 4 Hours Ago
-                    </p>
+              <a className="dropdown-item d-flex align-items-center" href="#">
+                <div className="mr-3">
+                  <div className="icon-circle bg-warning">
+                    <i className="fas fa-exclamation-triangle text-white" />
                   </div>
                 </div>
-                {/* Message End */}
+                <div>
+                  <div className="small text-gray-500">December 2, 2019</div>
+                  Spending Alert: We've noticed unusually high spending for your
+                  account.
+                </div>
               </a>
-              <div className="dropdown-divider" />
-              <a href="#" className="dropdown-item dropdown-footer">
-                See All Messages
+              <a
+                className="dropdown-item text-center small text-gray-500"
+                href="#"
+              >
+                Show All Alerts
               </a>
             </div>
           </li>
-          {/* Notifications Dropdown Menu */}
-          <li className="nav-item dropdown">
-            <a className="nav-link" data-toggle="dropdown" href="#">
-              <i className="far fa-bell" />
-              <span className="badge badge-warning navbar-badge">15</span>
+          {/* Nav Item - Messages */}
+          <li className="nav-item dropdown no-arrow mx-1">
+            <a
+              className="nav-link dropdown-toggle"
+              href="#"
+              id="messagesDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <i className="fas fa-envelope fa-fw" />
+              {/* Counter - Messages */}
+              <span className="badge badge-danger badge-counter">7</span>
             </a>
-            <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-              <span className="dropdown-item dropdown-header">
-                15 Notifications
+            {/* Dropdown - Messages */}
+            <div
+              className="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+              aria-labelledby="messagesDropdown"
+            >
+              <h6 className="dropdown-header">Message Center</h6>
+              <a className="dropdown-item d-flex align-items-center" href="#">
+                <div className="dropdown-list-image mr-3">
+                  <img
+                    className="rounded-circle"
+                    src="img/undraw_profile_1.svg"
+                    alt="..."
+                  />
+                  <div className="status-indicator bg-success" />
+                </div>
+                <div className="font-weight-bold">
+                  <div className="text-truncate">
+                    Hi there! I am wondering if you can help me with a problem
+                    I've been having.
+                  </div>
+                  <div className="small text-gray-500">Emily Fowler · 58m</div>
+                </div>
+              </a>
+              <a className="dropdown-item d-flex align-items-center" href="#">
+                <div className="dropdown-list-image mr-3">
+                  <img
+                    className="rounded-circle"
+                    src="img/undraw_profile_2.svg"
+                    alt="..."
+                  />
+                  <div className="status-indicator" />
+                </div>
+                <div>
+                  <div className="text-truncate">
+                    I have the photos that you ordered last month, how would you
+                    like them sent to you?
+                  </div>
+                  <div className="small text-gray-500">Jae Chun · 1d</div>
+                </div>
+              </a>
+              <a className="dropdown-item d-flex align-items-center" href="#">
+                <div className="dropdown-list-image mr-3">
+                  <img
+                    className="rounded-circle"
+                    src="img/undraw_profile_3.svg"
+                    alt="..."
+                  />
+                  <div className="status-indicator bg-warning" />
+                </div>
+                <div>
+                  <div className="text-truncate">
+                    Last month's report looks great, I am very happy with the
+                    progress so far, keep up the good work!
+                  </div>
+                  <div className="small text-gray-500">Morgan Alvarez · 2d</div>
+                </div>
+              </a>
+              <a className="dropdown-item d-flex align-items-center" href="#">
+                <div className="dropdown-list-image mr-3">
+                  <img
+                    className="rounded-circle"
+                    src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
+                    alt="..."
+                  />
+                  <div className="status-indicator bg-success" />
+                </div>
+                <div>
+                  <div className="text-truncate">
+                    Am I a good boy? The reason I ask is because someone told me
+                    that people say this to all dogs, even if they aren't
+                    good...
+                  </div>
+                  <div className="small text-gray-500">
+                    Chicken the Dog · 2w
+                  </div>
+                </div>
+              </a>
+              <a
+                className="dropdown-item text-center small text-gray-500"
+                href="#"
+              >
+                Read More Messages
+              </a>
+            </div>
+          </li>
+          <div className="topbar-divider d-none d-sm-block" />
+          {/* Nav Item - User Information */}
+          <li className="nav-item dropdown no-arrow">
+            <a
+              className="nav-link dropdown-toggle"
+              href="#"
+              id="userDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <span className="mr-2 d-none d-lg-inline text-gray-600 small">
+                Douglas McGee
               </span>
-              <div className="dropdown-divider" />
-              <a href="#" className="dropdown-item">
-                <i className="fas fa-envelope mr-2" /> 4 new messages
-                <span className="float-right text-muted text-sm">3 mins</span>
+              <img
+                className="img-profile rounded-circle"
+                src="img/undraw_profile.svg"
+              />
+            </a>
+            {/* Dropdown - User Information */}
+            <div
+              className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+              aria-labelledby="userDropdown"
+            >
+              <a className="dropdown-item" href="#">
+                <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400" />
+                Profile
+              </a>
+              <a className="dropdown-item" href="#">
+                <i className="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400" />
+                Settings
+              </a>
+              <a className="dropdown-item" href="#">
+                <i className="fas fa-list fa-sm fa-fw mr-2 text-gray-400" />
+                Activity Log
               </a>
               <div className="dropdown-divider" />
-              <a href="#" className="dropdown-item">
-                <i className="fas fa-users mr-2" /> 8 friend requests
-                <span className="float-right text-muted text-sm">12 hours</span>
-              </a>
-              <div className="dropdown-divider" />
-              <a href="#" className="dropdown-item">
-                <i className="fas fa-file mr-2" /> 3 new reports
-                <span className="float-right text-muted text-sm">2 days</span>
-              </a>
-              <div className="dropdown-divider" />
-              <a href="#" className="dropdown-item dropdown-footer">
-                See All Notifications
+              <a
+                className="dropdown-item"
+                href="#"
+                data-toggle="modal"
+                data-target="#logoutModal"
+              >
+                <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" />
+                Logout
               </a>
             </div>
-          </li>
-          <li className="nav-item">
-            <a
-              className="nav-link"
-              data-widget="fullscreen"
-              href="#"
-              role="button"
-            >
-              <i className="fas fa-expand-arrows-alt" />
-            </a>
-          </li>
-          <li className="nav-item">
-            <a
-              className="nav-link"
-              data-widget="control-sidebar"
-              data-controlsidebar-slide="true"
-              href="#"
-              role="button"
-            >
-              <i className="fas fa-th-large" />
-            </a>
           </li>
         </ul>
       </nav>
-      {/* /.navbar */}
+      {/* End of Topbar */}
     </div>
   );
 }
