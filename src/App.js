@@ -1,18 +1,27 @@
-import "./App.css";
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
-import Footer from "./components/Footer";
-import Home from "./components/Home";
 import SideNav from "./components/SideNav";
+import Home from "./components/Home";
+import Footer from "./components/Footer";
 
-function App() {
+const App = () => {
   return (
-    <div id="wrapper">
-      <SideNav />
-      <Header />
-      <Home />
-      <Footer />
-    </div>
+    <Router>
+      <div className="app">
+        <SideNav />
+        <div className="wrapper">
+          <Header />
+          <main>
+            <Routes>
+              <Route path="/" element={<Home />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
