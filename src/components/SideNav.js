@@ -1,4 +1,6 @@
-function SideNav() {
+import React from "react";
+
+const SideNav = () => {
   return (
     <div>
       <aside className="main-sidebar sidebar-dark-primary elevation-4">
@@ -64,7 +66,7 @@ function SideNav() {
                   </p>
                 </a>
               </li>
-              
+
               <li className="nav-item">
                 <a href="#" className="nav-link">
                   <i className="nav-icon fas fa-copy" />
@@ -163,6 +165,6 @@ function SideNav() {
       </aside>
     </div>
   );
-}
+};
 
 export default SideNav;
