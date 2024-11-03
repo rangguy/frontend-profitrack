@@ -1,6 +1,6 @@
 import React from "react";
 
-const Home = () => {
+function Home() {
   return (
     <div>
       {/* Content Wrapper. Contains page content */}
@@ -35,6 +35,6 @@ const Home = () => {
       {/* /.content-wrapper */}
     </div>
   );
-};
+}
 
 export default Home;

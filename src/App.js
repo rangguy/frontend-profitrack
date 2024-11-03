@@ -1,18 +1,23 @@
-import React from "react";
-import Header from "./components/Header";
-import SideNav from "./components/SideNav";
-import Home from "./components/Home";
-import Footer from "./components/Footer";
+import React, { useState } from "react";
+import { Outlet } from "react-router-dom";
+import CustomAlert from "./components/Alert";
 
-const App = () => {
+function App() {
+  const [jwtToken, setJwtToken] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertClassName, setAlertClassName] = useState("d-none");
+
   return (
     <div className="wrapper">
-      <Header />
-      <Home />
-      <SideNav />
-      <Footer />
+      <CustomAlert message={alertMessage} className={alertClassName} />
+      <Outlet
+        context={{
+          jwtToken,
+          setJwtToken,
+        }}
+      />
     </div>
   );
-};
+}
 
 export default App;
