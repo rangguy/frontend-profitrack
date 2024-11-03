@@ -8,9 +8,9 @@ function App() {
   return (
     <div className="wrapper">
       <Header />
-      <Footer />
       <Home />
       <SideNav />
+      <Footer />
     </div>
   );
 }
