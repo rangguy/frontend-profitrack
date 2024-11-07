@@ -3,8 +3,9 @@ import React, { useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
+import Input from "../components/form/Input";
 
-function Login() {
+const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -78,42 +79,30 @@ function Login() {
     <div className="d-flex align-items-center justify-content-center min-vh-100">
       <div className="login-box">
         <div className="login-logo text-center">
-          <a href="#">
-            <b>Admin</b>LTE
-          </a>
+          <p>
+            <b>Admin</b>Login
+          </p>
         </div>
         <div className="card">
           <div className="card-body login-card-body">
             <p className="login-box-msg">Sign in to start your session</p>
             <form onSubmit={handleSubmit}>
-              <div className="input-group mb-3">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Username"
-                  required
-                  onChange={(event) => setUsername(event.target.value)}
-                />
-                <div className="input-group-append">
-                  <div className="input-group-text">
-                    <span className="fas fa-envelope" />
-                  </div>
-                </div>
-              </div>
-              <div className="input-group mb-3">
-                <input
-                  type="password"
-                  className="form-control"
-                  placeholder="Password"
-                  required
-                  onChange={(event) => setPassword(event.target.value)}
-                />
-                <div className="input-group-append">
-                  <div className="input-group-text">
-                    <span className="fas fa-lock" />
-                  </div>
-                </div>
-              </div>
+              <Input 
+                type="text"
+                className="form-control"
+                placeholder="Username"
+                required
+                onChange={(event) => setUsername(event.target.value)}
+                icon="fas fa-envelope"
+              />
+              <Input 
+                type="password"
+                className="form-control"
+                placeholder="Password"
+                required
+                onChange={(event) => setPassword(event.target.value)}
+                icon="fas fa-lock"
+              />
               <div className="row">
                 <div className="col-8">
                   <div className="icheck-primary">
@@ -136,6 +125,6 @@ function Login() {
       </div>
     </div>
   );
-}
+};
 
 export default Login;

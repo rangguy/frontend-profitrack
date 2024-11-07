@@ -3,7 +3,9 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/Login";
-import Dashboard from "./Dashboard";
+import MainLayout from "./MainLayout";
+import Dashboard from "./pages/Dashboard";
+import Product from "./pages/Product";
 
 const router = createBrowserRouter([
   {
@@ -11,11 +13,20 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        index: true,
-        element: <Dashboard />,
+        element: <MainLayout />,
+        children: [
+          {
+            index: true,
+            element: <Dashboard title="Dashboard" />,
+          },
+          {
+            path: "products",
+            element: <Product title="Data Produk" />,
+          },
+        ],
       },
       {
-        path: "/login",
+        path: "login",
         element: <Login />,
       },
     ],
