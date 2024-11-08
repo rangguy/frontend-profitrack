@@ -6,6 +6,8 @@ import Login from "./pages/Login";
 import MainLayout from "./MainLayout";
 import Dashboard from "./pages/Dashboard";
 import Product from "./pages/Product";
+import Category from "./pages/Category";
+import Criteria from "./pages/Criteria";
 
 const router = createBrowserRouter([
   {
@@ -20,8 +22,16 @@ const router = createBrowserRouter([
             element: <Dashboard title="Dashboard" />,
           },
           {
+            path: "categories",
+            element: <Category title="Data Kategori" />,
+          },
+          {
             path: "products",
             element: <Product title="Data Produk" />,
+          },
+          {
+            path: "criterias",
+            element: <Criteria title="Data Kriteria" />,
           },
         ],
       },

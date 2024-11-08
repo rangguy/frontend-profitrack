@@ -63,7 +63,6 @@ const Header = () => {
             <a
               className="nav-link"
               data-widget="fullscreen"
-              href="/#"
               role="button"
             >
               <i className="fas fa-expand-arrows-alt" />

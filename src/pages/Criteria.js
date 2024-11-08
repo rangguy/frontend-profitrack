@@ -7,54 +7,56 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import axios from "axios";
 
-const Product = (props) => {
-  const [products, setProducts] = useState([]);
+const Category = (props) => {
+  const [criterias, setCriterias] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchProducts = async () => {
+  const fetchCriterias = async () => {
     setLoading(true);
     try {
       const token = Cookies.get("token");
-      const response = await axios.get("http://localhost:8080/api/products", {
+      const response = await axios.get("http://localhost:8080/api/criterias", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setProducts(response.data);
+      setCriterias(response.data);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("Error fetching criterias:", error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchProducts();
+    fetchCriterias();
   }, []);
 
   // Action button functions
   const handleAdd = () => {
-    console.log("Add product");
-    navigator("/add/product");
+    console.log("Add criteria");
+    navigator("/add/criteria");
   };
 
-  const handleEdit = (product) => {
-    console.log("Edit product", product);
+  const handleEdit = (criteria) => {
+    console.log("Edit criteria", criteria);
     // Edit product logic here
   };
 
-  const handleDelete = async (productId) => {
+  const handleDelete = async (criteriaId) => {
     const token = Cookies.get("token");
     try {
-      await axios.delete(`http://localhost:8080/api/products/${productId}`, {
+      await axios.delete(`http://localhost:8080/api/criterias/${criteriaId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setProducts(products.filter((product) => product.id !== productId));
-      console.log("Product deleted successfully");
+      setCriterias(
+        criterias.filter((criteria) => criteria.id !== criteriaId)
+      );
+      console.log("Criteria deleted successfully");
     } catch (error) {
-      console.error("Error deleting product:", error);
+      console.error("Error deleting criteria:", error);
     }
   };
 
@@ -96,29 +98,24 @@ const Product = (props) => {
           </div>
           {/* Add Button */}
           <button onClick={handleAdd} className="btn btn-success mb-3">
-            Tambah Produk
+            Tambah Kriteria
           </button>
         </div>
       </div>
       <section className="content">
         <div className="container-fluid">
           <DataTable
-            value={products}
+            value={criterias}
             stripedRows
             rowHover
             paginator
             rows={10}
             loading={loading}
-            emptyMessage="No products found."
+            emptyMessage="No criterias found."
           >
-            <Column field="name" header="Name" sortable />
-            <Column field="category_name" header="Category" sortable />
-            <Column field="net_profit" header="Keuntungan Bersih" sortable />
-            <Column field="gross_profit" header="Keuntungan Kotor" sortable />
-            <Column field="gross_sale" header="Penjualan Kotor" sortable />
-            <Column field="purchase_cost" header="Harga Beli" sortable />
-            <Column field="initial_stock" header="Stok Awal" sortable />
-            <Column field="final_stock" header="Stok Akhir" sortable />
+            <Column field="name" header="Nama" sortable />
+            <Column field="weight" header="Bobot" sortable />
+            <Column field="type" header="Tipe" sortable />
             <Column
               field="action"
               header="Action"
@@ -132,4 +129,4 @@ const Product = (props) => {
   );
 };
 
-export default Product;
+export default Category;

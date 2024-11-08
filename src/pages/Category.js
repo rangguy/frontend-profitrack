@@ -7,54 +7,54 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import axios from "axios";
 
-const Product = (props) => {
-  const [products, setProducts] = useState([]);
+const Category = (props) => {
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchProducts = async () => {
+  const fetchCategories = async () => {
     setLoading(true);
     try {
       const token = Cookies.get("token");
-      const response = await axios.get("http://localhost:8080/api/products", {
+      const response = await axios.get("http://localhost:8080/api/categories", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setProducts(response.data);
+      setCategories(response.data);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("Error fetching categories:", error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchProducts();
+    fetchCategories();
   }, []);
 
   // Action button functions
   const handleAdd = () => {
-    console.log("Add product");
-    navigator("/add/product");
+    console.log("Add category");
+    navigator("/add/category");
   };
 
-  const handleEdit = (product) => {
-    console.log("Edit product", product);
+  const handleEdit = (category) => {
+    console.log("Edit category", category);
     // Edit product logic here
   };
 
-  const handleDelete = async (productId) => {
+  const handleDelete = async (categoryId) => {
     const token = Cookies.get("token");
     try {
-      await axios.delete(`http://localhost:8080/api/products/${productId}`, {
+      await axios.delete(`http://localhost:8080/api/categories/${categoryId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setProducts(products.filter((product) => product.id !== productId));
-      console.log("Product deleted successfully");
+      setCategories(categories.filter((category) => category.id !== categoryId));
+      console.log("Category deleted successfully");
     } catch (error) {
-      console.error("Error deleting product:", error);
+      console.error("Error deleting category:", error);
     }
   };
 
@@ -96,29 +96,22 @@ const Product = (props) => {
           </div>
           {/* Add Button */}
           <button onClick={handleAdd} className="btn btn-success mb-3">
-            Tambah Produk
+            Tambah Kategori
           </button>
         </div>
       </div>
       <section className="content">
         <div className="container-fluid">
           <DataTable
-            value={products}
+            value={categories}
             stripedRows
             rowHover
             paginator
             rows={10}
             loading={loading}
-            emptyMessage="No products found."
+            emptyMessage="No categories found."
           >
             <Column field="name" header="Name" sortable />
-            <Column field="category_name" header="Category" sortable />
-            <Column field="net_profit" header="Keuntungan Bersih" sortable />
-            <Column field="gross_profit" header="Keuntungan Kotor" sortable />
-            <Column field="gross_sale" header="Penjualan Kotor" sortable />
-            <Column field="purchase_cost" header="Harga Beli" sortable />
-            <Column field="initial_stock" header="Stok Awal" sortable />
-            <Column field="final_stock" header="Stok Akhir" sortable />
             <Column
               field="action"
               header="Action"
@@ -132,4 +125,4 @@ const Product = (props) => {
   );
 };
 
-export default Product;
+export default Category;

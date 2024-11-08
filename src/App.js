@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
-import CustomAlert from "./components/Alert";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 function App() {
   const [jwtToken, setJwtToken] = useState("");
