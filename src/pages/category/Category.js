@@ -6,7 +6,8 @@ import "primeicons/primeicons.css";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Category = (props) => {
   const [categories, setCategories] = useState([]);
@@ -41,12 +42,6 @@ const Category = (props) => {
     fetchCategories();
   }, [fetchCategories]);
 
-  // Action button functions
-  const handleAdd = () => {
-    console.log("Add category");
-    navigator("/add/category");
-  };
-
   const handleEdit = (category) => {
     console.log("Edit category", category);
     // Edit product logic here
@@ -54,18 +49,87 @@ const Category = (props) => {
 
   const handleDelete = async (categoryId) => {
     const token = Cookies.get("token");
-    try {
-      await axios.delete(`http://localhost:8080/api/categories/${categoryId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+
+    if (!token) {
+      Swal.fire({
+        icon: "error",
+        title: "Authentication Error",
+        text: "Please login to continue.",
       });
-      setCategories(
-        categories.filter((category) => category.id !== categoryId)
-      );
-      console.log("Category deleted successfully");
+      return;
+    }
+
+    try {
+      const result = await Swal.fire({
+        title: "Konfirmasi Hapus",
+        text: "Apakah Anda yakin ingin menghapus kategori ini?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Ya, Hapus!",
+        cancelButtonText: "Batal",
+      });
+
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(
+            `http://localhost:8080/api/categories/${categoryId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          setCategories(
+            categories.filter((category) => category.id !== categoryId)
+          );
+
+          Swal.fire({
+            icon: "success",
+            title: "Berhasil!",
+            text: "Kategori berhasil dihapus",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        } catch (error) {
+          let errorMessage = "Terjadi kesalahan saat menghapus kategori.";
+
+          if (error.response) {
+            switch (error.response.status) {
+              case 403:
+                errorMessage =
+                  "Anda tidak memiliki izin untuk menghapus kategori ini.";
+                break;
+              case 404:
+                errorMessage = "Kategori tidak ditemukan.";
+                break;
+              case 409:
+                errorMessage =
+                  "Kategori tidak dapat dihapus karena masih digunakan.";
+                break;
+              default:
+                errorMessage = error.response.data?.message || errorMessage;
+            }
+          }
+
+          Swal.fire({
+            icon: "error",
+            title: "Error!",
+            text: errorMessage,
+          });
+
+          console.error("Error deleting category:", error);
+        }
+      }
     } catch (error) {
-      console.error("Error deleting category:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: "Terjadi kesalahan dalam memproses permintaan.",
+      });
+      console.error("Error in delete handler:", error);
     }
   };
 
@@ -106,9 +170,9 @@ const Category = (props) => {
             </div>
           </div>
           {/* Add Button */}
-          <button onClick={handleAdd} className="btn btn-success mb-3">
+          <Link to="/categories/add" className="btn btn-success mb-3">
             Tambah Kategori
-          </button>
+          </Link>
         </div>
       </div>
       <section className="content">

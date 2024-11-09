@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 const SideNav = () => {
   return (
@@ -7,8 +8,8 @@ const SideNav = () => {
         {/* Brand Logo */}
         <a href="/" className="brand-link">
           <img
-            src="dist/img/AdminLTELogo.png"
-            alt="AdminLTE Logo"
+            src="/dist/img/AdminLTELogo.png"
+            alt="AdminLTE"
             className="brand-image img-circle elevation-3"
             style={{ opacity: ".8" }}
           />
@@ -20,9 +21,9 @@ const SideNav = () => {
           <div className="user-panel mt-3 pb-3 mb-3 d-flex">
             <div className="image">
               <img
-                src="dist/img/user2-160x160.jpg"
+                src="/dist/img/user2-160x160.jpg"
                 className="img-circle elevation-2"
-                alt="User Image"
+                alt="User"
               />
             </div>
             <div className="info">
@@ -56,13 +57,10 @@ const SideNav = () => {
               data-accordion="false"
             >
               <li className="nav-item menu-open">
-                <a href="/#" className="nav-link active">
+                <NavLink to="/#" className="nav-link" activeClassName="active">
                   <i className="nav-icon fas fa-tachometer-alt" />
-                  <p>
-                    Dashboard
-                    <i className="right fas fa-angle-left" />
-                  </p>
-                </a>
+                  <p>Dashboard</p>
+                </NavLink>
               </li>
               <li className="nav-item">
                 <a href="/#" className="nav-link">
@@ -102,31 +100,43 @@ const SideNav = () => {
               </li>
               <li className="nav-header">EXAMPLES</li>
               <li className="nav-item">
-                <a href="/#" className="nav-link">
-                  <i className="nav-icon far fa-calendar-alt" />
-                  <p>
-                    Calendar
-                    <span className="badge badge-info right">2</span>
-                  </p>
-                </a>
-              </li>
-              <li className="nav-item">
-                <a href="/categories" className="nav-link">
+                <NavLink
+                  to="/categories"
+                  className="nav-link"
+                  activeClassName="active"
+                  isActive={(match, location) => {
+                    return match || location.pathname.startsWith("/categories");
+                  }}
+                >
                   <i className="nav-icon fas fa-folder" />
                   <p>Data Kategori</p>
-                </a>
+                </NavLink>
               </li>
               <li className="nav-item">
-                <a href="/products" className="nav-link">
+                <NavLink
+                  to="/products"
+                  className="nav-link"
+                  activeClassName="active"
+                  isActive={(match, location) => {
+                    return match || location.pathname.startsWith("/products");
+                  }}
+                >
                   <i className="nav-icon fas fa-box" />
                   <p>Data Produk</p>
-                </a>
+                </NavLink>
               </li>
               <li className="nav-item">
-                <a href="/criterias" className="nav-link">
+                <NavLink
+                  to="/criterias"
+                  className="nav-link"
+                  activeClassName="active"
+                  isActive={(match, location) => {
+                    return match || location.pathname.startsWith("/criterias");
+                  }}
+                >
                   <i className="nav-icon fas fa-list-alt" />
                   <p>Data Kriteria</p>
-                </a>
+                </NavLink>
               </li>
             </ul>
           </nav>

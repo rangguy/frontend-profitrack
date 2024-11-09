@@ -19,6 +19,9 @@ const Input = (props) => {
         className={props.className}
         placeholder={props.placeholder}
         onChange={props.onChange}
+        id={props.id}
+        value={props.value}
+        name={props.name}
       />
       {props.type === "password" && (
         <div className="input-group-append">
