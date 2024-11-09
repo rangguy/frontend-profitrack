@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const Dashboard = (props) => {
-  
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const jwtToken = Cookies.get("token");
+    if (!jwtToken) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   return (
     <div>

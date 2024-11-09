@@ -112,19 +112,19 @@ const SideNav = () => {
               </li>
               <li className="nav-item">
                 <a href="/categories" className="nav-link">
-                  <i className="nav-icon far fa-product" />
+                  <i className="nav-icon fas fa-folder" />
                   <p>Data Kategori</p>
                 </a>
               </li>
               <li className="nav-item">
                 <a href="/products" className="nav-link">
-                  <i className="nav-icon far fa-product" />
+                  <i className="nav-icon fas fa-box" />
                   <p>Data Produk</p>
                 </a>
               </li>
               <li className="nav-item">
                 <a href="/criterias" className="nav-link">
-                  <i className="nav-icon far fa-product" />
+                  <i className="nav-icon fas fa-list-alt" />
                   <p>Data Kriteria</p>
                 </a>
               </li>

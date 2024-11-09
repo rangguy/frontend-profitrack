@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Cookies from "js-cookie";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -6,12 +6,14 @@ import "primeicons/primeicons.css";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Product = (props) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     setLoading(true);
     try {
       const token = Cookies.get("token");
@@ -22,20 +24,27 @@ const Product = (props) => {
       });
       setProducts(response.data);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        navigate("/login");
+      } else {
+        console.error("Error fetching products:", error);
+      }
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate]);
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [fetchProducts]);
 
   // Action button functions
   const handleAdd = () => {
     console.log("Add product");
-    navigator("/add/product");
+    navigator("/product/add");
   };
 
   const handleEdit = (product) => {

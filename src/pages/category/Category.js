@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Cookies from "js-cookie";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -6,57 +6,66 @@ import "primeicons/primeicons.css";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Category = (props) => {
-  const [criterias, setCriterias] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  const fetchCriterias = async () => {
+  const fetchCategories = useCallback(async () => {
     setLoading(true);
     try {
       const token = Cookies.get("token");
-      const response = await axios.get("http://localhost:8080/api/criterias", {
+      const response = await axios.get("http://localhost:8080/api/categories", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setCriterias(response.data);
+      setCategories(response.data);
     } catch (error) {
-      console.error("Error fetching criterias:", error);
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        navigate("/login");
+      } else {
+        console.error("Error fetching categories:", error);
+      }
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate]);
 
   useEffect(() => {
-    fetchCriterias();
-  }, []);
+    fetchCategories();
+  }, [fetchCategories]);
 
   // Action button functions
   const handleAdd = () => {
-    console.log("Add criteria");
-    navigator("/add/criteria");
+    console.log("Add category");
+    navigator("/add/category");
   };
 
-  const handleEdit = (criteria) => {
-    console.log("Edit criteria", criteria);
+  const handleEdit = (category) => {
+    console.log("Edit category", category);
     // Edit product logic here
   };
 
-  const handleDelete = async (criteriaId) => {
+  const handleDelete = async (categoryId) => {
     const token = Cookies.get("token");
     try {
-      await axios.delete(`http://localhost:8080/api/criterias/${criteriaId}`, {
+      await axios.delete(`http://localhost:8080/api/categories/${categoryId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setCriterias(
-        criterias.filter((criteria) => criteria.id !== criteriaId)
+      setCategories(
+        categories.filter((category) => category.id !== categoryId)
       );
-      console.log("Criteria deleted successfully");
+      console.log("Category deleted successfully");
     } catch (error) {
-      console.error("Error deleting criteria:", error);
+      console.error("Error deleting category:", error);
     }
   };
 
@@ -98,24 +107,22 @@ const Category = (props) => {
           </div>
           {/* Add Button */}
           <button onClick={handleAdd} className="btn btn-success mb-3">
-            Tambah Kriteria
+            Tambah Kategori
           </button>
         </div>
       </div>
       <section className="content">
         <div className="container-fluid">
           <DataTable
-            value={criterias}
+            value={categories}
             stripedRows
             rowHover
             paginator
             rows={10}
             loading={loading}
-            emptyMessage="No criterias found."
+            emptyMessage="No categories found."
           >
-            <Column field="name" header="Nama" sortable />
-            <Column field="weight" header="Bobot" sortable />
-            <Column field="type" header="Tipe" sortable />
+            <Column field="name" header="Name" sortable />
             <Column
               field="action"
               header="Action"
