@@ -1,18 +1,20 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import Input from "../../components/form/Input";
+import React, { useState, useEffect } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
-import axios from "axios";
 
-const AddCategory = (props) => {
+const EditCategory = (props) => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     categoryName: "",
   });
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const navigate = useNavigate();
-
+  // Validation function
   const validateInput = (value) => {
     if (value.startsWith(" ") || value.endsWith(" ")) {
       return "Nama kategori tidak boleh diawali atau diakhiri dengan spasi";
@@ -32,6 +34,56 @@ const AddCategory = (props) => {
 
     return "";
   };
+
+  useEffect(() => {
+    const fetchCategoryDetail = async () => {
+      const token = Cookies.get("token");
+
+      if (!token) {
+        Swal.fire({
+          icon: "error",
+          title: "Authentication Error",
+          text: "Please login to continue.",
+        });
+        navigate("/login");
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+        const response = await axios.get(
+          `http://localhost:8080/api/categories/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setFormData({
+          categoryName: response.data.name,
+        });
+      } catch (error) {
+        const errorMessage =
+          error.response?.data?.error ||
+          error.message ||
+          "Failed to fetch category data";
+
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: errorMessage,
+        });
+
+        if (error.response?.status === 401) {
+          navigate("/login");
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCategoryDetail();
+  }, [id, navigate]);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -66,6 +118,7 @@ const AddCategory = (props) => {
         title: "Authentication Error",
         text: "Please login to continue.",
       });
+      navigate("/login");
       return;
     }
 
@@ -74,8 +127,9 @@ const AddCategory = (props) => {
     };
 
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/categories",
+      setIsLoading(true);
+      await axios.put(
+        `http://localhost:8080/api/categories/${id}`,
         requestBody,
         {
           headers: {
@@ -88,7 +142,7 @@ const AddCategory = (props) => {
       Swal.fire({
         icon: "success",
         title: "Berhasil",
-        text: "Kategori Berhasil Ditambahkan",
+        text: "Kategori Berhasil Diperbarui",
       }).then(() => {
         navigate("/categories");
       });
@@ -101,6 +155,12 @@ const AddCategory = (props) => {
         title: "Error",
         text: errorMessage,
       });
+
+      if (error.response?.status === 401) {
+        navigate("/login");
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -126,14 +186,14 @@ const AddCategory = (props) => {
           </div>
         </div>
       </div>
-      {/* Main content */}
+
       <section className="content px-3">
         <form onSubmit={handleSubmit}>
           <div className="row">
             <div className="col">
               <div className="card card-primary">
                 <div className="card-header">
-                  <h3 className="card-title">Form Data Kategori</h3>
+                  <h3 className="card-title">Data Kategori</h3>
                   <div className="card-tools">
                     <button
                       type="button"
@@ -148,7 +208,7 @@ const AddCategory = (props) => {
                 <div className="card-body">
                   <div className="form-group">
                     <label htmlFor="categoryName">Nama Kategori</label>
-                    <Input
+                    <input
                       type="text"
                       id="categoryName"
                       name="categoryName"
@@ -178,9 +238,9 @@ const AddCategory = (props) => {
               <button
                 type="submit"
                 className="btn btn-success float-right"
-                disabled={!!error || !formData.categoryName.trim()}
+                disabled={!!error || !formData.categoryName.trim() || isLoading}
               >
-                Simpan Data Kategori
+                {isLoading ? "Menyimpan..." : "Ubah Data Kategori"}
               </button>
             </div>
           </div>
@@ -190,4 +250,4 @@ const AddCategory = (props) => {
   );
 };
 
-export default AddCategory;
+export default EditCategory;

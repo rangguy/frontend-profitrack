@@ -42,9 +42,8 @@ const Category = (props) => {
     fetchCategories();
   }, [fetchCategories]);
 
-  const handleEdit = (category) => {
-    console.log("Edit category", category);
-    // Edit product logic here
+  const handleEdit = (categoryId) => {
+    navigate(`/categories/${categoryId}`);
   };
 
   const handleDelete = async (categoryId) => {
@@ -135,18 +134,22 @@ const Category = (props) => {
 
   const actionBodyTemplate = (rowData) => {
     return (
-      <div>
+      <div style={{ display: "flex", justifyContent: "center", gap: "8px" }}>
         <button
-          onClick={() => handleEdit(rowData)}
-          className="btn btn-primary btn-sm mr-2"
+          onClick={() => handleEdit(rowData.id)}
+          className="btn btn-primary btn-sm d-flex align-items-center"
+          title="Ubah"
         >
-          Ubah
+          <i className="fas fa-edit"></i>
+          <span>Ubah</span>
         </button>
         <button
           onClick={() => handleDelete(rowData.id)}
-          className="btn btn-danger btn-sm"
+          className="btn btn-danger btn-sm d-flex align-items-center"
+          title="Delete"
         >
-          Hapus
+          <i className="fas fa-trash"></i>
+          <span>Hapus</span>
         </button>
       </div>
     );
@@ -186,7 +189,7 @@ const Category = (props) => {
             loading={loading}
             emptyMessage="No categories found."
           >
-            <Column field="name" header="Name" sortable />
+            <Column field="name" header="Nama" sortable />
             <Column
               field="action"
               header="Action"

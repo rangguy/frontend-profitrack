@@ -16,6 +16,7 @@ import Criteria from "./pages/criteria/Criteria";
 import ErrorNotFound from "./pages/error/ErrorNotFound";
 import ErrorServer from "./pages/error/ErrorServer";
 import AddCategory from "./pages/category/AddCategory";
+import EditCategory from "./pages/category/EditCategory";
 
 const ErrorBoundary = () => {
   const error = useRouteError();
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
           {
             path: "/categories/add",
             element: <AddCategory title="Tambah Data Kategori" />,
+          },
+          {
+            path: "/categories/:id",
+            element: <EditCategory title="Ubah Data Kategori" />,
           },
           {
             path: "/products",
