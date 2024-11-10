@@ -11,10 +11,12 @@ const EditCategory = (props) => {
   const [formData, setFormData] = useState({
     categoryName: "",
   });
+  const [initialFormData, setInitialFormData] = useState({
+    categoryName: "",
+  });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Validation function
   const validateInput = (value) => {
     if (value.startsWith(" ") || value.endsWith(" ")) {
       return "Nama kategori tidak boleh diawali atau diakhiri dengan spasi";
@@ -62,6 +64,9 @@ const EditCategory = (props) => {
         setFormData({
           categoryName: response.data.name,
         });
+        setInitialFormData({
+          categoryName: response.data.name,
+        });
       } catch (error) {
         const errorMessage =
           error.response?.data?.error ||
@@ -100,12 +105,22 @@ const EditCategory = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validasi input
     const validationError = validateInput(formData.categoryName);
     if (validationError) {
       Swal.fire({
         icon: "error",
         title: "Validasi Error",
         text: validationError,
+      });
+      return;
+    }
+
+    if (formData.categoryName.trim() === initialFormData.categoryName.trim()) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Masukkan setidaknya satu data baru",
       });
       return;
     }
@@ -148,7 +163,10 @@ const EditCategory = (props) => {
       });
     } catch (error) {
       const errorMessage =
-        error.response?.data?.error || error.message || "Something went wrong!";
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong!";
 
       Swal.fire({
         icon: "error",

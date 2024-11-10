@@ -23,7 +23,7 @@ const Category = (props) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setCategories(response.data);
+      setCategories(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       if (
         error.response &&
@@ -146,7 +146,7 @@ const Category = (props) => {
         <button
           onClick={() => handleDelete(rowData.id)}
           className="btn btn-danger btn-sm d-flex align-items-center"
-          title="Delete"
+          title="Hapus"
         >
           <i className="fas fa-trash"></i>
           <span>Hapus</span>
@@ -187,7 +187,7 @@ const Category = (props) => {
             paginator
             rows={10}
             loading={loading}
-            emptyMessage="No categories found."
+            emptyMessage="Data Kategori masih kosong"
           >
             <Column field="name" header="Nama" sortable />
             <Column

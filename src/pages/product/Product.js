@@ -22,7 +22,7 @@ const Product = (props) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setProducts(response.data);
+      setProducts(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       if (
         error.response &&
@@ -69,18 +69,22 @@ const Product = (props) => {
 
   const actionBodyTemplate = (rowData) => {
     return (
-      <div>
+      <div style={{ display: "flex", justifyContent: "center", gap: "8px" }}>
         <button
-          onClick={() => handleEdit(rowData)}
-          className="btn btn-primary btn-sm mr-2"
+          onClick={() => handleEdit(rowData.id)}
+          className="btn btn-primary btn-sm d-flex align-items-center"
+          title="Ubah"
         >
-          Ubah
+          <i className="fas fa-edit"></i>
+          <span>Ubah</span>
         </button>
         <button
           onClick={() => handleDelete(rowData.id)}
-          className="btn btn-danger btn-sm"
+          className="btn btn-danger btn-sm d-flex align-items-center"
+          title="Delete"
         >
-          Hapus
+          <i className="fas fa-trash"></i>
+          <span>Hapus</span>
         </button>
       </div>
     );
@@ -118,7 +122,7 @@ const Product = (props) => {
             paginator
             rows={10}
             loading={loading}
-            emptyMessage="No products found."
+            emptyMessage="Data produk masih kosong"
           >
             <Column field="name" header="Name" sortable />
             <Column field="category_name" header="Category" sortable />

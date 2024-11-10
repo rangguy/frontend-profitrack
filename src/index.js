@@ -17,6 +17,8 @@ import ErrorNotFound from "./pages/error/ErrorNotFound";
 import ErrorServer from "./pages/error/ErrorServer";
 import AddCategory from "./pages/category/AddCategory";
 import EditCategory from "./pages/category/EditCategory";
+import AddCriteria from "./pages/criteria/AddCriteria";
+import EditCriteria from "./pages/criteria/EditCriteria";
 
 const ErrorBoundary = () => {
   const error = useRouteError();
@@ -66,6 +68,14 @@ const router = createBrowserRouter([
           {
             path: "/criterias",
             element: <Criteria title="Data Kriteria" />,
+          },
+          {
+            path: "/criterias/add",
+            element: <AddCriteria title="Tambah Data Kriteria" />,
+          },
+          {
+            path: "/criterias/:id",
+            element: <EditCriteria title="Ubah Data Kriteria" />,
           },
         ],
       },

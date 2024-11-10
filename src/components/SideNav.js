@@ -1,7 +1,28 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
 const SideNav = () => {
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    const getUserFromToken = () => {
+      try {
+        const token = Cookies.get("token");
+        if (token) {
+          const decoded = jwtDecode(token);
+          setUsername(decoded.Username);
+        }
+      } catch (error) {
+        console.error("Error decoding token:", error);
+        setUsername("User");
+      }
+    };
+
+    getUserFromToken();
+  }, []);
+
   return (
     <div>
       <aside className="main-sidebar sidebar-dark-primary elevation-4">
@@ -27,9 +48,9 @@ const SideNav = () => {
               />
             </div>
             <div className="info">
-              <a href="/" className="d-block">
-                Alexander Pierce
-              </a>
+              <Link to="/profile" className="d-block">
+                {username }
+              </Link>
             </div>
           </div>
           {/* SidebarSearch Form */}
