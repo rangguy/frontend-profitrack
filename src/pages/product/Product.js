@@ -6,7 +6,7 @@ import "primeicons/primeicons.css";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Product = (props) => {
   const [products, setProducts] = useState([]);
@@ -40,12 +40,6 @@ const Product = (props) => {
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
-
-  // Action button functions
-  const handleAdd = () => {
-    console.log("Add product");
-    navigator("/product/add");
-  };
 
   const handleEdit = (product) => {
     console.log("Edit product", product);
@@ -108,9 +102,9 @@ const Product = (props) => {
             </div>
           </div>
           {/* Add Button */}
-          <button onClick={handleAdd} className="btn btn-success mb-3">
+          <Link to="/products/add" className="btn btn-success mb-3">
             Tambah Produk
-          </button>
+          </Link>
         </div>
       </div>
       <section className="content">

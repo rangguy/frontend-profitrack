@@ -19,6 +19,7 @@ import AddCategory from "./pages/category/AddCategory";
 import EditCategory from "./pages/category/EditCategory";
 import AddCriteria from "./pages/criteria/AddCriteria";
 import EditCriteria from "./pages/criteria/EditCriteria";
+import AddProduct from "./pages/product/AddProduct.js";
 
 const ErrorBoundary = () => {
   const error = useRouteError();
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
           {
             path: "/products",
             element: <Product title="Data Produk" />,
+          },
+          {
+            path: "/products/add",
+            element: <AddProduct title="Tambah Data Produk" />,
           },
           {
             path: "/criterias",
