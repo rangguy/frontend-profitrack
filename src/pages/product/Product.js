@@ -210,7 +210,7 @@ const Product = (props) => {
               >
                 {/* Tombol Tambah Produk */}
                 <button
-                  className="btn btn-success"
+                  className="btn btn-success m-2"
                   onClick={() => navigate("/products/add")}
                 >
                   <i className="fas fa-plus me-2"></i>
@@ -218,14 +218,14 @@ const Product = (props) => {
                 </button>
 
                 {/* Tombol Export Excel */}
-                <button className="btn btn-info" onClick={handleExport}>
+                <button className="btn btn-info m-2" onClick={handleExport}>
                   <i className="fas fa-download me-2"></i>
                   Export Excel
                 </button>
 
                 {/* Tombol Import Excel */}
                 <div className="position-relative d-inline-block">
-                  <button className="btn btn-warning" onClick={toggleModal}>
+                  <button className="btn btn-warning m-2" onClick={toggleModal}>
                     <i className="fas fa-upload me-2"></i>
                     Import Excel
                   </button>
