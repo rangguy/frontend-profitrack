@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const SideNav = () => {
   const [username, setUsername] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getUserFromToken = () => {
@@ -22,6 +25,33 @@ const SideNav = () => {
 
     getUserFromToken();
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      const token = Cookies.get("token");
+      await axios.get("http://localhost:8080/api/logout", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      Cookies.remove("token");
+
+      Swal.fire({
+        icon: "success",
+        title: "Logout Successful",
+        text: "Berhasil logout",
+      });
+
+      navigate("/login");
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Logout Error",
+        text: "Failed to logout",
+      });
+    }
+  };
 
   return (
     <div>
@@ -49,7 +79,7 @@ const SideNav = () => {
             </div>
             <div className="info">
               <Link to="/profile" className="d-block">
-                {username }
+                {username}
               </Link>
             </div>
           </div>
@@ -158,6 +188,19 @@ const SideNav = () => {
                   <i className="nav-icon fas fa-list-alt" />
                   <p>Data Kriteria</p>
                 </NavLink>
+              </li>
+              <li className="nav-item">
+                <a
+                  href="/#"
+                  className="nav-link"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLogout();
+                  }}
+                >
+                  <i className="nav-icon fas fa-sign-out-alt" />
+                  <p>Logout</p>
+                </a>
               </li>
             </ul>
           </nav>
