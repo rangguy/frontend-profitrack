@@ -52,16 +52,87 @@ const Product = (props) => {
 
   const handleDelete = async (productId) => {
     const token = Cookies.get("token");
-    try {
-      await axios.delete(`http://localhost:8080/api/products/${productId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+
+    if (!token) {
+      Swal.fire({
+        icon: "error",
+        title: "Authentication Error",
+        text: "Please login to continue.",
       });
-      setProducts(products.filter((product) => product.id !== productId));
-      console.log("Product deleted successfully");
+      return;
+    }
+
+    try {
+      const result = await Swal.fire({
+        title: "Konfirmasi Hapus",
+        text: "Apakah Anda yakin ingin menghapus produk ini?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Ya, Hapus!",
+        cancelButtonText: "Batal",
+      });
+
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(
+            `http://localhost:8080/api/products/${productId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          setProducts(
+            products.filter((products) => products.id !== productId)
+          );
+
+          Swal.fire({
+            icon: "success",
+            title: "Berhasil!",
+            text: "Produk berhasil dihapus",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        } catch (error) {
+          let errorMessage = "Terjadi kesalahan saat menghapus Produk.";
+
+          if (error.response) {
+            switch (error.response.status) {
+              case 403:
+                errorMessage =
+                  "Anda tidak memiliki izin untuk menghapus produk ini.";
+                break;
+              case 404:
+                errorMessage = "Produk tidak ditemukan.";
+                break;
+              case 409:
+                errorMessage =
+                  "Produk tidak dapat dihapus karena masih digunakan.";
+                break;
+              default:
+                errorMessage = error.response.data?.message || errorMessage;
+            }
+          }
+
+          Swal.fire({
+            icon: "error",
+            title: "Error!",
+            text: errorMessage,
+          });
+
+          console.error("Error deleting product:", error);
+        }
+      }
     } catch (error) {
-      console.error("Error deleting product:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: "Terjadi kesalahan dalam memproses permintaan.",
+      });
+      console.error("Error in delete handler:", error);
     }
   };
 
