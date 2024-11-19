@@ -114,7 +114,7 @@ const SideNav = () => {
                 </NavLink>
               </li>
               <li className="nav-item">
-                <a href="/#" className="nav-link">
+                <a href="/" className="nav-link">
                   <i className="nav-icon fas fa-copy" />
                   <p>
                     Layout Options
@@ -149,7 +149,7 @@ const SideNav = () => {
                   </li>
                 </ul>
               </li>
-              <li className="nav-header">EXAMPLES</li>
+              <li className="nav-header">DATA</li>
               <li className="nav-item">
                 <NavLink
                   to="/categories"
@@ -189,6 +189,24 @@ const SideNav = () => {
                   <p>Data Kriteria</p>
                 </NavLink>
               </li>
+              <li className="nav-header">PERHITUNGAN</li>
+              <li className="nav-item">
+                <NavLink
+                  to="/values"
+                  className="nav-link"
+                  activeClassName="active"
+                  isActive={(match, location) => {
+                    return match || location.pathname.startsWith("/values");
+                  }}
+                >
+                  <i className="nav-icon fas fa-calculator" />{" "}
+                  <p>Hasil Perhitungan</p>
+                </NavLink>
+              </li>
+              <li className="nav-header">
+                <hr className="border border-secondary my-2" />{" "}
+              </li>
+              <li className="nav-header">AKSI</li>
               <li className="nav-item">
                 <a
                   href="/#"

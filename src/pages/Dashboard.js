@@ -1,27 +1,94 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import axios from "axios";
+import { Bar } from "react-chartjs-2";
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const Dashboard = (props) => {
   const navigate = useNavigate();
+  const [data, setData] = useState({
+    net_profit: [],
+    gross_profit: [],
+    gross_sale: [],
+    purchase_cost: [],
+    labels: [],
+  });
 
   useEffect(() => {
+    // Check authentication token
     const jwtToken = Cookies.get("token");
     if (!jwtToken) {
       navigate("/login");
     }
+
+    // Fetch product data
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/products", {
+          headers: { Authorization: `Bearer ${jwtToken}` },
+        });
+        const products = response.data;
+
+        // Prepare data for charts
+        const labels = products.map(
+          (product) => product.name || `Product ${product.id}`
+        );
+        const net_profit = products.map((product) => product.net_profit);
+        const gross_profit = products.map((product) => product.gross_profit);
+        const gross_sale = products.map((product) => product.gross_sale);
+        const purchase_cost = products.map((product) => product.purchase_cost);
+
+        setData({
+          labels,
+          net_profit,
+          gross_profit,
+          gross_sale,
+          purchase_cost,
+        });
+      } catch (error) {
+        console.error("Error fetching product data:", error);
+      }
+    };
+
+    fetchData();
   }, [navigate]);
+
+  // Chart options
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+    },
+  };
 
   return (
     <div>
-      {/* Content Header (Page header) */}
+      {/* Content Header */}
       <div className="content-header">
         <div className="container-fluid">
           <div className="row mb-2">
             <div className="col-sm-6">
               <h1 className="m-0">{props.title}</h1>
             </div>
-            {/* /.col */}
             <div className="col-sm-6">
               <ol className="breadcrumb float-sm-right">
                 <li className="breadcrumb-item">
@@ -30,16 +97,112 @@ const Dashboard = (props) => {
                 <li className="breadcrumb-item active">{props.title}</li>
               </ol>
             </div>
-            {/* /.col */}
           </div>
-          {/* /.row */}
         </div>
-        {/* /.container-fluid */}
       </div>
-      {/* /.content-header */}
-      {/* Main content */}
-      <section className="content"></section>
-      {/* /.content */}
+
+      {/* Main Content */}
+      <section className="content">
+        <div className="container-fluid">
+          <div className="row">
+            {/* Net Profit Chart */}
+            <div className="col-lg-6">
+              <div className="card">
+                <div className="card-header">
+                  <h3 className="card-title">Net Profit</h3>
+                </div>
+                <div className="card-body">
+                  <Bar
+                    data={{
+                      labels: data.labels,
+                      datasets: [
+                        {
+                          label: "Net Profit",
+                          data: data.net_profit,
+                          backgroundColor: "rgba(75, 192, 192, 0.6)",
+                        },
+                      ],
+                    }}
+                    options={chartOptions}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Gross Profit Chart */}
+            <div className="col-lg-6">
+              <div className="card">
+                <div className="card-header">
+                  <h3 className="card-title">Gross Profit</h3>
+                </div>
+                <div className="card-body">
+                  <Bar
+                    data={{
+                      labels: data.labels,
+                      datasets: [
+                        {
+                          label: "Gross Profit",
+                          data: data.gross_profit,
+                          backgroundColor: "rgba(153, 102, 255, 0.6)",
+                        },
+                      ],
+                    }}
+                    options={chartOptions}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Gross Sale Chart */}
+            <div className="col-lg-6">
+              <div className="card">
+                <div className="card-header">
+                  <h3 className="card-title">Gross Sale</h3>
+                </div>
+                <div className="card-body">
+                  <Bar
+                    data={{
+                      labels: data.labels,
+                      datasets: [
+                        {
+                          label: "Gross Sale",
+                          data: data.gross_sale,
+                          backgroundColor: "rgba(255, 159, 64, 0.6)",
+                        },
+                      ],
+                    }}
+                    options={chartOptions}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Purchase Cost Chart */}
+            <div className="col-lg-6">
+              <div className="card">
+                <div className="card-header">
+                  <h3 className="card-title">Purchase Cost</h3>
+                </div>
+                <div className="card-body">
+                  <Bar
+                    data={{
+                      labels: data.labels,
+                      datasets: [
+                        {
+                          label: "Purchase Cost",
+                          data: data.purchase_cost,
+                          backgroundColor: "rgba(255, 99, 132, 0.6)",
+                        },
+                      ],
+                    }}
+                    options={chartOptions}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
