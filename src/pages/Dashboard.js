@@ -105,11 +105,11 @@ const Dashboard = (props) => {
       <section className="content">
         <div className="container-fluid">
           <div className="row">
-            {/* Net Profit Chart */}
+            {/* Keuntungan Bersih Chart */}
             <div className="col-lg-6">
               <div className="card">
                 <div className="card-header">
-                  <h3 className="card-title">Net Profit</h3>
+                  <h3 className="card-title">Keuntungan Bersih</h3>
                 </div>
                 <div className="card-body">
                   <Bar
@@ -117,7 +117,7 @@ const Dashboard = (props) => {
                       labels: data.labels,
                       datasets: [
                         {
-                          label: "Net Profit",
+                          label: "Keuntungan Bersih",
                           data: data.net_profit,
                           backgroundColor: "rgba(75, 192, 192, 0.6)",
                         },
@@ -129,11 +129,11 @@ const Dashboard = (props) => {
               </div>
             </div>
 
-            {/* Gross Profit Chart */}
+            {/* Keuntungan Kotor Chart */}
             <div className="col-lg-6">
               <div className="card">
                 <div className="card-header">
-                  <h3 className="card-title">Gross Profit</h3>
+                  <h3 className="card-title">Keuntungan Kotor</h3>
                 </div>
                 <div className="card-body">
                   <Bar
@@ -141,7 +141,7 @@ const Dashboard = (props) => {
                       labels: data.labels,
                       datasets: [
                         {
-                          label: "Gross Profit",
+                          label: "Keuntungan Kotor",
                           data: data.gross_profit,
                           backgroundColor: "rgba(153, 102, 255, 0.6)",
                         },
@@ -153,11 +153,11 @@ const Dashboard = (props) => {
               </div>
             </div>
 
-            {/* Gross Sale Chart */}
+            {/* Penjualan Kotor Chart */}
             <div className="col-lg-6">
               <div className="card">
                 <div className="card-header">
-                  <h3 className="card-title">Gross Sale</h3>
+                  <h3 className="card-title">Penjualan Kotor</h3>
                 </div>
                 <div className="card-body">
                   <Bar
@@ -165,7 +165,7 @@ const Dashboard = (props) => {
                       labels: data.labels,
                       datasets: [
                         {
-                          label: "Gross Sale",
+                          label: "Penjualan Kotor",
                           data: data.gross_sale,
                           backgroundColor: "rgba(255, 159, 64, 0.6)",
                         },
@@ -177,11 +177,11 @@ const Dashboard = (props) => {
               </div>
             </div>
 
-            {/* Purchase Cost Chart */}
+            {/* Biaya Pembelian Chart */}
             <div className="col-lg-6">
               <div className="card">
                 <div className="card-header">
-                  <h3 className="card-title">Purchase Cost</h3>
+                  <h3 className="card-title">Biaya Pembelian</h3>
                 </div>
                 <div className="card-body">
                   <Bar
@@ -189,7 +189,7 @@ const Dashboard = (props) => {
                       labels: data.labels,
                       datasets: [
                         {
-                          label: "Purchase Cost",
+                          label: "Biaya Pembelian",
                           data: data.purchase_cost,
                           backgroundColor: "rgba(255, 99, 132, 0.6)",
                         },
