@@ -27,29 +27,54 @@ const SideNav = () => {
   }, []);
 
   const handleLogout = async () => {
+    const token = Cookies.get("token");
     try {
-      const token = Cookies.get("token");
-      await axios.get("http://localhost:8080/api/logout", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const result = await Swal.fire({
+        title: "Konfirmasi Keluar Aplikasi",
+        text: "Apakah anda yakin untuk keluar aplikasi?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Ya, Keluar Aplikasi!",
+        cancelButtonText: "Batal",
       });
 
-      Cookies.remove("token");
+      if (result.isConfirmed) {
+        try {
+          await axios.get(`http://localhost:8080/api/logout`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
-      Swal.fire({
-        icon: "success",
-        title: "Logout Successful",
-        text: "Berhasil logout",
-      });
+          Cookies.remove("token");
 
-      navigate("/login");
+          Swal.fire({
+            icon: "success",
+            title: "Berhasil!",
+            text: "Berhasil Keluar Aplikasi!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+
+          navigate("/login");
+        } catch (error) {
+          Swal.fire({
+            icon: "error",
+            title: "Error!",
+            text: "Terjadi kesalahan dalam memproses permintaan logout.",
+          });
+          console.error("Logout error:", error);
+        }
+      }
     } catch (error) {
       Swal.fire({
         icon: "error",
-        title: "Logout Error",
-        text: "Failed to logout",
+        title: "Error!",
+        text: "Terjadi kesalahan dalam memproses konfirmasi.",
       });
+      console.error("Confirmation dialog error:", error);
     }
   };
 
