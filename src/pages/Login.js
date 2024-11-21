@@ -8,13 +8,32 @@ import Input from "../components/form/Input";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
 
   const { setJwtToken } = useOutletContext();
-
   const navigate = useNavigate();
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!username.trim()) {
+      newErrors.username = "Username wajib diisi";
+    }
+
+    if (!password.trim()) {
+      newErrors.password = "Password wajib diisi";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
 
     let payload = {
       username: username,
@@ -39,7 +58,7 @@ const Login = () => {
       if (data.error) {
         Swal.fire({
           icon: "error",
-          title: "Login Failed",
+          title: "Gagal Login",
           text: data.message,
         });
       } else {
@@ -48,8 +67,8 @@ const Login = () => {
           setJwtToken(token);
           Swal.fire({
             icon: "success",
-            title: "Success",
-            text: "Login successful!",
+            title: "Berhasil",
+            text: "Berhasil Masuk!",
           }).then(() => {
             navigate("/");
           });
@@ -85,40 +104,69 @@ const Login = () => {
         </div>
         <div className="card">
           <div className="card-body login-card-body">
-            <p className="login-box-msg">Sign in to start your session</p>
+            <p className="login-box-msg">Masuk untuk memulai sesi</p>
             <form onSubmit={handleSubmit}>
-              <Input 
-                type="text"
-                className="form-control"
-                placeholder="Username"
-                required
-                onChange={(event) => setUsername(event.target.value)}
-                icon="fas fa-envelope"
-              />
-              <Input 
-                type="password"
-                className="form-control"
-                placeholder="Password"
-                required
-                onChange={(event) => setPassword(event.target.value)}
-                icon="fas fa-lock"
-              />
-              <div className="row">
+              <div className="form-group">
+                <label htmlFor="username">Username</label>
+                <Input
+                  id="username"
+                  type="text"
+                  className={`form-control ${
+                    errors.username ? "is-invalid" : ""
+                  }`}
+                  placeholder="Masukkan username"
+                  required
+                  onChange={(event) => {
+                    setUsername(event.target.value);
+                    if (errors.username) {
+                      setErrors((prev) => ({ ...prev, username: "" }));
+                    }
+                  }}
+                  icon="fas fa-envelope"
+                />
+                {errors.username && (
+                  <div className="invalid-feedback">{errors.username}</div>
+                )}
+              </div>
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <Input
+                  id="password"
+                  type="password"
+                  className={`form-control ${
+                    errors.password ? "is-invalid" : ""
+                  }`}
+                  placeholder="Masukkan password"
+                  required
+                  onChange={(event) => {
+                    setPassword(event.target.value);
+                    if (errors.password) {
+                      setErrors((prev) => ({ ...prev, password: "" }));
+                    }
+                  }}
+                  icon="fas fa-lock"
+                />
+                {errors.password && (
+                  <div className="invalid-feedback">{errors.password}</div>
+                )}
+              </div>
+
+              <div className="row mt-3">
                 <div className="col-8">
                   <div className="icheck-primary">
                     <input type="checkbox" id="remember" />
-                    <label htmlFor="remember">Remember Me</label>
+                    <label htmlFor="remember">Ingat Saya</label>
                   </div>
                 </div>
                 <div className="col-4">
                   <button type="submit" className="btn btn-primary btn-block">
-                    Sign In
+                    Masuk
                   </button>
                 </div>
               </div>
             </form>
-            <p className="mb-1">
-              <a href="/#">I forgot my password</a>
+            <p className="mb-1 mt-2">
+              <a href="/#">Lupa Password</a>
             </p>
           </div>
         </div>
