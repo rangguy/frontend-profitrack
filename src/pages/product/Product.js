@@ -407,10 +407,10 @@ const Product = (props) => {
               body={(rowData) => currencyBodyTemplate(rowData, "gross_profit")}
             />
             <Column
-              field="gross_sale"
-              header="Penjualan Kotor"
+              field="price_sale"
+              header="Harga Jual"
               sortable
-              body={(rowData) => currencyBodyTemplate(rowData, "gross_sale")}
+              body={(rowData) => currencyBodyTemplate(rowData, "price_sale")}
             />
             <Column
               field="purchase_cost"

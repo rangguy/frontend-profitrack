@@ -28,7 +28,7 @@ const Dashboard = (props) => {
   const [data, setData] = useState({
     net_profit: [],
     gross_profit: [],
-    gross_sale: [],
+    price_sale: [],
     purchase_cost: [],
     labels: [],
   });
@@ -54,14 +54,14 @@ const Dashboard = (props) => {
         );
         const net_profit = products.map((product) => product.net_profit);
         const gross_profit = products.map((product) => product.gross_profit);
-        const gross_sale = products.map((product) => product.gross_sale);
+        const price_sale = products.map((product) => product.price_sale);
         const purchase_cost = products.map((product) => product.purchase_cost);
 
         setData({
           labels,
           net_profit,
           gross_profit,
-          gross_sale,
+          price_sale,
           purchase_cost,
         });
       } catch (error) {
@@ -166,7 +166,7 @@ const Dashboard = (props) => {
                       datasets: [
                         {
                           label: "Penjualan Kotor",
-                          data: data.gross_sale,
+                          data: data.price_sale,
                           backgroundColor: "rgba(255, 159, 64, 0.6)",
                         },
                       ],
