@@ -10,7 +10,7 @@ const AddProduct = (props) => {
     name: "",
     net_profit: "",
     gross_profit: "",
-    gross_sale: "",
+    price_sale: "",
     purchase_cost: "",
     initial_stock: "",
     final_stock: "",
@@ -22,7 +22,7 @@ const AddProduct = (props) => {
     name: "",
     net_profit: "",
     gross_profit: "",
-    gross_sale: "",
+    price_sale: "",
     purchase_cost: "",
     initial_stock: "",
     final_stock: "",
@@ -118,7 +118,7 @@ const AddProduct = (props) => {
       name: formData.name.trim(),
       net_profit: parseFloat(formData.net_profit),
       gross_profit: parseFloat(formData.gross_profit),
-      gross_sale: parseFloat(formData.gross_sale),
+      price_sale: parseFloat(formData.price_sale),
       purchase_cost: parseFloat(formData.purchase_cost),
       initial_stock: parseInt(formData.initial_stock),
       final_stock: parseInt(formData.final_stock),
@@ -261,29 +261,29 @@ const AddProduct = (props) => {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="gross_sale">Gross Sale</label>
+                    <label htmlFor="price_sale">Harga Jual</label>
                     <Input
                       type="number"
-                      id="gross_sale"
+                      id="price_sale"
                       className={`form-control ${
-                        errors.gross_sale ? "is-invalid" : ""
+                        errors.price_sale ? "is-invalid" : ""
                       }`}
-                      value={formData.gross_sale}
+                      value={formData.price_sale}
                       onChange={handleChange}
-                      placeholder="Masukkan gross sale"
+                      placeholder="Masukkan Harga Jual"
                     />
-                    {errors.gross_sale && (
+                    {errors.price_sale && (
                       <div
                         className="invalid-feedback"
                         style={{ display: "block" }}
                       >
-                        {errors.gross_sale}
+                        {errors.price_sale}
                       </div>
                     )}
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="purchase_cost">Purchase Cost</label>
+                    <label htmlFor="purchase_cost">Harga Beli</label>
                     <Input
                       type="number"
                       id="purchase_cost"
@@ -292,7 +292,7 @@ const AddProduct = (props) => {
                       }`}
                       value={formData.purchase_cost}
                       onChange={handleChange}
-                      placeholder="Masukkan purchase cost"
+                      placeholder="Masukkan Harga Beli"
                     />
                     {errors.purchase_cost && (
                       <div
@@ -305,7 +305,7 @@ const AddProduct = (props) => {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="initial_stock">Initial Stock</label>
+                    <label htmlFor="initial_stock">Stok Awal</label>
                     <Input
                       type="number"
                       id="initial_stock"
@@ -314,7 +314,7 @@ const AddProduct = (props) => {
                       }`}
                       value={formData.initial_stock}
                       onChange={handleChange}
-                      placeholder="Masukkan initial stock"
+                      placeholder="Masukkan Stok Awal"
                     />
                     {errors.initial_stock && (
                       <div
@@ -327,7 +327,7 @@ const AddProduct = (props) => {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="final_stock">Final Stock</label>
+                    <label htmlFor="final_stock">Stok Akhir</label>
                     <Input
                       type="number"
                       id="final_stock"
@@ -336,7 +336,7 @@ const AddProduct = (props) => {
                       }`}
                       value={formData.final_stock}
                       onChange={handleChange}
-                      placeholder="Masukkan final stock"
+                      placeholder="Masukkan Stok Akhir"
                     />
                     {errors.final_stock && (
                       <div
