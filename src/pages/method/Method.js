@@ -32,7 +32,7 @@ const Method = (props) => {
   }, []);
 
   const handleMethodClick = (id, name) => {
-    navigate(`/scores/${id}/${name}`, { state: { id, name } });
+    navigate(`/methods/${id}/${name}`, { state: { id, name } });
   };
 
   return (
@@ -62,20 +62,20 @@ const Method = (props) => {
                 <div className="col-md-4 mb-4" key={method.id}>
                   <div className="card shadow-sm border-primary">
                     <div className="card-body">
-                      <h5 className="card-title">{method.name}</h5>
+                      <h5 className="card-title mb-2">{method.name}</h5>
                       <p className="card-text">
-                        <span className="badge bg-info text-dark">
-                          ID: {method.id}
-                        </span>
+                        <button
+                          className="btn btn-primary mx-2"
+                          onClick={() =>
+                            handleMethodClick(method.id, method.name)
+                          }
+                        >
+                          Lihat Detail Nilai
+                        </button>
+                        <button className="btn btn-success">
+                          Lihat Rank
+                        </button>
                       </p>
-                      <button
-                        className="btn btn-primary"
-                        onClick={() =>
-                          handleMethodClick(method.id, method.name)
-                        }
-                      >
-                        Lihat Data Nilai
-                      </button>
                     </div>
                   </div>
                 </div>
