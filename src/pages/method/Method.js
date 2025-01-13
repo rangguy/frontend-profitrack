@@ -73,7 +73,7 @@ const Method = (props) => {
                           Lihat Detail Nilai
                         </button>
                         <button className="btn btn-success">
-                          Lihat Rank
+                          Lihat Nilai Akhir
                         </button>
                       </p>
                     </div>

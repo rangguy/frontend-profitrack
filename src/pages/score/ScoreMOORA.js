@@ -9,7 +9,7 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import Swal from "sweetalert2";
 
-const Score = (props) => {
+const ScoreMOORA = (props) => {
   const [scores, setScores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [criteriaNames, setCriteriaNames] = useState({});
@@ -22,7 +22,7 @@ const Score = (props) => {
     try {
       const token = Cookies.get("token");
       const response = await axios.get(
-        `http://localhost:8080/api/scores/${id}/SMART`,
+        `http://localhost:8080/api/scores/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -37,7 +37,7 @@ const Score = (props) => {
       ) {
         navigate("/login");
       } else {
-        console.error("Error fetching scores SMART:", error);
+        console.error("Error fetching scores MOORA:", error);
       }
     } finally {
       setLoading(false);
@@ -99,14 +99,14 @@ const Score = (props) => {
     setProductNames(productMap);
   }, [scores]);
 
-  const handlePerhitunganUtility = async () => {
-    setLoading(true); // Set loading state to true
+  const handlePerhitunganNormalisasi = async () => {
+    setLoading(true);
     try {
       const token = Cookies.get("token");
 
       const response = await axios.put(
-        `http://localhost:8080/api/scores/${id}/SMART`,
-        {}, // Assuming no body is needed for the PUT request
+        `http://localhost:8080/api/scores/${id}/MOORA`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -114,24 +114,23 @@ const Score = (props) => {
         }
       );
 
-      // Handle the response from the PUT request
       if (response.status === 200) {
         Swal.fire({
           icon: "success",
           title: "Berhasil!",
-          text: "Nilai SMART berhasil dihitung",
+          text: "Nilai MOORA berhasil dihitung",
           showConfirmButton: false,
           timer: 1500,
         });
       }
     } catch (error) {
-      let errorMessage = "Terjadi kesalahan saat menghitung nilai SMART.";
+      let errorMessage = "Terjadi kesalahan saat menghitung nilai MOORA.";
 
       if (error.response) {
         switch (error.response.status) {
           case 403:
             errorMessage =
-              "Anda tidak memiliki izin untuk menghitung nilai SMART ini.";
+              "Anda tidak memiliki izin untuk menghitung nilai MOORA ini.";
             break;
           default:
             errorMessage = error.response.data?.message || errorMessage;
@@ -144,7 +143,7 @@ const Score = (props) => {
         text: errorMessage,
       });
 
-      console.error("Error counting scores SMART:", error);
+      console.error("Error counting scores MOORA:", error);
     } finally {
       setLoading(false);
       window.location.reload();
@@ -159,7 +158,7 @@ const Score = (props) => {
       // Make the POST request
       const response = await axios.post(
         `http://localhost:8080/api/scores/${id}`,
-        {}, // Assuming no body is needed for the POST request
+        {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -172,19 +171,19 @@ const Score = (props) => {
         Swal.fire({
           icon: "success",
           title: "Berhasil!",
-          text: "Nilai SMART berhasil dihitung",
+          text: "Nilai MOORA berhasil dihitung",
           showConfirmButton: false,
           timer: 1500,
         });
       }
     } catch (error) {
-      let errorMessage = "Terjadi kesalahan saat menghitung nilai SMART.";
+      let errorMessage = "Terjadi kesalahan saat menghitung nilai MOORA.";
 
       if (error.response) {
         switch (error.response.status) {
           case 403:
             errorMessage =
-              "Anda tidak memiliki izin untuk menghitung nilai SMART ini.";
+              "Anda tidak memiliki izin untuk menghitung nilai MOORA ini.";
             break;
           default:
             errorMessage = error.response.data?.message || errorMessage;
@@ -197,7 +196,7 @@ const Score = (props) => {
         text: errorMessage,
       });
 
-      console.error("Error counting scores SMART:", error);
+      console.error("Error counting scores MOORA:", error);
     } finally {
       setLoading(false);
       window.location.reload();
@@ -316,9 +315,9 @@ const Score = (props) => {
           </button>
           <button
             className="btn btn-info my-2 mx-2"
-            onClick={handlePerhitunganUtility}
+            onClick={handlePerhitunganNormalisasi}
           >
-            Proses Perhitungan Utility dan Utility x Bobot
+            Proses Perhitungan Normalisasi dan Normalisasi x Bobot
           </button>
         </div>
       </div>
@@ -373,7 +372,7 @@ const Score = (props) => {
           <div className="col">
             <div className="card card-primary">
               <div className="card-header">
-                <h3 className="card-title">Nilai Utility</h3>
+                <h3 className="card-title">Nilai Normalisasi</h3>
                 <div className="card-tools">
                   <button
                     type="button"
@@ -394,7 +393,7 @@ const Score = (props) => {
                     paginator
                     rows={10}
                     loading={loading}
-                    emptyMessage="Data Nilai Utility masih kosong"
+                    emptyMessage="Data Nilai Normalisasi masih kosong"
                   >
                     <Column field="name" header="Nama Produk" sortable />
                     {criteria.map((criteriaId) => (
@@ -419,7 +418,7 @@ const Score = (props) => {
           <div className="col">
             <div className="card card-primary">
               <div className="card-header">
-                <h3 className="card-title">Nilai Utility x Bobot</h3>
+                <h3 className="card-title">Nilai Normalisasi x Bobot</h3>
                 <div className="card-tools">
                   <button
                     type="button"
@@ -440,7 +439,7 @@ const Score = (props) => {
                     paginator
                     rows={10}
                     loading={loading}
-                    emptyMessage="Data Nilai Utility x Bobot masih kosong"
+                    emptyMessage="Data Nilai Normalisasi x Bobot masih kosong"
                   >
                     <Column field="name" header="Nama Produk" sortable />
                     {criteria.map((criteriaId) => (
@@ -464,4 +463,4 @@ const Score = (props) => {
   );
 };
 
-export default Score;
+export default ScoreMOORA;

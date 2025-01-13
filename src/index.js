@@ -21,7 +21,8 @@ import AddCriteria from "./pages/criteria/AddCriteria";
 import EditCriteria from "./pages/criteria/EditCriteria";
 import AddProduct from "./pages/product/AddProduct.js";
 import Method from "./pages/method/Method.js";
-import Score from "./pages/score/Score.js";
+import ScoreSMART from "./pages/score/ScoreSMART.js";
+import ScoreMOORA from "./pages/score/ScoreMOORA.js";
 
 const ErrorBoundary = () => {
   const error = useRouteError();
@@ -90,7 +91,11 @@ const router = createBrowserRouter([
           },
           {
             path: "/methods/:id/SMART",
-            element: <Score title="Data Nilai SMART" />,
+            element: <ScoreSMART title="Data Nilai SMART" />,
+          },
+          {
+            path: "/methods/:id/MOORA",
+            element: <ScoreMOORA title="Data Nilai MOORA" />,
           },
         ],
       },
