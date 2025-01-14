@@ -44,7 +44,7 @@ const Category = (props) => {
   }, [fetchCriterias]);
 
   const handleEdit = (criteriaId) => {
-    navigate(`/criterias/${criteriaId}`)
+    navigate(`/criterias/${criteriaId}`);
   };
 
   const handleDelete = async (criteriaId) => {
@@ -175,6 +175,7 @@ const Category = (props) => {
           </div>
           {/* Add Button */}
           <Link to="/criterias/add" className="btn btn-success mb-3">
+            <i className="fas fa-plus me-2 mx-1"></i>
             Tambah Kriteria
           </Link>
         </div>

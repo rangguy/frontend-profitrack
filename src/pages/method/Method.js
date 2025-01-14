@@ -65,15 +65,12 @@ const Method = (props) => {
                       <h5 className="card-title mb-2">{method.name}</h5>
                       <p className="card-text">
                         <button
-                          className="btn btn-primary mx-2"
+                          className="btn btn-primary"
                           onClick={() =>
                             handleMethodClick(method.id, method.name)
                           }
                         >
-                          Lihat Detail Nilai
-                        </button>
-                        <button className="btn btn-success">
-                          Lihat Nilai Akhir
+                          Lihat Hasil Perhitungan
                         </button>
                       </p>
                     </div>

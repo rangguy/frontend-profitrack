@@ -174,6 +174,7 @@ const Category = (props) => {
           </div>
           {/* Add Button */}
           <Link to="/categories/add" className="btn btn-success mb-3">
+          <i className="fas fa-plus me-2 mx-1"></i>
             Tambah Kategori
           </Link>
         </div>

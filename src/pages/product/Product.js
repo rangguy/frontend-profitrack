@@ -157,7 +157,7 @@ const Product = (props) => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download",  fileName);
+      link.setAttribute("download", fileName);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -277,113 +277,105 @@ const Product = (props) => {
               </ol>
             </div>
           </div>
-          <div className="card">
-            <div className="card-body">
-              <div
-                className="btn-group"
-                role="group"
-                aria-label="Product actions"
-              >
-                {/* Tombol Tambah Produk */}
-                <button
-                  className="btn btn-success m-2"
-                  onClick={() => navigate("/products/add")}
-                >
-                  <i className="fas fa-plus me-2"></i>
-                  Tambah Produk
-                </button>
 
-                {/* Tombol Export Excel */}
-                <button className="btn btn-info m-2" onClick={handleExport}>
-                  <i className="fas fa-download me-2"></i>
-                  Export Excel
-                </button>
+          {/* Button Container */}
+          <div className="d-flex flex-wrap mb-2">
+            {/* Tombol Tambah Produk */}
+            <button
+              className="btn btn-success me-2"
+              onClick={() => navigate("/products/add")}
+            >
+              <i className="fas fa-plus me-2 mx-1"></i>
+              Tambah Produk
+            </button>
 
-                {/* Tombol Import Excel */}
-                <div className="position-relative d-inline-block">
-                  <button className="btn btn-warning m-2" onClick={toggleModal}>
-                    <i className="fas fa-upload me-2"></i>
-                    Import Excel
-                  </button>
-                </div>
-              </div>
-            </div>
+            {/* Tombol Export Excel */}
+            <button className="btn btn-info mx-2" onClick={handleExport}>
+              <i className="fas fa-download me-2 mx-1"></i>
+              Download Excel
+            </button>
 
-            {/* Modal untuk Upload Excel */}
-            {showModal && (
-              <div
-                className="modal fade show"
-                style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}
-                tabIndex="-1"
-                role="dialog"
-                aria-labelledby="modalLabel"
-                aria-hidden="true"
-              >
-                <div className="modal-dialog" role="document">
-                  <div className="modal-content">
-                    <div className="modal-header">
-                      <h5 className="modal-title" id="modalLabel">
-                        Upload File Excel
-                      </h5>
-                      <button
-                        type="button"
-                        className="close btn btn-danger"
-                        aria-label="Close"
-                        onClick={toggleModal}
-                      >
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div className="modal-body">
-                      <p>
-                        Hanya file dengan ekstensi .xlsx atau .xls yang
-                        diperbolehkan. Maksimal ukuran file adalah 1MB.
-                      </p>
-                      <FileUpload
-                        mode="basic"
-                        name="file"
-                        auto
-                        accept=".xlsx,.xls"
-                        maxFileSize={1000000}
-                        onSelect={(event) => setFile(event.files[0])} // Set the file on selection
-                        chooseLabel="Pilih File"
-                        className="w-100"
-                      />
+            {/* Tombol Import Excel */}
+            <button className="btn btn-warning" onClick={toggleModal}>
+              <i className="fas fa-upload me-2 mx-1"></i>
+              Upload Excel
+            </button>
+          </div>
 
-                      {file && (
-                        <div className="mt-3">
-                          <p>
-                            <strong>Nama File:</strong> {file.name}
-                          </p>
-                          <p>
-                            <strong>Ukuran File:</strong>{" "}
-                            {(file.size / 1024).toFixed(2)} KB
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                    <div className="modal-footer">
-                      <button
-                        type="button"
-                        className="btn btn-secondary"
-                        onClick={toggleModal} // Cancel and clear the file
-                      >
-                        Batal
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-primary"
-                        onClick={handleImport}
-                        disabled={!file} // Disable the button if no file is selected
-                      >
-                        Submit
-                      </button>
-                    </div>
+          {/* Modal untuk Upload Excel */}
+          {showModal && (
+            <div
+              className="modal fade show"
+              style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}
+              tabIndex="-1"
+              role="dialog"
+              aria-labelledby="modalLabel"
+              aria-hidden="true"
+            >
+              <div className="modal-dialog" role="document">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="modalLabel">
+                      Upload File Excel
+                    </h5>
+                    <button
+                      type="button"
+                      className="close btn btn-danger"
+                      aria-label="Close"
+                      onClick={toggleModal}
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div className="modal-body">
+                    <p>
+                      Hanya file dengan ekstensi .xlsx atau .xls yang
+                      diperbolehkan. Maksimal ukuran file adalah 1MB.
+                    </p>
+                    <FileUpload
+                      mode="basic"
+                      name="file"
+                      auto
+                      accept=".xlsx,.xls"
+                      maxFileSize={1000000}
+                      onSelect={(event) => setFile(event.files[0])}
+                      chooseLabel="Pilih File"
+                      className="w-100"
+                    />
+
+                    {file && (
+                      <div className="mt-3">
+                        <p>
+                          <strong>Nama File:</strong> {file.name}
+                        </p>
+                        <p>
+                          <strong>Ukuran File:</strong>{" "}
+                          {(file.size / 1024).toFixed(2)} KB
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={toggleModal}
+                    >
+                      Batal
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={handleImport}
+                      disabled={!file}
+                    >
+                      Submit
+                    </button>
                   </div>
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
       <section className="content">

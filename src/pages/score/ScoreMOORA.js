@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 
 const ScoreMOORA = (props) => {
   const [scores, setScores] = useState([]);
+  const [finalScores, setFinalScores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [criteriaNames, setCriteriaNames] = useState({});
   const [productNames, setProductNames] = useState({});
@@ -38,6 +39,33 @@ const ScoreMOORA = (props) => {
         navigate("/login");
       } else {
         console.error("Error fetching scores MOORA:", error);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [navigate, id]);
+
+  const fetchFinalScores = useCallback(async () => {
+    setLoading(true);
+    try {
+      const token = Cookies.get("token");
+      const response = await axios.get(
+        `http://localhost:8080/api/final_scores/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setFinalScores(Array.isArray(response.data) ? response.data : []);
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        navigate("/login");
+      } else {
+        console.error("Error fetching scores SMART:", error);
       }
     } finally {
       setLoading(false);
@@ -99,7 +127,59 @@ const ScoreMOORA = (props) => {
     setProductNames(productMap);
   }, [scores]);
 
-  const handlePerhitunganNormalisasi = async () => {
+  const handlePerhitungan = async () => {
+    setLoading(true);
+    try {
+      const token = Cookies.get("token");
+
+      // Make the POST request
+      const response = await axios.post(
+        `http://localhost:8080/api/scores/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil!",
+          text: "Nilai MOORA berhasil dihitung",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    } catch (error) {
+      let errorMessage = "Terjadi kesalahan saat menghitung nilai MOORA.";
+
+      if (error.response) {
+        switch (error.response.status) {
+          case 403:
+            errorMessage =
+              "Anda tidak memiliki izin untuk menghitung nilai MOORA ini.";
+            break;
+          default:
+            errorMessage = error.response.data?.message || errorMessage;
+        }
+      }
+
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: errorMessage,
+      });
+
+      console.error("Error counting scores MOORA:", error);
+    } finally {
+      setLoading(false);
+      window.location.reload();
+    }
+  };
+
+  const handlePerhitunganMOORA = async () => {
     setLoading(true);
     try {
       const token = Cookies.get("token");
@@ -150,62 +230,10 @@ const ScoreMOORA = (props) => {
     }
   };
 
-  const handlePerhitungan = async () => {
-    setLoading(true);
-    try {
-      const token = Cookies.get("token");
-
-      // Make the POST request
-      const response = await axios.post(
-        `http://localhost:8080/api/scores/${id}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      // Handle the response from the POST request
-      if (response.status === 200) {
-        Swal.fire({
-          icon: "success",
-          title: "Berhasil!",
-          text: "Nilai MOORA berhasil dihitung",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      }
-    } catch (error) {
-      let errorMessage = "Terjadi kesalahan saat menghitung nilai MOORA.";
-
-      if (error.response) {
-        switch (error.response.status) {
-          case 403:
-            errorMessage =
-              "Anda tidak memiliki izin untuk menghitung nilai MOORA ini.";
-            break;
-          default:
-            errorMessage = error.response.data?.message || errorMessage;
-        }
-      }
-
-      Swal.fire({
-        icon: "error",
-        title: "Error!",
-        text: errorMessage,
-      });
-
-      console.error("Error counting scores MOORA:", error);
-    } finally {
-      setLoading(false);
-      window.location.reload();
-    }
-  };
-
   useEffect(() => {
     fetchScores();
-  }, [fetchScores]);
+    fetchFinalScores();
+  }, [fetchScores, fetchFinalScores]);
 
   useEffect(() => {
     if (scores.length > 0) {
@@ -289,6 +317,100 @@ const ScoreMOORA = (props) => {
 
   const finalDataScoreTwo = transformScoreTwo();
 
+  const transformFinalScores = () => {
+    const transformedData = {};
+
+    finalScores.forEach((score) => {
+      const { id, product_id, final_score, created_at } = score;
+
+      if (!transformedData[product_id]) {
+        const date = new Date(created_at);
+        const monthNames = [
+          "Januari",
+          "Februari",
+          "Maret",
+          "April",
+          "Mei",
+          "Juni",
+          "Juli",
+          "Agustus",
+          "September",
+          "Oktober",
+          "November",
+          "Desember",
+        ];
+        const month = monthNames[date.getMonth()];
+        const year = date.getFullYear();
+
+        transformedData[product_id] = {
+          id: id,
+          name: productNames[product_id] || `Product ${product_id}`,
+          final_score: parseFloat(final_score).toFixed(2),
+          created_at: `${month} ${year}`,
+        };
+      }
+    });
+
+    return Object.values(transformedData).sort(
+      (a, b) => b.final_score - a.final_score
+    );
+  };
+
+  const finalDataScores = transformFinalScores();
+
+  const handleDeleteAndSafeFinalScore = async () => {
+    setLoading(true);
+    try {
+      const token = Cookies.get("token");
+
+      // Make the POST request
+      const response = await axios.post(
+        `http://localhost:8080/api/scores/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // Handle the response from the POST request
+      if (response.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil!",
+          text: "Nilai MOORA berhasil dihitung",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    } catch (error) {
+      let errorMessage = "Terjadi kesalahan saat menghitung nilai MOORA.";
+
+      if (error.response) {
+        switch (error.response.status) {
+          case 403:
+            errorMessage =
+              "Anda tidak memiliki izin untuk menghitung nilai MOORA ini.";
+            break;
+          default:
+            errorMessage = error.response.data?.message || errorMessage;
+        }
+      }
+
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: errorMessage,
+      });
+
+      console.error("Error counting scores MOORA:", error);
+    } finally {
+      setLoading(false);
+      window.location.reload();
+    }
+  };
+
   return (
     <div>
       <div className="content-header">
@@ -309,16 +431,37 @@ const ScoreMOORA = (props) => {
               </ol>
             </div>
           </div>
-          {/* Add Button */}
-          <button className="btn btn-success my-2" onClick={handlePerhitungan}>
-            Proses Perhitungan nilai awal
-          </button>
-          <button
-            className="btn btn-info my-2 mx-2"
-            onClick={handlePerhitunganNormalisasi}
-          >
-            Proses Perhitungan Normalisasi dan Normalisasi x Bobot
-          </button>
+          <div className="d-flex justify-content-between align-items-center mb-2">
+            <div>
+              <Link className="btn btn-secondary" to="/methods">
+                <i className="fas fa-arrow-left me-2 mx-1"></i>
+                Kembali
+              </Link>
+              <button
+                className="btn btn-primary mx-2"
+                onClick={handlePerhitungan}
+              >
+                <i className="fas fa-calculator me-2 mx-1"></i>
+                Proses Perhitungan Nilai Awal
+              </button>
+              <button
+                className="btn btn-success"
+                onClick={handlePerhitunganMOORA}
+              >
+                <i className="fas fa-cogs me-2 mx-1"></i>
+                Proses Perhitungan MOORA
+              </button>
+            </div>
+            <div>
+              <button
+                className="btn btn-warning"
+                onClick={handleDeleteAndSafeFinalScore}
+              >
+                <i className="fas fa-save me-2 mx-1"></i>
+                Simpan Data Nilai Akhir
+              </button>
+            </div>
+          </div>
         </div>
       </div>
       <section className="content px-3">
@@ -452,6 +595,53 @@ const ScoreMOORA = (props) => {
                         sortable
                       />
                     ))}
+                  </DataTable>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="content px-3">
+        <div className="row">
+          <div className="col">
+            <div className="card card-primary">
+              <div className="card-header">
+                <h3 className="card-title">Nilai Akhir MOORA</h3>
+                <div className="card-tools">
+                  <button
+                    type="button"
+                    className="btn btn-tool"
+                    data-card-widget="collapse"
+                    title="Collapse"
+                  >
+                    <i className="fas fa-minus" />
+                  </button>
+                </div>
+              </div>
+              <div className="card-body">
+                <div className="container-fluid">
+                  <DataTable
+                    value={finalDataScores}
+                    stripedRows
+                    rowHover
+                    paginator
+                    rows={10}
+                    loading={loading}
+                    emptyMessage="Data nilai akhir masih kosong"
+                  >
+                    <Column field="name" header="Nama Produk" sortable />
+                    <Column
+                      field="final_score"
+                      header="Nilai Akhir"
+                      sortable
+                      body={(rowData) => (
+                        <span>
+                          {parseFloat(rowData.final_score).toFixed(2)}
+                        </span>
+                      )}
+                    />
+                    <Column field="created_at" header="Periode" sortable />
                   </DataTable>
                 </div>
               </div>
