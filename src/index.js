@@ -23,6 +23,7 @@ import AddProduct from "./pages/product/AddProduct.js";
 import Method from "./pages/method/Method.js";
 import ScoreSMART from "./pages/score/ScoreSMART.js";
 import ScoreMOORA from "./pages/score/ScoreMOORA.js";
+import EditProduct from "./pages/product/EditProduct.js";
 
 const ErrorBoundary = () => {
   const error = useRouteError();
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
           {
             path: "/products/add",
             element: <AddProduct title="Tambah Data Produk" />,
+          },
+          {
+            path: "/products/:id",
+            element: <EditProduct title="Ubah Data Produk" />,
           },
           {
             path: "/criterias",

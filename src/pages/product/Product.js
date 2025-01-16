@@ -45,9 +45,8 @@ const Product = (props) => {
     fetchProducts();
   }, [fetchProducts]);
 
-  const handleEdit = (product) => {
-    console.log("Edit product", product);
-    // Edit product logic here
+  const handleEdit = (productId) => {
+    navigate(`/products/${productId}`);
   };
 
   const handleDelete = async (productId) => {
@@ -241,7 +240,7 @@ const Product = (props) => {
     return (
       <div style={{ display: "flex", justifyContent: "center", gap: "8px" }}>
         <button
-          onClick={() => handleEdit(rowData)}
+          onClick={() => handleEdit(rowData.id)}
           className="btn btn-primary btn-sm d-flex align-items-center"
           title="Ubah"
         >
