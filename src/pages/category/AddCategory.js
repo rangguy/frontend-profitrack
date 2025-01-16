@@ -5,6 +5,8 @@ import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import axios from "axios";
 
+const API_BASE_URL = "http://localhost:8080/api";
+
 const AddCategory = (props) => {
   const [formData, setFormData] = useState({
     categoryName: "",
@@ -75,7 +77,7 @@ const AddCategory = (props) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/categories",
+        `${API_BASE_URL}/categories`,
         requestBody,
         {
           headers: {

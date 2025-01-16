@@ -5,6 +5,8 @@ import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import axios from "axios";
 
+const API_BASE_URL = "http://localhost:8080/api";
+
 const AddCriteria = (props) => {
   const [formData, setFormData] = useState({
     criteriaName: "",
@@ -50,10 +52,6 @@ const AddCriteria = (props) => {
 
     if (numValue < 0 || numValue > 6) {
       return "Masukkan bobot antara 1 - 5";
-    }
-
-    if (!Number.isInteger(numValue)) {
-      return "Bobot harus berupa bilangan bulat";
     }
 
     return "";
@@ -141,7 +139,7 @@ const AddCriteria = (props) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/criterias",
+        `${API_BASE_URL}/criterias`,
         requestBody,
         {
           headers: {

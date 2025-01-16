@@ -10,6 +10,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
+const API_BASE_URL = "http://localhost:8080/api";
+
 const Product = (props) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,7 +23,7 @@ const Product = (props) => {
     setLoading(true);
     try {
       const token = Cookies.get("token");
-      const response = await axios.get("http://localhost:8080/api/products", {
+      const response = await axios.get(`${API_BASE_URL}/products`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -76,7 +78,7 @@ const Product = (props) => {
       if (result.isConfirmed) {
         try {
           await axios.delete(
-            `http://localhost:8080/api/products/${productId}`,
+            `${API_BASE_URL}/products/${productId}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -137,7 +139,7 @@ const Product = (props) => {
     try {
       const token = Cookies.get("token");
       const response = await axios.get(
-        "http://localhost:8080/api/products/export",
+        `${API_BASE_URL}/products/export`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -184,7 +186,7 @@ const Product = (props) => {
       formData.append("file", file);
 
       const response = await axios.post(
-        "http://localhost:8080/api/products/import",
+       ` ${API_BASE_URL}/products/import`,
         formData,
         {
           headers: {

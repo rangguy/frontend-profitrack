@@ -9,6 +9,8 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import Swal from "sweetalert2";
 
+const API_BASE_URL = "http://localhost:8080/api";
+
 const ScoreMOORA = (props) => {
   const [scores, setScores] = useState([]);
   const [finalScores, setFinalScores] = useState([]);
@@ -23,7 +25,7 @@ const ScoreMOORA = (props) => {
     try {
       const token = Cookies.get("token");
       const response = await axios.get(
-        `http://localhost:8080/api/scores/${id}`,
+        `${API_BASE_URL}/scores/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -50,7 +52,7 @@ const ScoreMOORA = (props) => {
     try {
       const token = Cookies.get("token");
       const response = await axios.get(
-        `http://localhost:8080/api/final_scores/${id}`,
+        `${API_BASE_URL}/final_scores/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -85,7 +87,7 @@ const ScoreMOORA = (props) => {
     // Fetch criteria names
     const criteriaPromises = Array.from(criteriaSet).map(async (criteriaId) => {
       const response = await axios.get(
-        `http://localhost:8080/api/criterias/${criteriaId}`,
+        `${API_BASE_URL}/criterias/${criteriaId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -98,7 +100,7 @@ const ScoreMOORA = (props) => {
     // Fetch Nama Produk / Kriterias
     const productPromises = Array.from(productSet).map(async (productId) => {
       const response = await axios.get(
-        `http://localhost:8080/api/products/${productId}`,
+        `${API_BASE_URL}/products/${productId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -134,7 +136,7 @@ const ScoreMOORA = (props) => {
 
       // Make the POST request
       const response = await axios.post(
-        `http://localhost:8080/api/scores/${id}`,
+        `${API_BASE_URL}/scores/${id}`,
         {},
         {
           headers: {
@@ -185,7 +187,7 @@ const ScoreMOORA = (props) => {
       const token = Cookies.get("token");
 
       const response = await axios.put(
-        `http://localhost:8080/api/scores/${id}/MOORA`,
+        `${API_BASE_URL}/scores/${id}/MOORA`,
         {},
         {
           headers: {
@@ -365,7 +367,7 @@ const ScoreMOORA = (props) => {
 
       // Make the POST request
       const response = await axios.post(
-        `http://localhost:8080/api/scores/${id}`,
+        `${API_BASE_URL}/scores/${id}`,
         {},
         {
           headers: {

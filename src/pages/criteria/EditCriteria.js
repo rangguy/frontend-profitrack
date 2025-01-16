@@ -5,11 +5,14 @@ import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import Input from "../../components/form/Input";
 
+const API_BASE_URL = "http://localhost:8080/api";
+
 const EditCriteria = (props) => {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
+    criteriaName: "",
     weight: "",
     type: "",
   });
@@ -34,10 +37,6 @@ const EditCriteria = (props) => {
 
     if (numValue < 0 || numValue > 6) {
       return "Masukkan bobot antara 1 - 5";
-    }
-
-    if (!Number.isInteger(numValue)) {
-      return "Bobot harus berupa bilangan bulat";
     }
 
     return "";
@@ -71,18 +70,15 @@ const EditCriteria = (props) => {
 
       try {
         setIsLoading(true);
-        const response = await axios.get(
-          `http://localhost:8080/api/criterias/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`${API_BASE_URL}/criterias/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         const data = {
           criteriaName: response.data.name,
-          weight: response.data.weight,
+          weight: response.data.weight.toString(),
           type: response.data.type,
         };
 
@@ -137,6 +133,15 @@ const EditCriteria = (props) => {
     }));
   };
 
+  const checkIfDataChanged = () => {
+    if (!originalData) return false;
+
+    return (
+      formData.weight !== originalData.weight ||
+      formData.type !== originalData.type
+    );
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -168,35 +173,30 @@ const EditCriteria = (props) => {
       return;
     }
 
-    if (
-      originalData &&
-      formData.weight === originalData.weight &&
-      formData.type === originalData.type
-    ) {
+    // Cek perubahan data menggunakan fungsi baru
+    if (!checkIfDataChanged()) {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Masukkan setidaknya satu data baru",
+        text: "Tidak ada perubahan data",
       });
       return;
     }
 
+    setIsLoading(true);
+
     const requestBody = {
-      weight: parseInt(formData.weight),
+      weight: parseFloat(formData.weight),
       type: formData.type,
     };
 
     try {
-      await axios.put(
-        `http://localhost:8080/api/criterias/${id}`,
-        requestBody,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.put(`${API_BASE_URL}/criterias/${id}`, requestBody, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       Swal.fire({
         icon: "success",
         title: "Berhasil",
@@ -213,6 +213,8 @@ const EditCriteria = (props) => {
         title: "Error",
         text: errorMessage,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -339,13 +341,14 @@ const EditCriteria = (props) => {
                 type="submit"
                 className="btn btn-success float-right"
                 disabled={
+                  isLoading ||
                   !!errors.weight ||
                   !!errors.type ||
                   !formData.weight ||
                   !formData.type
                 }
               >
-                Ubah Data Kriteria
+                {isLoading ? "Menyimpan..." : "Ubah Data Kriteria"}
               </button>
             </div>
           </div>

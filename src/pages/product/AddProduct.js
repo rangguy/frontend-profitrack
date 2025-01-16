@@ -266,12 +266,13 @@ const AddProduct = ({ title }) => {
                 ) : (
                   <div className="form-group" key={fieldId}>
                     <label htmlFor={fieldId}>
-                      {fieldId
-                        .split("_")
-                        .map(
-                          (word) => word.charAt(0).toUpperCase() + word.slice(1)
-                        )
-                        .join(" ")}
+                      {fieldId === "name" && "Nama Produk"}
+                      {fieldId === "purchase_cost" && "Harga Beli"}
+                      {fieldId === "price_sale" && "Harga Jual"}
+                      {fieldId === "unit" && "Satuan"}
+                      {fieldId === "stock" && "Stok"}
+                      {fieldId === "sold" && "Stok Terjual"}
+                      {fieldId === "category_id" && "Kategori"}
                     </label>
                     <Input
                       type={

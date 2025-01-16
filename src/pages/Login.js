@@ -5,6 +5,8 @@ import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import Input from "../components/form/Input";
 
+const API_BASE_URL = "http://localhost:8080/api";
+
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -49,7 +51,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/login`,
+        `${API_BASE_URL}/login`,
         payload,
         requestOptions
       );

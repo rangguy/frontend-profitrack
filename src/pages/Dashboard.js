@@ -23,6 +23,8 @@ ChartJS.register(
   Legend
 );
 
+const API_BASE_URL = "http://localhost:8080/api";
+
 const Dashboard = (props) => {
   const navigate = useNavigate();
   const [data, setData] = useState({
@@ -43,7 +45,7 @@ const Dashboard = (props) => {
     // Fetch product data
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/products", {
+        const response = await axios.get(`${API_BASE_URL}/products`, {
           headers: { Authorization: `Bearer ${jwtToken}` },
         });
         const products = response.data;

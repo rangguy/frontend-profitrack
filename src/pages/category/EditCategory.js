@@ -4,6 +4,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 
+const API_BASE_URL = "http://localhost:8080/api";
+
 const EditCategory = (props) => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -54,7 +56,7 @@ const EditCategory = (props) => {
       try {
         setIsLoading(true);
         const response = await axios.get(
-          `http://localhost:8080/api/categories/${id}`,
+          `${API_BASE_URL}/categories/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -144,7 +146,7 @@ const EditCategory = (props) => {
     try {
       setIsLoading(true);
       await axios.put(
-        `http://localhost:8080/api/categories/${id}`,
+        `${API_BASE_URL}/categories/${id}`,
         requestBody,
         {
           headers: {

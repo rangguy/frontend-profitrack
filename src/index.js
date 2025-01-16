@@ -24,6 +24,7 @@ import Method from "./pages/method/Method.js";
 import ScoreSMART from "./pages/score/ScoreSMART.js";
 import ScoreMOORA from "./pages/score/ScoreMOORA.js";
 import EditProduct from "./pages/product/EditProduct.js";
+import Report from "./pages/report/Report.js";
 
 const ErrorBoundary = () => {
   const error = useRouteError();
@@ -102,6 +103,10 @@ const router = createBrowserRouter([
             path: "/methods/:id/MOORA",
             element: <ScoreMOORA title="Data Nilai MOORA" />,
           },
+          {
+            path: "/methods/reports/:id",
+            element: <Report title="Laporan " />
+          }
         ],
       },
       {

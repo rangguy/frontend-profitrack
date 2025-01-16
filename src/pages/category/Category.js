@@ -9,6 +9,8 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
+const API_BASE_URL = "http://localhost:8080/api";
+
 const Category = (props) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,7 +20,7 @@ const Category = (props) => {
     setLoading(true);
     try {
       const token = Cookies.get("token");
-      const response = await axios.get("http://localhost:8080/api/categories", {
+      const response = await axios.get(`${API_BASE_URL}/categories`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -73,7 +75,7 @@ const Category = (props) => {
       if (result.isConfirmed) {
         try {
           await axios.delete(
-            `http://localhost:8080/api/categories/${categoryId}`,
+            `${API_BASE_URL}/categories/${categoryId}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
