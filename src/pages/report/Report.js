@@ -81,13 +81,13 @@ const Report = (props) => {
 
   const handleExport = async (period) => {
     if (!selectedMonth) {
-        Swal.fire({
-          icon: "error",
-          title: "Error!",
-          text: "Please select a month.",
-        });
-        return;
-      }
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: "Please select a month.",
+      });
+      return;
+    }
 
     try {
       const token = Cookies.get("token");
@@ -123,6 +123,84 @@ const Report = (props) => {
     }
   };
 
+  const handleDelete = async () => {
+    const token = Cookies.get("token");
+
+    if (!token) {
+      Swal.fire({
+        icon: "error",
+        title: "Authentication Error",
+        text: "Please login to continue.",
+      });
+      return;
+    }
+
+    try {
+      const result = await Swal.fire({
+        title: "Konfirmasi Hapus",
+        text: "Apakah Anda yakin ingin menghapus laporan ini?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Ya, Hapus!",
+        cancelButtonText: "Batal",
+      });
+
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`${API_BASE_URL}/reports/${id}`, {
+            data: { period },
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+          Swal.fire({
+            icon: "success",
+            title: "Berhasil!",
+            text: `Laporan bulan ${period} berhasil dihapus`,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          fetchReports(period);
+        } catch (error) {
+          let errorMessage = "Terjadi kesalahan saat menghapus laporan.";
+
+          if (error.response) {
+            switch (error.response.status) {
+              case 403:
+                errorMessage =
+                  "Anda tidak memiliki izin untuk menghapus laporan ini.";
+                break;
+              case 404:
+                errorMessage = "laporan tidak ditemukan.";
+                break;
+              default:
+                errorMessage = error.response.data?.message || errorMessage;
+            }
+          }
+
+          Swal.fire({
+            icon: "error",
+            title: "Error!",
+            text: errorMessage,
+          });
+
+          console.error("Error deleting reports:", error);
+        }
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: "Terjadi kesalahan dalam memproses permintaan.",
+      });
+      console.error("Error in delete handler:", error);
+    }
+  };
+
   return (
     <div>
       <div className="content-header">
@@ -151,7 +229,11 @@ const Report = (props) => {
 
       <section className="content">
         <div className="container-fluid">
-          <form onSubmit={handleFormSubmit} className="mb-3">
+          <Link className="btn btn-secondary mx-2 mb-2" to="/methods">
+            <i className="fas fa-arrow-left mx-1"></i>
+            Kembali
+          </Link>
+          <form onSubmit={handleFormSubmit} className="mb-3 px-2">
             <div className="form-group">
               <label htmlFor="month">Pilih Bulan</label>
               <select
@@ -176,14 +258,21 @@ const Report = (props) => {
               </select>
             </div>
             <button type="submit" className="btn btn-primary">
+              <i className="fas fa-eye mx-1"></i>
               Tampilkan Laporan
             </button>
+            <button
+              className="btn btn-info mx-2"
+              onClick={() => handleExport(period)}
+            >
+              <i className="fas fa-download mx-1"></i>
+              Download Excel
+            </button>
+            <button className="btn btn-danger mx-2" onClick={handleDelete}>
+              <i className="fas fa-trash mx-1"></i>
+              Hapus Laporan {period}
+            </button>
           </form>
-
-          <button className="btn btn-info" onClick={() => handleExport(period)}>
-            <i className="fas fa-download me-2 mx-1"></i>
-            Download Excel
-          </button>
 
           <DataTable
             value={reports}

@@ -21,7 +21,6 @@ const ScoreMOORA = (props) => {
   const navigate = useNavigate();
 
   const fetchScores = useCallback(async () => {
-    setLoading(true);
     try {
       const token = Cookies.get("token");
       const response = await axios.get(`${API_BASE_URL}/scores/${id}`, {
@@ -39,13 +38,10 @@ const ScoreMOORA = (props) => {
       } else {
         console.error("Error fetching scores MOORA:", error);
       }
-    } finally {
-      setLoading(false);
     }
   }, [navigate, id]);
 
   const fetchFinalScores = useCallback(async () => {
-    setLoading(true);
     try {
       const token = Cookies.get("token");
       const response = await axios.get(`${API_BASE_URL}/final_scores/${id}`, {
@@ -63,64 +59,68 @@ const ScoreMOORA = (props) => {
       } else {
         console.error("Error fetching scores SMART:", error);
       }
-    } finally {
-      setLoading(false);
     }
   }, [navigate, id]);
 
   const fetchNames = useCallback(async () => {
-    const token = Cookies.get("token");
-    const criteriaSet = new Set();
-    const productSet = new Set();
+    try {
+      const token = Cookies.get("token");
+      const criteriaSet = new Set();
+      const productSet = new Set();
 
-    scores.forEach((score) => {
-      criteriaSet.add(score.criteria_id);
-      productSet.add(score.product_id);
-    });
+      scores.forEach((score) => {
+        criteriaSet.add(score.criteria_id);
+        productSet.add(score.product_id);
+      });
 
-    // Fetch criteria names
-    const criteriaPromises = Array.from(criteriaSet).map(async (criteriaId) => {
-      const response = await axios.get(
-        `${API_BASE_URL}/criterias/${criteriaId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      // Fetch criteria names
+      const criteriaPromises = Array.from(criteriaSet).map(
+        async (criteriaId) => {
+          const response = await axios.get(
+            `${API_BASE_URL}/criterias/${criteriaId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          return { id: criteriaId, name: response.data.name };
         }
       );
-      return { id: criteriaId, name: response.data.name };
-    });
 
-    // Fetch Nama Produk / Kriterias
-    const productPromises = Array.from(productSet).map(async (productId) => {
-      const response = await axios.get(
-        `${API_BASE_URL}/products/${productId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      return { id: productId, name: response.data.name };
-    });
+      // Fetch Nama Produk / Kriterias
+      const productPromises = Array.from(productSet).map(async (productId) => {
+        const response = await axios.get(
+          `${API_BASE_URL}/products/${productId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        return { id: productId, name: response.data.name };
+      });
 
-    // Wait for all promises to resolve
-    const criteriaResults = await Promise.all(criteriaPromises);
-    const productResults = await Promise.all(productPromises);
+      // Wait for all promises to resolve
+      const criteriaResults = await Promise.all(criteriaPromises);
+      const productResults = await Promise.all(productPromises);
 
-    // Map results to objects for easy access
-    const criteriaMap = criteriaResults.reduce((acc, curr) => {
-      acc[curr.id] = curr.name;
-      return acc;
-    }, {});
+      // Map results to objects for easy access
+      const criteriaMap = criteriaResults.reduce((acc, curr) => {
+        acc[curr.id] = curr.name;
+        return acc;
+      }, {});
 
-    const productMap = productResults.reduce((acc, curr) => {
-      acc[curr.id] = curr.name;
-      return acc;
-    }, {});
+      const productMap = productResults.reduce((acc, curr) => {
+        acc[curr.id] = curr.name;
+        return acc;
+      }, {});
 
-    setCriteriaNames(criteriaMap);
-    setProductNames(productMap);
+      setCriteriaNames(criteriaMap);
+      setProductNames(productMap);
+    } catch (error) {
+      console.error("Error fetching names:", error);
+    }
   }, [scores]);
 
   const handlePerhitungan = async () => {
@@ -139,15 +139,16 @@ const ScoreMOORA = (props) => {
         }
       );
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         Swal.fire({
           icon: "success",
           title: "Berhasil!",
-          text: "Nilai MOORA berhasil dihitung",
+          text: "Nilai awal berhasil dihitung",
           showConfirmButton: false,
           timer: 1500,
         });
       }
+      fetchScores();
     } catch (error) {
       let errorMessage = "Terjadi kesalahan saat menghitung nilai MOORA.";
 
@@ -171,7 +172,6 @@ const ScoreMOORA = (props) => {
       console.error("Error counting scores MOORA:", error);
     } finally {
       setLoading(false);
-      window.location.reload();
     }
   };
 
@@ -199,6 +199,8 @@ const ScoreMOORA = (props) => {
           timer: 1500,
         });
       }
+      fetchScores();
+      fetchFinalScores();
     } catch (error) {
       let errorMessage = "Terjadi kesalahan saat menghitung nilai MOORA.";
 
@@ -222,13 +224,18 @@ const ScoreMOORA = (props) => {
       console.error("Error counting scores MOORA:", error);
     } finally {
       setLoading(false);
-      window.location.reload();
     }
   };
 
   useEffect(() => {
-    fetchScores();
-    fetchFinalScores();
+    const initializeData = async () => {
+      setLoading(true);
+      await fetchScores();
+      await fetchFinalScores();
+      setLoading(false);
+    };
+
+    initializeData();
   }, [fetchScores, fetchFinalScores]);
 
   useEffect(() => {
@@ -393,7 +400,8 @@ const ScoreMOORA = (props) => {
           showConfirmButton: false,
           timer: 1500,
         });
-        window.location.reload();
+        fetchScores();
+        fetchFinalScores();
       }
     } catch (error) {
       let errorMessage = "Terjadi kesalahan saat menghapus nilai MOORA.";

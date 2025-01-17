@@ -24,14 +24,11 @@ const ScoreSMART = (props) => {
     setLoading(true);
     try {
       const token = Cookies.get("token");
-      const response = await axios.get(
-        `${API_BASE_URL}/scores/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${API_BASE_URL}/scores/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setScores(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       if (
@@ -51,14 +48,11 @@ const ScoreSMART = (props) => {
     setLoading(true);
     try {
       const token = Cookies.get("token");
-      const response = await axios.get(
-        `${API_BASE_URL}/final_scores/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${API_BASE_URL}/final_scores/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setFinalScores(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       if (
@@ -146,7 +140,7 @@ const ScoreSMART = (props) => {
       );
 
       // Handle the response from the POST request
-      if (response.status === 200) {
+      if (response.status === 201) {
         Swal.fire({
           icon: "success",
           title: "Berhasil!",
@@ -155,6 +149,7 @@ const ScoreSMART = (props) => {
           timer: 1500,
         });
       }
+      fetchScores();
     } catch (error) {
       let errorMessage = "Terjadi kesalahan saat menghitung nilai SMART.";
 
@@ -178,7 +173,6 @@ const ScoreSMART = (props) => {
       console.error("Error counting scores SMART:", error);
     } finally {
       setLoading(false);
-      window.location.reload();
     }
   };
 
@@ -206,6 +200,8 @@ const ScoreSMART = (props) => {
           timer: 1500,
         });
       }
+      fetchScores();
+      fetchFinalScores();
     } catch (error) {
       let errorMessage = "Terjadi kesalahan saat menghitung nilai SMART.";
 
@@ -229,13 +225,18 @@ const ScoreSMART = (props) => {
       console.error("Error counting scores SMART:", error);
     } finally {
       setLoading(false);
-      window.location.reload();
     }
   };
 
   useEffect(() => {
-    fetchScores();
-    fetchFinalScores();
+    const initializeData = async () => {
+      setLoading(true);
+      await fetchScores();
+      await fetchFinalScores();
+      setLoading(false);
+    };
+
+    initializeData();
   }, [fetchScores, fetchFinalScores]);
 
   useEffect(() => {
@@ -400,7 +401,8 @@ const ScoreSMART = (props) => {
           showConfirmButton: false,
           timer: 1500,
         });
-        window.location.reload();
+        fetchScores();
+        fetchFinalScores();
       }
     } catch (error) {
       let errorMessage = "Terjadi kesalahan saat menghapus nilai SMART.";
