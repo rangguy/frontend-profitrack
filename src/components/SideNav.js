@@ -132,47 +132,18 @@ const SideNav = () => {
               role="menu"
               data-accordion="false"
             >
-              <li className="nav-item menu-open">
-                <NavLink to="/#" className="nav-link" activeClassName="active">
+              <li className="nav-item">
+                <NavLink
+                  to="/#"
+                  className="nav-link"
+                  activeClassName="active"
+                  isActive={(match, location) => {
+                    return match || location.pathname.startsWith("/");
+                  }}
+                >
                   <i className="nav-icon fas fa-tachometer-alt" />
                   <p>Dashboard</p>
                 </NavLink>
-              </li>
-              <li className="nav-item">
-                <a href="/" className="nav-link">
-                  <i className="nav-icon fas fa-copy" />
-                  <p>
-                    Layout Options
-                    <i className="fas fa-angle-left right" />
-                    <span className="badge badge-info right">6</span>
-                  </p>
-                </a>
-                <ul className="nav nav-treeview">
-                  <li className="nav-item">
-                    <a href="pages/layout/top-nav.html" className="nav-link">
-                      <i className="far fa-circle nav-icon" />
-                      <p>Top Navigation</p>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a
-                      href="pages/layout/fixed-footer.html"
-                      className="nav-link"
-                    >
-                      <i className="far fa-circle nav-icon" />
-                      <p>Fixed Footer</p>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a
-                      href="pages/layout/collapsed-sidebar.html"
-                      className="nav-link"
-                    >
-                      <i className="far fa-circle nav-icon" />
-                      <p>Collapsed Sidebar</p>
-                    </a>
-                  </li>
-                </ul>
               </li>
               <li className="nav-header">DATA</li>
               <li className="nav-item">
@@ -232,7 +203,7 @@ const SideNav = () => {
                 <hr className="border border-secondary my-2" />{" "}
               </li>
               <li className="nav-header">AKSI</li>
-              <li className="nav-item">
+              <li className="nav-item bg-red">
                 <a
                   href="/#"
                   className="nav-link"
