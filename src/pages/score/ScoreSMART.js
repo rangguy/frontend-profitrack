@@ -363,13 +363,28 @@ const ScoreSMART = (props) => {
 
   const handleDeleteAndSafeFinalScore = async () => {
     setLoading(true);
+
     try {
+      const result = await Swal.fire({
+        title: "Konfirmasi Hapus",
+        text: "Apakah Anda yakin ingin menghapus nilai SMART ini dan memasukkan ke laporan?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Ya, Hapus!",
+        cancelButtonText: "Batal",
+      });
+
+      if (!result.isConfirmed) {
+        setLoading(false);
+        return;
+      }
+
       const token = Cookies.get("token");
 
-      // Make the POST request
-      const response = await axios.post(
-        `${API_BASE_URL}/scores/${id}`,
-        {},
+      const response = await axios.delete(
+        `${API_BASE_URL}/final_scores/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -377,24 +392,28 @@ const ScoreSMART = (props) => {
         }
       );
 
-      // Handle the response from the POST request
       if (response.status === 200) {
-        Swal.fire({
+        await Swal.fire({
           icon: "success",
           title: "Berhasil!",
-          text: "Nilai SMART berhasil dihitung",
+          text: "Nilai SMART berhasil dihapus dan disimpan ke laporan.",
           showConfirmButton: false,
           timer: 1500,
         });
+        window.location.reload();
       }
     } catch (error) {
-      let errorMessage = "Terjadi kesalahan saat menghitung nilai SMART.";
+      let errorMessage = "Terjadi kesalahan saat menghapus nilai SMART.";
 
       if (error.response) {
         switch (error.response.status) {
+          case 404:
+            errorMessage =
+              error.response.data?.error || "Data tidak ditemukan.";
+            break;
           case 403:
             errorMessage =
-              "Anda tidak memiliki izin untuk menghitung nilai SMART ini.";
+              "Anda tidak memiliki izin untuk menghapus nilai SMART ini.";
             break;
           default:
             errorMessage = error.response.data?.message || errorMessage;
@@ -407,10 +426,9 @@ const ScoreSMART = (props) => {
         text: errorMessage,
       });
 
-      console.error("Error counting scores SMART:", error);
+      console.error("Error deleting SMART scores:", error);
     } finally {
       setLoading(false);
-      window.location.reload();
     }
   };
 
