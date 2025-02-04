@@ -25,7 +25,7 @@ const AddCriteria = (props) => {
   const validCriteriaNames = [
     "Return On Investment",
     "Net Profit Margin",
-    "Gross Profit Margin",
+    "Rasio Efisiensi",
   ];
 
   const validateCriteriaName = (value) => {
@@ -34,7 +34,7 @@ const AddCriteria = (props) => {
     }
 
     if (!validCriteriaNames.includes(value)) {
-      return "Nama kriteria harus Return On Investment, Net Profit Margin, atau Gross Profit Margin";
+      return "Nama kriteria harus Return On Investment, Net Profit Margin, atau Rasio Efisiensi";
     }
 
     return "";
@@ -50,8 +50,8 @@ const AddCriteria = (props) => {
       return "Bobot harus berupa angka";
     }
 
-    if (numValue < 0 || numValue > 6) {
-      return "Masukkan bobot antara 1 - 5";
+    if (numValue < 0 || numValue > 1) {
+      return "Masukkan bobot antara 0 - 1";
     }
 
     return "";
@@ -133,7 +133,7 @@ const AddCriteria = (props) => {
 
     const requestBody = {
       name: formData.criteriaName.trim(),
-      weight: parseInt(formData.weight),
+      weight: parseFloat(formData.weight),
       type: formData.type,
     };
 
@@ -261,6 +261,9 @@ const AddCriteria = (props) => {
                     )}
                     <small className="form-text text-muted">
                       Bobot harus berupa bilangan bulat antara 0 dan 1
+                    </small>
+                    <small className="form-text text-muted">
+                      Gunakan titik "."
                     </small>
                   </div>
 
