@@ -186,7 +186,7 @@ const Product = (props) => {
       formData.append("file", file);
 
       const response = await axios.post(
-       ` ${API_BASE_URL}/products/import`,
+        `${API_BASE_URL}/products/import`,
         formData,
         {
           headers: {
@@ -279,9 +279,7 @@ const Product = (props) => {
             </div>
           </div>
 
-          {/* Button Container */}
           <div className="d-flex flex-wrap mb-2">
-            {/* Tombol Tambah Produk */}
             <button
               className="btn btn-success me-2"
               onClick={() => navigate("/products/add")}
@@ -290,20 +288,17 @@ const Product = (props) => {
               Tambah Produk
             </button>
 
-            {/* Tombol Export Excel */}
             <button className="btn btn-info mx-2" onClick={handleExport}>
               <i className="fas fa-download me-2 mx-1"></i>
               Download Excel
             </button>
 
-            {/* Tombol Import Excel */}
             <button className="btn btn-warning" onClick={toggleModal}>
               <i className="fas fa-upload me-2 mx-1"></i>
               Upload Excel
             </button>
           </div>
 
-          {/* Modal untuk Upload Excel */}
           {showModal && (
             <div
               className="modal fade show"
@@ -391,7 +386,6 @@ const Product = (props) => {
             emptyMessage="Data produk masih kosong"
           >
             <Column field="name" header="Nama Produk" sortable />
-            <Column field="category_name" header="Kategori" sortable />
             <Column
               field="purchase_cost"
               header="Harga Beli"

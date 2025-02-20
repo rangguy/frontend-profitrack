@@ -45,10 +45,6 @@ const validationRules = {
     if (sold > stock) return "Stok terjual tidak boleh lebih besar dari stok";
     return "";
   },
-  category_id: (value) => {
-    if (!value) return "Kategori harus dipilih";
-    return "";
-  },
 };
 
 const initialFormData = {
@@ -58,38 +54,18 @@ const initialFormData = {
   unit: "",
   stock: "",
   sold: "",
-  category_id: "",
 };
 
 const EditProduct = ({ title }) => {
   const { id } = useParams();
   const [formData, setFormData] = useState(initialFormData);
   const [originalData, setOriginalData] = useState(null);
-  const [categories, setCategories] = useState([]);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const navigate = useNavigate();
 
-  const fetchCategories = async () => {
-    try {
-      const token = Cookies.get("token");
-      if (!token) throw new Error("Token not found");
-
-      const response = await axios.get(`${API_BASE_URL}/categories`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setCategories(response.data);
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Gagal mengambil data kategori",
-      });
-    }
-  };
-
-  const fetchProductData = useCallback (async () => {
+  const fetchProductData = useCallback(async () => {
     try {
       const token = Cookies.get("token");
       if (!token) throw new Error("Token not found");
@@ -106,7 +82,6 @@ const EditProduct = ({ title }) => {
         unit: productData.unit,
         stock: productData.stock.toString(),
         sold: productData.sold.toString(),
-        category_id: productData.category_id.toString(),
       });
       setOriginalData(productData);
       setIsValid(true);
@@ -121,7 +96,6 @@ const EditProduct = ({ title }) => {
   }, [id, navigate]);
 
   useEffect(() => {
-    fetchCategories();
     fetchProductData();
   }, [fetchProductData]);
 
@@ -134,7 +108,6 @@ const EditProduct = ({ title }) => {
     const newErrors = {};
     let isValid = true;
 
-    // Check if all fields are filled
     const allFieldsFilled = Object.values(formData).every(
       (value) => value !== ""
     );
@@ -142,7 +115,6 @@ const EditProduct = ({ title }) => {
       isValid = false;
     }
 
-    // Check for validation errors
     Object.keys(formData).forEach((key) => {
       const error = validateField(key, formData[key]);
       if (error) {
@@ -151,7 +123,6 @@ const EditProduct = ({ title }) => {
       }
     });
 
-    // Check if data has changed
     if (
       originalData &&
       JSON.stringify(originalData) === JSON.stringify(formData)
@@ -175,11 +146,9 @@ const EditProduct = ({ title }) => {
     setFormData((prev) => {
       const newFormData = { ...prev, [id]: value };
 
-      // Validate the changed field
       const error = validateField(id, value);
       setErrors((prev) => ({ ...prev, [id]: error }));
 
-      // Check if all fields are filled and there are no errors
       const allFieldsFilled = Object.values(newFormData).every(
         (val) => val !== ""
       );
@@ -219,7 +188,6 @@ const EditProduct = ({ title }) => {
         unit: formData.unit.trim(),
         stock: parseInt(formData.stock),
         sold: parseInt(formData.sold),
-        category_id: parseInt(formData.category_id),
       };
 
       await axios.put(`${API_BASE_URL}/products/${id}`, requestBody, {
@@ -278,79 +246,47 @@ const EditProduct = ({ title }) => {
               <h3 className="card-title">Form Data Produk</h3>
             </div>
             <div className="card-body">
-              {Object.keys(initialFormData).map((fieldId) =>
-                fieldId === "category_id" ? (
-                  <div className="form-group" key={fieldId}>
-                    <label htmlFor={fieldId}>Kategori</label>
-                    <select
-                      id={fieldId}
-                      className={`form-control ${
-                        errors[fieldId] ? "is-invalid" : ""
-                      }`}
-                      value={formData[fieldId]}
-                      onChange={handleChange}
+              {Object.keys(initialFormData).map((fieldId) => (
+                <div className="form-group" key={fieldId}>
+                  <label htmlFor={fieldId}>
+                    {fieldId
+                      .split("_")
+                      .map(
+                        (word) => word.charAt(0).toUpperCase() + word.slice(1)
+                      )
+                      .join(" ")}
+                  </label>
+                  <Input
+                    type={
+                      ["purchase_cost", "price_sale", "stock", "sold"].includes(
+                        fieldId
+                      )
+                        ? "number"
+                        : "text"
+                    }
+                    id={fieldId}
+                    className={`form-control ${
+                      errors[fieldId] ? "is-invalid" : ""
+                    }`}
+                    value={formData[fieldId]}
+                    onChange={handleChange}
+                    placeholder={`Masukkan ${fieldId
+                      .split("_")
+                      .map(
+                        (word) => word.charAt(0).toUpperCase() + word.slice(1)
+                      )
+                      .join(" ")}`}
+                  />
+                  {errors[fieldId] && (
+                    <div
+                      className="invalid-feedback"
+                      style={{ display: "block" }}
                     >
-                      <option value="">Pilih Kategori</option>
-                      {categories.map((category) => (
-                        <option key={category.id} value={category.id}>
-                          {category.name}
-                        </option>
-                      ))}
-                    </select>
-                    {errors[fieldId] && (
-                      <div
-                        className="invalid-feedback"
-                        style={{ display: "block" }}
-                      >
-                        {errors[fieldId]}
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="form-group" key={fieldId}>
-                    <label htmlFor={fieldId}>
-                      {fieldId
-                        .split("_")
-                        .map(
-                          (word) => word.charAt(0).toUpperCase() + word.slice(1)
-                        )
-                        .join(" ")}
-                    </label>
-                    <Input
-                      type={
-                        [
-                          "purchase_cost",
-                          "price_sale",
-                          "stock",
-                          "sold",
-                        ].includes(fieldId)
-                          ? "number"
-                          : "text"
-                      }
-                      id={fieldId}
-                      className={`form-control ${
-                        errors[fieldId] ? "is-invalid" : ""
-                      }`}
-                      value={formData[fieldId]}
-                      onChange={handleChange}
-                      placeholder={`Masukkan ${fieldId
-                        .split("_")
-                        .map(
-                          (word) => word.charAt(0).toUpperCase() + word.slice(1)
-                        )
-                        .join(" ")}`}
-                    />
-                    {errors[fieldId] && (
-                      <div
-                        className="invalid-feedback"
-                        style={{ display: "block" }}
-                      >
-                        {errors[fieldId]}
-                      </div>
-                    )}
-                  </div>
-                )
-              )}
+                      {errors[fieldId]}
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
 

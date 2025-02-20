@@ -148,19 +148,6 @@ const SideNav = () => {
               <li className="nav-header">DATA</li>
               <li className="nav-item">
                 <NavLink
-                  to="/categories"
-                  className="nav-link"
-                  activeClassName="active"
-                  isActive={(match, location) => {
-                    return match || location.pathname.startsWith("/categories");
-                  }}
-                >
-                  <i className="nav-icon fas fa-folder" />
-                  <p>Data Kategori</p>
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink
                   to="/products"
                   className="nav-link"
                   activeClassName="active"

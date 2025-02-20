@@ -11,12 +11,9 @@ import Login from "./pages/Login";
 import MainLayout from "./MainLayout";
 import Dashboard from "./pages/Dashboard";
 import Product from "./pages/product/Product";
-import Category from "./pages/category/Category";
 import Criteria from "./pages/criteria/Criteria";
 import ErrorNotFound from "./pages/error/ErrorNotFound";
 import ErrorServer from "./pages/error/ErrorServer";
-import AddCategory from "./pages/category/AddCategory";
-import EditCategory from "./pages/category/EditCategory";
 import AddCriteria from "./pages/criteria/AddCriteria";
 import EditCriteria from "./pages/criteria/EditCriteria";
 import AddProduct from "./pages/product/AddProduct.js";
@@ -54,18 +51,6 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <Dashboard title="Dashboard" />,
-          },
-          {
-            path: "/categories",
-            element: <Category title="Data Kategori" />,
-          },
-          {
-            path: "/categories/add",
-            element: <AddCategory title="Tambah Data Kategori" />,
-          },
-          {
-            path: "/categories/:id",
-            element: <EditCategory title="Ubah Data Kategori" />,
           },
           {
             path: "/products",

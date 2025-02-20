@@ -314,8 +314,6 @@ const Report = (props) => {
             <Column field="product.stock" header="Stok" sortable />
             <Column field="product.sold" header="Stok Terjual" sortable />
 
-            {/* Category Name */}
-            <Column field="product.category.name" header="Kategori" sortable />
           </DataTable>
         </div>
       </section>
