@@ -22,6 +22,7 @@ import ScoreSMART from "./pages/score/ScoreSMART.js";
 import ScoreMOORA from "./pages/score/ScoreMOORA.js";
 import EditProduct from "./pages/product/EditProduct.js";
 import Report from "./pages/report/Report.js";
+import CriteriaScore from "./pages/criteria_score/CriteriaScore.js";
 
 const ErrorBoundary = () => {
   const error = useRouteError();
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
           {
             path: "/criterias/:id",
             element: <EditCriteria title="Ubah Data Kriteria" />,
+          },
+          {
+            path: "/criteria_scores",
+            element: <CriteriaScore title="Data Nilai Kriteria" />,
           },
           {
             path: "/methods",

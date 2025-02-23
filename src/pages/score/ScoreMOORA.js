@@ -20,7 +20,47 @@ const ScoreMOORA = (props) => {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  // Fetch all criteria names
+  const fetchCriteriaNames = useCallback(async () => {
+    try {
+      const token = Cookies.get("token");
+      const response = await axios.get(`${API_BASE_URL}/criterias`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const criteriaMap = response.data.reduce((acc, curr) => {
+        acc[curr.id] = curr.name;
+        return acc;
+      }, {});
+      setCriteriaNames(criteriaMap);
+    } catch (error) {
+      console.error("Error fetching criteria names:", error);
+    }
+  }, []);
+
+  // Fetch all product names
+  const fetchProductNames = useCallback(async () => {
+    try {
+      const token = Cookies.get("token");
+      const response = await axios.get(`${API_BASE_URL}/products`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const productMap = response.data.reduce((acc, curr) => {
+        acc[curr.id] = curr.name;
+        return acc;
+      }, {});
+      setProductNames(productMap);
+    } catch (error) {
+      console.error("Error fetching product names:", error);
+    }
+  }, []);
+
+  // Fetch scores
   const fetchScores = useCallback(async () => {
+    setLoading(true);
     try {
       const token = Cookies.get("token");
       const response = await axios.get(`${API_BASE_URL}/scores/${id}`, {
@@ -38,10 +78,14 @@ const ScoreMOORA = (props) => {
       } else {
         console.error("Error fetching scores MOORA:", error);
       }
+    } finally {
+      setLoading(false);
     }
   }, [navigate, id]);
 
+  // Fetch final scores
   const fetchFinalScores = useCallback(async () => {
+    setLoading(true);
     try {
       const token = Cookies.get("token");
       const response = await axios.get(`${API_BASE_URL}/final_scores/${id}`, {
@@ -57,129 +101,103 @@ const ScoreMOORA = (props) => {
       ) {
         navigate("/login");
       } else {
-        console.error("Error fetching scores SMART:", error);
+        console.error("Error fetching final scores:", error);
       }
-    }
-  }, [navigate, id]);
-
-  const fetchNames = useCallback(async () => {
-    try {
-      const token = Cookies.get("token");
-      const criteriaSet = new Set();
-      const productSet = new Set();
-
-      scores.forEach((score) => {
-        criteriaSet.add(score.criteria_id);
-        productSet.add(score.product_id);
-      });
-
-      // Fetch criteria names
-      const criteriaPromises = Array.from(criteriaSet).map(
-        async (criteriaId) => {
-          const response = await axios.get(
-            `${API_BASE_URL}/criterias/${criteriaId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          return { id: criteriaId, name: response.data.name };
-        }
-      );
-
-      // Fetch Nama Produk / Kriterias
-      const productPromises = Array.from(productSet).map(async (productId) => {
-        const response = await axios.get(
-          `${API_BASE_URL}/products/${productId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        return { id: productId, name: response.data.name };
-      });
-
-      // Wait for all promises to resolve
-      const criteriaResults = await Promise.all(criteriaPromises);
-      const productResults = await Promise.all(productPromises);
-
-      // Map results to objects for easy access
-      const criteriaMap = criteriaResults.reduce((acc, curr) => {
-        acc[curr.id] = curr.name;
-        return acc;
-      }, {});
-
-      const productMap = productResults.reduce((acc, curr) => {
-        acc[curr.id] = curr.name;
-        return acc;
-      }, {});
-
-      setCriteriaNames(criteriaMap);
-      setProductNames(productMap);
-    } catch (error) {
-      console.error("Error fetching names:", error);
-    }
-  }, [scores]);
-
-  const handlePerhitungan = async () => {
-    setLoading(true);
-    try {
-      const token = Cookies.get("token");
-
-      // Make the POST request
-      const response = await axios.post(
-        `${API_BASE_URL}/scores/${id}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.status === 201) {
-        Swal.fire({
-          icon: "success",
-          title: "Berhasil!",
-          text: "Nilai awal berhasil dihitung",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      }
-      fetchScores();
-    } catch (error) {
-      let errorMessage = "Terjadi kesalahan saat menghitung nilai MOORA.";
-
-      if (error.response) {
-        switch (error.response.status) {
-          case 403:
-            errorMessage =
-              "Anda tidak memiliki izin untuk menghitung nilai MOORA ini.";
-            break;
-          default:
-            errorMessage = error.response.data?.message || errorMessage;
-        }
-      }
-
-      Swal.fire({
-        icon: "error",
-        title: "Error!",
-        text: errorMessage,
-      });
-
-      console.error("Error counting scores MOORA:", error);
     } finally {
       setLoading(false);
     }
+  }, [navigate, id]);
+
+  // Initialize data
+  useEffect(() => {
+    const initializeData = async () => {
+      setLoading(true);
+      await fetchCriteriaNames();
+      await fetchProductNames();
+      await fetchScores();
+      await fetchFinalScores();
+      setLoading(false);
+    };
+
+    initializeData();
+  }, [fetchCriteriaNames, fetchProductNames, fetchScores, fetchFinalScores]);
+
+  // Transform scores into a format suitable for the DataTable
+  const transformScores = () => {
+    const transformedData = {};
+    const criteriaSet = new Set();
+
+    scores.forEach((score) => {
+      const { product_id, criteria_id, score_one, score_two } = score;
+
+      if (!transformedData[product_id]) {
+        transformedData[product_id] = {
+          id: product_id,
+          name: productNames[product_id] || `Product ${product_id}`,
+        };
+      }
+
+      transformedData[product_id][`criteria_${criteria_id}_score_one`] =
+        score_one;
+      transformedData[product_id][`criteria_${criteria_id}_score_two`] =
+        score_two;
+      criteriaSet.add(criteria_id);
+    });
+
+    return {
+      finalData: Object.values(transformedData),
+      criteria: Array.from(criteriaSet),
+    };
   };
+
+  const { finalData, criteria } = transformScores();
+
+  // Transform final scores
+  const transformFinalScores = () => {
+    const transformedData = {};
+
+    finalScores.forEach((score) => {
+      const { product_id, final_score, created_at } = score;
+
+      if (!transformedData[product_id]) {
+        const date = new Date(created_at);
+        const monthNames = [
+          "Januari",
+          "Februari",
+          "Maret",
+          "April",
+          "Mei",
+          "Juni",
+          "Juli",
+          "Agustus",
+          "September",
+          "Oktober",
+          "November",
+          "Desember",
+        ];
+        const month = monthNames[date.getMonth()];
+        const year = date.getFullYear();
+
+        transformedData[product_id] = {
+          id: product_id,
+          name: productNames[product_id] || `Product ${product_id}`,
+          final_score: parseFloat(final_score).toFixed(2),
+          created_at: `${month} ${year}`,
+        };
+      }
+    });
+
+    return Object.values(transformedData).sort(
+      (a, b) => b.final_score - a.final_score
+    );
+  };
+
+  const finalDataScores = transformFinalScores();
 
   const handlePerhitunganMOORA = async () => {
     setLoading(true);
     try {
       const token = Cookies.get("token");
-
       const response = await axios.put(
         `${API_BASE_URL}/scores/${id}/MOORA`,
         {},
@@ -226,140 +244,6 @@ const ScoreMOORA = (props) => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    const initializeData = async () => {
-      setLoading(true);
-      await fetchScores();
-      await fetchFinalScores();
-      setLoading(false);
-    };
-
-    initializeData();
-  }, [fetchScores, fetchFinalScores]);
-
-  useEffect(() => {
-    if (scores.length > 0) {
-      fetchNames();
-    }
-  }, [scores, fetchNames]);
-
-  // Transform scores into a format suitable for the DataTable
-  const transformScores = () => {
-    const transformedData = {};
-    const criteriaSet = new Set();
-
-    // Organize scores by product and collect criteria
-    scores.forEach((score) => {
-      const {
-        product_id,
-        criteria_id,
-        score: scoreValue,
-        score_one,
-        score_two,
-      } = score;
-
-      if (!transformedData[product_id]) {
-        transformedData[product_id] = {
-          id: product_id,
-          name: productNames[product_id] || `Product ${product_id}`,
-        };
-      }
-
-      transformedData[product_id][`criteria_${criteria_id}`] = scoreValue;
-      transformedData[product_id][`score_one`] = score_one;
-      transformedData[product_id][`score_two`] = score_two;
-      criteriaSet.add(criteria_id);
-    });
-
-    // Convert the transformed data into an array
-    const finalData = Object.values(transformedData);
-    return { finalData, criteria: Array.from(criteriaSet) };
-  };
-
-  const { finalData, criteria } = transformScores();
-
-  // Transform scores for score_one and score_two
-  const transformScoreOne = () => {
-    const transformedData = {};
-    scores.forEach((score) => {
-      const { product_id, criteria_id, score_one } = score;
-
-      if (!transformedData[product_id]) {
-        transformedData[product_id] = {
-          id: product_id,
-          name: productNames[product_id] || `Product ${product_id}`,
-        };
-      }
-
-      transformedData[product_id][`criteria_${criteria_id}`] = score_one;
-    });
-
-    return Object.values(transformedData);
-  };
-
-  const finalDataScoreOne = transformScoreOne();
-
-  const transformScoreTwo = () => {
-    const transformedData = {};
-    scores.forEach((score) => {
-      const { product_id, criteria_id, score_two } = score;
-
-      if (!transformedData[product_id]) {
-        transformedData[product_id] = {
-          id: product_id,
-          name: productNames[product_id] || `Product ${product_id}`,
-        };
-      }
-
-      transformedData[product_id][`criteria_${criteria_id}`] = score_two;
-    });
-
-    return Object.values(transformedData);
-  };
-
-  const finalDataScoreTwo = transformScoreTwo();
-
-  const transformFinalScores = () => {
-    const transformedData = {};
-
-    finalScores.forEach((score) => {
-      const { id, product_id, final_score, created_at } = score;
-
-      if (!transformedData[product_id]) {
-        const date = new Date(created_at);
-        const monthNames = [
-          "Januari",
-          "Februari",
-          "Maret",
-          "April",
-          "Mei",
-          "Juni",
-          "Juli",
-          "Agustus",
-          "September",
-          "Oktober",
-          "November",
-          "Desember",
-        ];
-        const month = monthNames[date.getMonth()];
-        const year = date.getFullYear();
-
-        transformedData[product_id] = {
-          id: id,
-          name: productNames[product_id] || `Product ${product_id}`,
-          final_score: parseFloat(final_score).toFixed(2),
-          created_at: `${month} ${year}`,
-        };
-      }
-    });
-
-    return Object.values(transformedData).sort(
-      (a, b) => b.final_score - a.final_score
-    );
-  };
-
-  const finalDataScores = transformFinalScores();
 
   const handleDeleteAndSafeFinalScore = async () => {
     setLoading(true);
@@ -460,14 +344,7 @@ const ScoreMOORA = (props) => {
                 Kembali
               </Link>
               <button
-                className="btn btn-primary mx-2"
-                onClick={handlePerhitungan}
-              >
-                <i className="fas fa-calculator me-2 mx-1"></i>
-                Proses Perhitungan Nilai Awal
-              </button>
-              <button
-                className="btn btn-success"
+                className="btn btn-success mx-2"
                 onClick={handlePerhitunganMOORA}
               >
                 <i className="fas fa-cogs me-2 mx-1"></i>
@@ -491,7 +368,7 @@ const ScoreMOORA = (props) => {
           <div className="col">
             <div className="card card-primary">
               <div className="card-header">
-                <h3 className="card-title">Perhitungan Awal</h3>
+                <h3 className="card-title">Nilai Normalisasi</h3>
                 <div className="card-tools">
                   <button
                     type="button"
@@ -512,59 +389,13 @@ const ScoreMOORA = (props) => {
                     paginator
                     rows={10}
                     loading={loading}
-                    emptyMessage="Data Nilai Awal masih kosong"
-                  >
-                    <Column field="name" header="Nama Produk" sortable />
-                    {criteria.map((criteriaId) => (
-                      <Column
-                        key={criteriaId}
-                        field={`criteria_${criteriaId}`}
-                        header={
-                          criteriaNames[criteriaId] || `Criteria ${criteriaId}`
-                        }
-                        sortable
-                      />
-                    ))}
-                  </DataTable>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className="content px-3">
-        <div className="row">
-          <div className="col">
-            <div className="card card-primary">
-              <div className="card-header">
-                <h3 className="card-title">Nilai Normalisasi</h3>
-                <div className="card-tools">
-                  <button
-                    type="button"
-                    className="btn btn-tool"
-                    data-card-widget="collapse"
-                    title="Collapse"
-                  >
-                    <i className="fas fa-minus" />
-                  </button>
-                </div>
-              </div>
-              <div className="card-body">
-                <div className="container-fluid">
-                  <DataTable
-                    value={finalDataScoreOne}
-                    stripedRows
-                    rowHover
-                    paginator
-                    rows={10}
-                    loading={loading}
                     emptyMessage="Data Nilai Normalisasi masih kosong"
                   >
                     <Column field="name" header="Nama Produk" sortable />
                     {criteria.map((criteriaId) => (
                       <Column
                         key={criteriaId}
-                        field={`criteria_${criteriaId}`}
+                        field={`criteria_${criteriaId}_score_one`}
                         header={
                           criteriaNames[criteriaId] || `Criteria ${criteriaId}`
                         }
@@ -598,7 +429,7 @@ const ScoreMOORA = (props) => {
               <div className="card-body">
                 <div className="container-fluid">
                   <DataTable
-                    value={finalDataScoreTwo}
+                    value={finalData}
                     stripedRows
                     rowHover
                     paginator
@@ -610,7 +441,7 @@ const ScoreMOORA = (props) => {
                     {criteria.map((criteriaId) => (
                       <Column
                         key={criteriaId}
-                        field={`criteria_${criteriaId}`}
+                        field={`criteria_${criteriaId}_score_two`}
                         header={
                           criteriaNames[criteriaId] || `Criteria ${criteriaId}`
                         }

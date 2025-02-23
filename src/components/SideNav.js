@@ -89,7 +89,9 @@ const SideNav = () => {
             className="brand-image img-circle elevation-3"
             style={{ opacity: ".8" }}
           />
-          <span className="brand-text font-weight-light">ProfiTrack</span>
+          <span className="brand-text font-weight-light">
+            SPK - SMART & MOORA
+          </span>
         </a>
         {/* Sidebar */}
         <div className="sidebar">
@@ -148,6 +150,19 @@ const SideNav = () => {
               <li className="nav-header">DATA</li>
               <li className="nav-item">
                 <NavLink
+                  to="/criterias"
+                  className="nav-link"
+                  activeClassName="active"
+                  isActive={(match, location) => {
+                    return match || location.pathname.startsWith("/criterias");
+                  }}
+                >
+                  <i className="nav-icon fas fa-list-alt" />
+                  <p>Data Kriteria</p>
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink
                   to="/products"
                   className="nav-link"
                   activeClassName="active"
@@ -161,15 +176,15 @@ const SideNav = () => {
               </li>
               <li className="nav-item">
                 <NavLink
-                  to="/criterias"
+                  to="/criteria_scores"
                   className="nav-link"
                   activeClassName="active"
                   isActive={(match, location) => {
-                    return match || location.pathname.startsWith("/criterias");
+                    return match || location.pathname.startsWith("/criteria_scores");
                   }}
                 >
-                  <i className="nav-icon fas fa-list-alt" />
-                  <p>Data Kriteria</p>
+                  <i className="nav-icon fas fa-box" />
+                  <p>Data Nilai Kriteria</p>
                 </NavLink>
               </li>
               <li className="nav-header">METODE</li>
