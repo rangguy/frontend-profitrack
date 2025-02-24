@@ -23,6 +23,7 @@ import ScoreMOORA from "./pages/score/ScoreMOORA.js";
 import EditProduct from "./pages/product/EditProduct.js";
 import Report from "./pages/report/Report.js";
 import CriteriaScore from "./pages/criteria_score/CriteriaScore.js";
+import Profile from "./pages/profile/Profile.js";
 
 const ErrorBoundary = () => {
   const error = useRouteError();
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <Dashboard title="Dashboard" />,
+          },
+          {
+            path:"/profile",
+            element: <Profile title="Data User"/>,
           },
           {
             path: "/products",
