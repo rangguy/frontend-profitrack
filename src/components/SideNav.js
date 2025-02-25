@@ -180,7 +180,9 @@ const SideNav = () => {
                   className="nav-link"
                   activeClassName="active"
                   isActive={(match, location) => {
-                    return match || location.pathname.startsWith("/criteria_scores");
+                    return (
+                      match || location.pathname.startsWith("/criteria_scores")
+                    );
                   }}
                 >
                   <i className="nav-icon fas fa-box" />
@@ -199,6 +201,23 @@ const SideNav = () => {
                 >
                   <i className="nav-icon fas fa-calculator" />{" "}
                   <p>Hasil Perhitungan</p>
+                </NavLink>
+              </li>
+              <li className="nav-header">
+                <hr className="border border-secondary my-2" />{" "}
+              </li>
+              <li className="nav-header">DATA AKUN</li>
+              <li className="nav-item">
+                <NavLink
+                  to="/profile"
+                  className="nav-link"
+                  activeClassName="active"
+                  isActive={(match, location) => {
+                    return match || location.pathname.startsWith("/profile");
+                  }}
+                >
+                  <i className="nav-icon fas fa-calculator" />{" "}
+                  <p>Data Akun</p>
                 </NavLink>
               </li>
               <li className="nav-header">
