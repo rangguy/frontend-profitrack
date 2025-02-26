@@ -99,7 +99,7 @@ const router = createBrowserRouter([
             element: <ScoreMOORA title="Data Nilai MOORA" />,
           },
           {
-            path: "/methods/reports/:id",
+            path: "/reports",
             element: <Report title="Laporan " />
           }
         ],

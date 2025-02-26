@@ -157,32 +157,13 @@ const ScoreMOORA = (props) => {
     const transformedData = {};
 
     finalScores.forEach((score) => {
-      const { product_id, final_score, created_at } = score;
+      const { product_id, final_score } = score;
 
       if (!transformedData[product_id]) {
-        const date = new Date(created_at);
-        const monthNames = [
-          "Januari",
-          "Februari",
-          "Maret",
-          "April",
-          "Mei",
-          "Juni",
-          "Juli",
-          "Agustus",
-          "September",
-          "Oktober",
-          "November",
-          "Desember",
-        ];
-        const month = monthNames[date.getMonth()];
-        const year = date.getFullYear();
-
         transformedData[product_id] = {
           id: product_id,
           name: productNames[product_id] || `Product ${product_id}`,
           final_score: parseFloat(final_score).toFixed(2),
-          created_at: `${month} ${year}`,
         };
       }
     });
@@ -198,7 +179,7 @@ const ScoreMOORA = (props) => {
     setLoading(true);
     try {
       const token = Cookies.get("token");
-      const response = await axios.put(
+      const response = await axios.post(
         `${API_BASE_URL}/scores/${id}/MOORA`,
         {},
         {
@@ -267,8 +248,9 @@ const ScoreMOORA = (props) => {
 
       const token = Cookies.get("token");
 
-      const response = await axios.delete(
+      const response = await axios.post(
         `${API_BASE_URL}/final_scores/${id}`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -483,6 +465,11 @@ const ScoreMOORA = (props) => {
                     loading={loading}
                     emptyMessage="Data nilai akhir masih kosong"
                   >
+                    <Column
+                      header="Rank"
+                      body={(rowData, { rowIndex }) => rowIndex + 1}
+                      sortable
+                    />
                     <Column field="name" header="Nama Produk" sortable />
                     <Column
                       field="final_score"
@@ -494,7 +481,6 @@ const ScoreMOORA = (props) => {
                         </span>
                       )}
                     />
-                    <Column field="created_at" header="Periode" sortable />
                   </DataTable>
                 </div>
               </div>

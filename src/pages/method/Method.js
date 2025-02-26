@@ -36,10 +36,6 @@ const Method = (props) => {
   const handleMethodClick = (id, name) => {
     navigate(`/methods/${id}/${name}`, { state: { id, name } });
   };
-  
-  const handleMethodClickTwo = (id, name) => {
-    navigate(`/methods/reports/${id}`, { state: { id, name} });
-  };
 
   return (
     <div>
@@ -77,14 +73,6 @@ const Method = (props) => {
                           }
                         >
                           Lihat Hasil Perhitungan
-                        </button>
-                        <button
-                          className="btn btn-success mx-2"
-                          onClick={() =>
-                            handleMethodClickTwo(method.id, method.name)
-                          }
-                        >
-                          Lihat Laporan
                         </button>
                       </p>
                     </div>

@@ -189,7 +189,6 @@ const SideNav = () => {
                   <p>Data Nilai Kriteria</p>
                 </NavLink>
               </li>
-              <li className="nav-header">METODE</li>
               <li className="nav-item">
                 <NavLink
                   to="/methods"
@@ -203,8 +202,18 @@ const SideNav = () => {
                   <p>Hasil Perhitungan</p>
                 </NavLink>
               </li>
-              <li className="nav-header">
-                <hr className="border border-secondary my-2" />{" "}
+              <li className="nav-item">
+                <NavLink
+                  to="/reports"
+                  className="nav-link"
+                  activeClassName="active"
+                  isActive={(match, location) => {
+                    return match || location.pathname.startsWith("/reports");
+                  }}
+                >
+                  <i className="nav-icon fas fa-file-alt" />{" "}
+                  <p>Laporan Perhitungan</p>
+                </NavLink>
               </li>
               <li className="nav-header">DATA AKUN</li>
               <li className="nav-item">
@@ -219,9 +228,6 @@ const SideNav = () => {
                   <i className="nav-icon fas fa-calculator" />{" "}
                   <p>Data Akun</p>
                 </NavLink>
-              </li>
-              <li className="nav-header">
-                <hr className="border border-secondary my-2" />{" "}
               </li>
               <li className="nav-header">AKSI</li>
               <li className="nav-item bg-red">

@@ -7,7 +7,6 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 
 const API_BASE_URL = "http://localhost:8080/api";
 
@@ -49,95 +48,10 @@ const Category = (props) => {
     navigate(`/criterias/${criteriaId}`);
   };
 
-  const handleDelete = async (criteriaId) => {
-    const token = Cookies.get("token");
-
-    if (!token) {
-      Swal.fire({
-        icon: "error",
-        title: "Authentication Error",
-        text: "Please login to continue.",
-      });
-      return;
-    }
-
-    try {
-      const result = await Swal.fire({
-        title: "Konfirmasi Hapus",
-        text: "Apakah Anda yakin ingin menghapus kriteria ini?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "Ya, Hapus!",
-        cancelButtonText: "Batal",
-      });
-
-      if (result.isConfirmed) {
-        try {
-          await axios.delete(
-            `${API_BASE_URL}/criterias/${criteriaId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-
-          setCriterias(
-            criterias.filter((criterias) => criterias.id !== criteriaId)
-          );
-
-          Swal.fire({
-            icon: "success",
-            title: "Berhasil!",
-            text: "Kriteria berhasil dihapus",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        } catch (error) {
-          let errorMessage = "Terjadi kesalahan saat menghapus Kriteria.";
-
-          if (error.response) {
-            switch (error.response.status) {
-              case 403:
-                errorMessage =
-                  "Anda tidak memiliki izin untuk menghapus kriteria ini.";
-                break;
-              case 404:
-                errorMessage = "Kriteria tidak ditemukan.";
-                break;
-              case 409:
-                errorMessage =
-                  "Kriteria tidak dapat dihapus karena masih digunakan.";
-                break;
-              default:
-                errorMessage = error.response.data?.message || errorMessage;
-            }
-          }
-
-          Swal.fire({
-            icon: "error",
-            title: "Error!",
-            text: errorMessage,
-          });
-
-          console.error("Error deleting criteria:", error);
-        }
-      }
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Error!",
-        text: "Terjadi kesalahan dalam memproses permintaan.",
-      });
-      console.error("Error in delete handler:", error);
-    }
-  };
 
   const actionBodyTemplate = (rowData) => {
     return (
-      <div style={{ display: "flex", justifyContent: "center", gap: "8px" }}>
+      <div>
         <button
           onClick={() => handleEdit(rowData.id)}
           className="btn btn-primary btn-sm d-flex align-items-center"
@@ -145,14 +59,6 @@ const Category = (props) => {
         >
           <i className="fas fa-edit"></i>
           <span>Ubah</span>
-        </button>
-        <button
-          onClick={() => handleDelete(rowData.id)}
-          className="btn btn-danger btn-sm d-flex align-items-center"
-          title="Haous"
-        >
-          <i className="fas fa-trash"></i>
-          <span>Hapus</span>
         </button>
       </div>
     );
