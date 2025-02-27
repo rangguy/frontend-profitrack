@@ -1,86 +1,59 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
-import { Bar } from "react-chartjs-2";
-
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
 
 const API_BASE_URL = "http://localhost:8080/api";
 
 const Dashboard = (props) => {
   const navigate = useNavigate();
-  const [data, setData] = useState({
-    profit: [],
-    sold: [],
-    price_sale: [],
-    purchase_cost: [],
-    labels: [],
+  const [counts, setCounts] = useState({
+    products: 0,
+    criteria: 0,
+    reports: 0,
+    users: 0,
   });
 
   useEffect(() => {
-    // Check authentication token
     const jwtToken = Cookies.get("token");
     if (!jwtToken) {
       navigate("/login");
     }
 
-    // Fetch product data
-    const fetchData = async () => {
+    const fetchCounts = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/products`, {
-          headers: { Authorization: `Bearer ${jwtToken}` },
-        });
-        const products = response.data;
+        const [productsRes, criteriaRes, reportsRes, usersRes] = await Promise.all([
+          axios.get(`${API_BASE_URL}/products/count`, {
+            headers: { Authorization: `Bearer ${jwtToken}` },
+            withCredentials: true,
+          }),
+          axios.get(`${API_BASE_URL}/criterias/count`, {
+            headers: { Authorization: `Bearer ${jwtToken}` },
+            withCredentials: true,
+          }),
+          axios.get(`${API_BASE_URL}/reports/count`, {
+            headers: { Authorization: `Bearer ${jwtToken}` },
+            withCredentials: true,
+          }),
+          axios.get(`${API_BASE_URL}/user/count`, {
+            headers: { Authorization: `Bearer ${jwtToken}` },
+            withCredentials: true,
+          }),
+        ]);
 
-        // Prepare data for charts
-        const labels = products.map(
-          (product) => product.name || `Product ${product.id}`
-        );
-        const profit = products.map((product) => product.profit);
-        const sold = products.map((product) => product.sold);
-        const price_sale = products.map((product) => product.price_sale);
-        const purchase_cost = products.map((product) => product.purchase_cost);
-
-        setData({
-          labels,
-          profit,
-          sold,
-          price_sale,
-          purchase_cost,
+        setCounts({
+          products: productsRes.data.count,
+          criteria: criteriaRes.data.count,
+          reports: reportsRes.data.count,
+          users: usersRes.data.count,
         });
       } catch (error) {
-        console.error("Error fetching product data:", error);
+        console.error("Error fetching counts:", error);
       }
     };
 
-    fetchData();
+    fetchCounts();
   }, [navigate]);
-
-  // Chart options
-  const chartOptions = {
-    responsive: true,
-    plugins: {
-      legend: { display: false },
-    },
-  };
 
   return (
     <div>
@@ -107,98 +80,108 @@ const Dashboard = (props) => {
       <section className="content">
         <div className="container-fluid">
           <div className="row">
-            {/* Keuntungan Chart */}
-            <div className="col-lg-6">
-              <div className="card">
-                <div className="card-header">
-                  <h3 className="card-title">Keuntungan</h3>
-                </div>
+            {/* Card 1 - Produk */}
+            <div className="col-lg-3 col-md-6 mb-4">
+              <div className="card bg-danger text-white h-100">
                 <div className="card-body">
-                  <Bar
-                    data={{
-                      labels: data.labels,
-                      datasets: [
-                        {
-                          label: "Keuntungan",
-                          data: data.profit,
-                          backgroundColor: "rgba(75, 192, 192, 0.6)",
-                        },
-                      ],
-                    }}
-                    options={chartOptions}
-                  />
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h6 className="text-uppercase fw-bold mb-1">
+                        Jumlah Produk
+                      </h6>
+                      <h2 className="display-4 mb-0">{counts.products}</h2>
+                    </div>
+                    <div className="icon text-white">
+                      <i className="fas fa-box fa-3x opacity-50"></i>
+                    </div>
+                  </div>
+                </div>
+                <div className="card-footer d-flex align-items-center justify-content-between">
+                  <Link
+                    to="/products"
+                    className="text-white text-decoration-none"
+                  >
+                    Lihat Detail
+                  </Link>
                 </div>
               </div>
             </div>
 
-            {/* Stok Terjual Chart */}
-            <div className="col-lg-6">
-              <div className="card">
-                <div className="card-header">
-                  <h3 className="card-title">Stok Terjual</h3>
-                </div>
+            {/* Card 2 - Kriteria */}
+            <div className="col-lg-3 col-md-6 mb-4">
+              <div className="card bg-success text-white h-100">
                 <div className="card-body">
-                  <Bar
-                    data={{
-                      labels: data.labels,
-                      datasets: [
-                        {
-                          label: "Stok Terjual",
-                          data: data.sold,
-                          backgroundColor: "rgba(153, 102, 255, 0.6)",
-                        },
-                      ],
-                    }}
-                    options={chartOptions}
-                  />
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h6 className="text-uppercase fw-bold mb-1">
+                        Jumlah Kriteria
+                      </h6>
+                      <h2 className="display-4 mb-0">{counts.criteria}</h2>
+                    </div>
+                    <div className="icon text-white">
+                      <i className="fas fa-clipboard-list fa-3x opacity-50"></i>
+                    </div>
+                  </div>
+                </div>
+                <div className="card-footer d-flex align-items-center justify-content-between">
+                  <Link
+                    to="/criterias"
+                    className="text-white text-decoration-none"
+                  >
+                    Lihat Detail
+                  </Link>
                 </div>
               </div>
             </div>
 
-            {/* Penjualan Chart */}
-            <div className="col-lg-6">
-              <div className="card">
-                <div className="card-header">
-                  <h3 className="card-title">Harga Jual</h3>
-                </div>
+            {/* Card 3 - Laporan */}
+            <div className="col-lg-3 col-md-6 mb-4">
+              <div className="card bg-primary text-white h-100">
                 <div className="card-body">
-                  <Bar
-                    data={{
-                      labels: data.labels,
-                      datasets: [
-                        {
-                          label: "Harga Jual",
-                          data: data.price_sale,
-                          backgroundColor: "rgba(255, 159, 64, 0.6)",
-                        },
-                      ],
-                    }}
-                    options={chartOptions}
-                  />
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h6 className="text-uppercase fw-bold mb-1">
+                        Jumlah Laporan
+                      </h6>
+                      <h2 className="display-4 mb-0">{counts.reports}</h2>
+                    </div>
+                    <div className="icon text-white">
+                      <i className="fas fa-file-alt fa-3x opacity-50"></i>
+                    </div>
+                  </div>
+                </div>
+                <div className="card-footer d-flex align-items-center justify-content-between">
+                  <Link
+                    to="/reports"
+                    className="text-white text-decoration-none"
+                  >
+                    Lihat Detail
+                  </Link>
                 </div>
               </div>
             </div>
 
-            {/* Biaya Pembelian Chart */}
-            <div className="col-lg-6">
-              <div className="card">
-                <div className="card-header">
-                  <h3 className="card-title">Biaya Pembelian</h3>
-                </div>
+            {/* Card 4 - Data Akun */}
+            <div className="col-lg-3 col-md-6 mb-4">
+              <div className="card bg-warning h-100">
                 <div className="card-body">
-                  <Bar
-                    data={{
-                      labels: data.labels,
-                      datasets: [
-                        {
-                          label: "Biaya Pembelian",
-                          data: data.purchase_cost,
-                          backgroundColor: "rgba(255, 99, 132, 0.6)",
-                        },
-                      ],
-                    }}
-                    options={chartOptions}
-                  />
+                  <div className="d-flex justify-content-between align-items-center text-white">
+                    <div>
+                      <h6 className="text-uppercase fw-bold mb-1">Data Akun</h6>
+                      <h2 className="display-4 mb-0">{counts.users}</h2>
+                    </div>
+                    <div className="icon text-white">
+                      <i className="fas fa-user fa-3x opacity-50"></i>
+                    </div>
+                  </div>
+                </div>
+                <div className="card-footer d-flex align-items-center justify-content-between">
+                  <Link
+                    to="/account"
+                    className="text-white text-decoration-none"
+                  >
+                    Lihat Detail
+                  </Link>
                 </div>
               </div>
             </div>

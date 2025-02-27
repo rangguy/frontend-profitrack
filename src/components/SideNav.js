@@ -157,7 +157,7 @@ const SideNav = () => {
                     return match || location.pathname.startsWith("/criterias");
                   }}
                 >
-                  <i className="nav-icon fas fa-list-alt" />
+                  <i className="nav-icon fas fa-clipboard-list" />
                   <p>Data Kriteria</p>
                 </NavLink>
               </li>
@@ -185,7 +185,7 @@ const SideNav = () => {
                     );
                   }}
                 >
-                  <i className="nav-icon fas fa-box" />
+                  <i className="nav-icon fas fa-table" />
                   <p>Data Nilai Kriteria</p>
                 </NavLink>
               </li>
