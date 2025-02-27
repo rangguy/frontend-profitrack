@@ -163,7 +163,7 @@ const ScoreMOORA = (props) => {
         transformedData[product_id] = {
           id: product_id,
           name: productNames[product_id] || `Product ${product_id}`,
-          final_score: parseFloat(final_score).toFixed(2),
+          final_score: parseFloat(final_score),
         };
       }
     });
@@ -475,11 +475,7 @@ const ScoreMOORA = (props) => {
                       field="final_score"
                       header="Nilai Akhir"
                       sortable
-                      body={(rowData) => (
-                        <span>
-                          {parseFloat(rowData.final_score).toFixed(2)}
-                        </span>
-                      )}
+                      body={(rowData) => rowData.final_score}
                     />
                   </DataTable>
                 </div>

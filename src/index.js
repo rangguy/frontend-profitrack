@@ -24,6 +24,7 @@ import EditProduct from "./pages/product/EditProduct.js";
 import Report from "./pages/report/Report.js";
 import CriteriaScore from "./pages/criteria_score/CriteriaScore.js";
 import Account from "./pages/account/Account.js";
+import ReportDetail from "./pages/report/ReportDetail.js";
 
 const ErrorBoundary = () => {
   const error = useRouteError();
@@ -100,7 +101,11 @@ const router = createBrowserRouter([
           },
           {
             path: "/reports",
-            element: <Report title="Laporan " />
+            element: <Report title="Laporan" />
+          },
+          {
+            path: "/reports/detail-reports/:id/:methodName",
+            element: <ReportDetail title="Detail Laporan" />
           }
         ],
       },

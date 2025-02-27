@@ -68,8 +68,8 @@ const Report = (props) => {
     }
   };
 
-  const handleViewReport = (reportId) => {
-    navigate(`/reports/${reportId}`);
+  const handleViewReport = (reportId, methodName) => {
+    navigate(`/reports/detail-reports/${reportId}/${methodName}`);
   };
 
   const handleDeleteReport = async (reportId) => {
@@ -171,7 +171,7 @@ const Report = (props) => {
     return (
       <div style={{ display: "flex", justifyContent: "center", gap: "8px" }}>
         <button
-          onClick={() => handleViewReport(rowData.id)}
+          onClick={() => handleViewReport(rowData.id, rowData.method_name)}
           className="btn btn-primary btn-sm d-flex align-items-center"
           title="Lihat"
         >
