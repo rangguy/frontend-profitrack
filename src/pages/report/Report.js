@@ -1,9 +1,6 @@
-import React, { useState } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import "primeicons/primeicons.css";
-import "primereact/resources/themes/saga-blue/theme.css";
-import "primereact/resources/primereact.min.css";
 import axios from "axios";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -12,31 +9,27 @@ import Swal from "sweetalert2";
 const API_BASE_URL = "http://localhost:8080/api";
 
 const Report = (props) => {
-  const { id } = useParams();
-  const location = useLocation();
-  const { name } = location.state || {};
-  const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [selectedMonth, setSelectedMonth] = useState("");
-  const [period, setPeriod] = useState("");
-
+  const [reports, setReports] = useState([]);
   const navigate = useNavigate();
 
-  const fetchReports = async (period) => {
+  const fetchReports = useCallback(async () => {
     setLoading(true);
     try {
       const token = Cookies.get("token");
-      const response = await axios.post(
-        `${API_BASE_URL}/reports/${id}`,
-        { period },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
+      const response = await axios.get(`${API_BASE_URL}/reports`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const reportsWithMethodNames = await Promise.all(
+        response.data.map(async (report) => {
+          const methodName = await fetchMethodName(report.method_id);
+          return { ...report, method_name: methodName };
+        })
       );
-      setReports(Array.isArray(response.data) ? response.data : []);
+      setReports(reportsWithMethodNames);
     } catch (error) {
       if (
         error.response &&
@@ -53,77 +46,33 @@ const Report = (props) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate]);
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    if (!selectedMonth) {
-      Swal.fire({
-        icon: "error",
-        title: "Error!",
-        text: "Please select a month.",
-      });
-      return;
-    }
+  useEffect(() => {
+    fetchReports();
+  }, [fetchReports]);
 
-    const currentYear = new Date().getFullYear();
-    const period = `${selectedMonth} ${currentYear}`;
-    setPeriod(period);
-    fetchReports(period);
-  };
-
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-    }).format(value);
-  };
-
-  const handleExport = async (period) => {
-    if (!selectedMonth) {
-      Swal.fire({
-        icon: "error",
-        title: "Error!",
-        text: "Please select a month.",
-      });
-      return;
-    }
-
+  const fetchMethodName = async (methodId) => {
     try {
       const token = Cookies.get("token");
-      const response = await axios.post(
-        `${API_BASE_URL}/reports/export/${id}`,
-        { period },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-          responseType: "blob",
-        }
-      );
-
-      const currentDate = new Date();
-      const month = currentDate
-        .toLocaleString("id-ID", { month: "long" })
-        .toLowerCase();
-      const year = currentDate.getFullYear();
-
-      const fileName = `laporan-produk-${month}-${year}.xlsx`;
-
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", fileName);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      const response = await axios.get(`${API_BASE_URL}/methods/${methodId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      return response.data.name;
     } catch (error) {
-      console.error("Error exporting products:", error);
+      console.error("Failed to fetch method name:", error);
+      return "Unknown Method";
     }
   };
 
-  const handleDelete = async () => {
+  const handleViewReport = (reportId) => {
+    navigate(`/reports/${reportId}`);
+  };
+
+  const handleDeleteReport = async (reportId) => {
     const token = Cookies.get("token");
 
     if (!token) {
@@ -149,33 +98,36 @@ const Report = (props) => {
 
       if (result.isConfirmed) {
         try {
-          await axios.delete(`${API_BASE_URL}/reports/${id}`, {
-            data: { period },
+          await axios.delete(`${API_BASE_URL}/reports/${reportId}`, {
             headers: {
               Authorization: `Bearer ${token}`,
-              "Content-Type": "multipart/form-data",
             },
           });
+
+          setReports(reports.filter((reports) => reports.id !== reportId));
 
           Swal.fire({
             icon: "success",
             title: "Berhasil!",
-            text: `Laporan bulan ${period} berhasil dihapus`,
+            text: "Laporan berhasil dihapus",
             showConfirmButton: false,
             timer: 1500,
           });
-          fetchReports(period);
         } catch (error) {
-          let errorMessage = "Terjadi kesalahan saat menghapus laporan.";
+          let errorMessage = "Terjadi kesalahan saat menghapus Laporan.";
 
           if (error.response) {
             switch (error.response.status) {
               case 403:
                 errorMessage =
-                  "Anda tidak memiliki izin untuk menghapus laporan ini.";
+                  "Anda tidak memiliki izin untuk menghapus Laporan ini.";
                 break;
               case 404:
-                errorMessage = "laporan tidak ditemukan.";
+                errorMessage = "Laporan tidak ditemukan.";
+                break;
+              case 409:
+                errorMessage =
+                  "Laporan tidak dapat dihapus karena masih digunakan.";
                 break;
               default:
                 errorMessage = error.response.data?.message || errorMessage;
@@ -201,26 +153,57 @@ const Report = (props) => {
     }
   };
 
+  const formatDate = (isoString) => {
+    const date = new Date(isoString);
+    return date
+      .toLocaleString("id-ID", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+      .replace(",", " -");
+  };
+
+  const actionBodyTemplate = (rowData) => {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", gap: "8px" }}>
+        <button
+          onClick={() => handleViewReport(rowData.id)}
+          className="btn btn-primary btn-sm d-flex align-items-center"
+          title="Lihat"
+        >
+          <i className="fas fa-eye"></i>
+          <span>Lihat</span>
+        </button>
+        <button
+          onClick={() => handleDeleteReport(rowData.id)}
+          className="btn btn-danger btn-sm d-flex align-items-center"
+          title="Hapus"
+        >
+          <i className="fas fa-trash"></i>
+          <span>Hapus</span>
+        </button>
+      </div>
+    );
+  };
+
   return (
     <div>
       <div className="content-header">
         <div className="container-fluid">
           <div className="row mb-2">
             <div className="col-sm-6">
-              <h1 className="m-0">Laporan untuk {name}</h1>
+              <h1 className="m-0">Daftar {props.title}</h1>
             </div>
             <div className="col-sm-6">
               <ol className="breadcrumb float-sm-right">
                 <li className="breadcrumb-item">
                   <a href="/">Home</a>
                 </li>
-                <li className="breadcrumb-item">
-                  <Link to="/methods">Metode</Link>
-                </li>
-                <li className="breadcrumb-item active">
-                  {props.title}
-                  {name}
-                </li>
+                <li className="breadcrumb-item active">{props.title}</li>
               </ol>
             </div>
           </div>
@@ -229,91 +212,23 @@ const Report = (props) => {
 
       <section className="content">
         <div className="container-fluid">
-          <Link className="btn btn-secondary mx-2 mb-2" to="/methods">
-            <i className="fas fa-arrow-left mx-1"></i>
-            Kembali
-          </Link>
-          <form onSubmit={handleFormSubmit} className="mb-3 px-2">
-            <div className="form-group">
-              <label htmlFor="month">Pilih Bulan</label>
-              <select
-                id="month"
-                className="form-control"
-                value={selectedMonth}
-                onChange={(e) => setSelectedMonth(e.target.value)}
-              >
-                <option value="">-- Pilih Bulan --</option>
-                <option value="January">Januari</option>
-                <option value="February">Februari</option>
-                <option value="March">Maret</option>
-                <option value="April">April</option>
-                <option value="May">Mei</option>
-                <option value="June">Juni </option>
-                <option value="July">Juli</option>
-                <option value="August">Agustus</option>
-                <option value="September">September</option>
-                <option value="October">Oktober</option>
-                <option value="November">November</option>
-                <option value="December">Desember</option>
-              </select>
-            </div>
-            <button type="submit" className="btn btn-primary">
-              <i className="fas fa-eye mx-1"></i>
-              Tampilkan Laporan
-            </button>
-            <button
-              className="btn btn-info mx-2"
-              onClick={() => handleExport(period)}
-            >
-              <i className="fas fa-download mx-1"></i>
-              Download Excel
-            </button>
-            <button className="btn btn-danger mx-2" onClick={handleDelete}>
-              <i className="fas fa-trash mx-1"></i>
-              Hapus Laporan {period}
-            </button>
-          </form>
+          <DataTable value={reports} loading={loading} paginator rows={5}>
+            <Column field="method_name" header="Nama Metode" sortable></Column>
+            <Column field="report_code" header="Kode Laporan" sortable></Column>
+            <Column field="total_data" header="Total Data" sortable></Column>
+            <Column
+              field="created_at"
+              header="Dibuat Pada"
+              sortable
+              body={(rowData) => formatDate(rowData.created_at)}
+            />
 
-          <DataTable
-            value={reports}
-            stripedRows
-            rowHover
-            paginator
-            rows={10}
-            loading={loading}
-            emptyMessage="Data laporan masih kosong"
-          >
             <Column
-              header="Rank"
-              body={(rowData, { rowIndex }) => rowIndex + 1}
-              sortable
+              field="action"
+              header="Action"
+              body={actionBodyTemplate}
+              style={{ textAlign: "center", width: "180px" }}
             />
-            <Column field="product.name" header="Nama Produk" sortable />
-            <Column field="final_score" header="Skor Akhir" sortable />
-
-            {/* Product Details */}
-            <Column
-              field="product.purchase_cost"
-              header="Harga Beli"
-              sortable
-              body={(rowData) => formatCurrency(rowData.product.purchase_cost)}
-            />
-            <Column
-              field="product.price_sale"
-              header="Harga Jual"
-              sortable
-              body={(rowData) => formatCurrency(rowData.product.price_sale)}
-            />
-            <Column
-              field="product.profit"
-              header="Keuntungan"
-              sortable
-              body={(rowData) => formatCurrency(rowData.product.profit)}
-            />
-            <Column field="product.unit" header="Satuan" sortable />
-            <Column field="product.stock" header="Stok" sortable />
-            <Column field="product.sold" header="Stok Terjual" sortable />
-
           </DataTable>
         </div>
       </section>

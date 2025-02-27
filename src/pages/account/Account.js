@@ -7,7 +7,7 @@ import Input from "../../components/form/Input";
 
 const API_BASE_URL = "http://localhost:8080/api";
 
-const Profile = () => {
+const Account = (props) => {
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -115,27 +115,28 @@ const Profile = () => {
         <div className="container-fluid">
           <div className="row mb-2">
             <div className="col-sm-6">
-              <h1 className="m-0">Profil</h1>
+              <h1 className="m-0">{props.title}</h1>
             </div>
             <div className="col-sm-6">
               <ol className="breadcrumb float-sm-right">
                 <li className="breadcrumb-item">
                   <a href="/">Home</a>
                 </li>
-                <li className="breadcrumb-item active">Profil</li>
+                <li className="breadcrumb-item active">{props.title}</li>
               </ol>
             </div>
           </div>
         </div>
       </div>
-      <section className="content px-4">
+      <section className="content px-2">
         <div className="container-fluid">
-          <form className="form-horizontal" onSubmit={handleSubmit}>
-            <div className="form-group row mb-4">
-              <label htmlFor="username" className="col-sm-2 col-form-label">
-                Username
-              </label>
-              <div className="col-sm-10">
+          <div className="card">
+            <div className="card-header">
+              <h5 className="card-title">Informasi Akun</h5>
+            </div>
+            <div className="card-body">
+              <div className="form-group">
+                <label htmlFor="username">Username</label>
                 <input
                   type="text"
                   className="form-control"
@@ -145,57 +146,53 @@ const Profile = () => {
                 />
               </div>
             </div>
-
-            <div className="form-group row mb-3">
-              <label htmlFor="oldPassword" className="col-sm-2 col-form-label">
-                Password Lama
-              </label>
-              <div className="col-sm-10">
-                <Input
-                  id="oldPassword"
-                  type="password"
-                  className="form-control"
-                  placeholder="Password Lama"
-                  value={formData.oldPassword}
-                  onChange={handleChange}
-                  icon="fas fa-lock"
-                />
-              </div>
+          </div>
+          <div className="card">
+            <div className="card-header">
+              <h5 className="card-title">Ubah Password</h5>
             </div>
+            <div className="card-body">
+              <form className="form-horizontal" onSubmit={handleSubmit}>
+                <div className="form-group">
+                  <label htmlFor="oldPassword">Password Lama</label>
+                  <Input
+                    id="oldPassword"
+                    type="password"
+                    className="form-control"
+                    placeholder="Password Lama"
+                    value={formData.oldPassword}
+                    onChange={handleChange}
+                    icon="fas fa-lock"
+                  />
+                </div>
 
-            <div className="form-group row mb-3">
-              <label htmlFor="newPassword" className="col-sm-2 col-form-label">
-                Password Baru
-              </label>
-              <div className="col-sm-10">
-                <Input
-                  id="newPassword"
-                  type="password"
-                  className="form-control"
-                  placeholder="Password Baru"
-                  value={formData.newPassword}
-                  onChange={handleChange}
-                  icon="fas fa-lock"
-                />
-              </div>
-            </div>
+                <div className="form-group">
+                  <label htmlFor="newPassword">Password Baru</label>
+                  <Input
+                    id="newPassword"
+                    type="password"
+                    className="form-control"
+                    placeholder="Password Baru"
+                    value={formData.newPassword}
+                    onChange={handleChange}
+                    icon="fas fa-lock"
+                  />
+                </div>
 
-            <div className="form-group row mt-4">
-              <div className="offset-sm-2 col-sm-10">
                 <button
                   type="submit"
-                  className="btn btn-danger"
+                  className="btn btn-danger mt-3"
                   disabled={loading}
                 >
                   {loading ? "Memproses..." : "Ubah Password"}
                 </button>
-              </div>
+              </form>
             </div>
-          </form>
+          </div>
         </div>
       </section>
     </div>
   );
 };
 
-export default Profile;
+export default Account;

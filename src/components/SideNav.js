@@ -218,14 +218,14 @@ const SideNav = () => {
               <li className="nav-header">DATA AKUN</li>
               <li className="nav-item">
                 <NavLink
-                  to="/profile"
+                  to="/account"
                   className="nav-link"
                   activeClassName="active"
                   isActive={(match, location) => {
-                    return match || location.pathname.startsWith("/profile");
+                    return match || location.pathname.startsWith("/account");
                   }}
                 >
-                  <i className="nav-icon fas fa-calculator" />{" "}
+                  <i className="nav-icon fas fa-user" />{" "}
                   <p>Data Akun</p>
                 </NavLink>
               </li>
