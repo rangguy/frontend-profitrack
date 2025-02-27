@@ -249,12 +249,15 @@ const EditProduct = ({ title }) => {
               {Object.keys(initialFormData).map((fieldId) => (
                 <div className="form-group" key={fieldId}>
                   <label htmlFor={fieldId}>
-                    {fieldId
-                      .split("_")
-                      .map(
-                        (word) => word.charAt(0).toUpperCase() + word.slice(1)
-                      )
-                      .join(" ")}
+                    {fieldId === "unit"
+                      ? "Satuan"
+                      : fieldId
+                          .split("_")
+                          .map(
+                            (word) =>
+                              word.charAt(0).toUpperCase() + word.slice(1)
+                          )
+                          .join(" ")}
                   </label>
                   <Input
                     type={

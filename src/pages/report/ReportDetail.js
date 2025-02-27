@@ -3,6 +3,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+import { saveAs } from "file-saver";
 
 const API_BASE_URL = "http://localhost:8080/api";
 
@@ -36,13 +37,29 @@ const ReportDetail = (props) => {
     }).format(value);
   };
 
+  const handlePrintPdf = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/reports/export/${id}`, {
+        responseType: "blob",
+        withCredentials: true,
+      });
+
+      const pdfBlob = new Blob([response.data], { type: "application/pdf" });
+      saveAs(pdfBlob, `report_${id}_${methodName}.pdf`);
+    } catch (error) {
+      console.error("Error exporting report to PDF:", error);
+    }
+  };
+
   return (
     <div>
       <div className="content-header">
         <div className="container-fluid">
           <div className="row mb-2">
             <div className="col-sm-6">
-              <h1 className="m-0">{props.title} {methodName}</h1>
+              <h1 className="m-0">
+                {props.title} {methodName}
+              </h1>
             </div>
             <div className="col-sm-6">
               <ol className="breadcrumb float-sm-right">
@@ -61,6 +78,13 @@ const ReportDetail = (props) => {
 
       <section className="content">
         <div className="container-fluid">
+          <button
+            onClick={handlePrintPdf}
+            className="btn btn-primary mb-3 mx-2"
+          >
+            <i className="fas fa-print mx-1"></i>
+            <span>Cetak</span>
+          </button>
           <DataTable
             value={reports}
             stripedRows

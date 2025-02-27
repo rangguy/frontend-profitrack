@@ -104,7 +104,7 @@ const router = createBrowserRouter([
             element: <Report title="Laporan" />
           },
           {
-            path: "/reports/detail-reports/:id/:methodName",
+            path: "/reports/detail-reports/:id/:methodName/:code",
             element: <ReportDetail title="Detail Laporan" />
           }
         ],

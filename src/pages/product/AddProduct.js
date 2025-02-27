@@ -158,7 +158,7 @@ const AddProduct = ({ title }) => {
                     {fieldId === "name" && "Nama Produk"}
                     {fieldId === "purchase_cost" && "Harga Beli"}
                     {fieldId === "price_sale" && "Harga Jual"}
-                    {fieldId === "unit" && "Unit"}
+                    {fieldId === "unit" && "Satuan"}
                     {fieldId === "stock" && "Stok"}
                     {fieldId === "sold" && "Stok Terjual"}
                   </label>
@@ -176,7 +176,7 @@ const AddProduct = ({ title }) => {
                     }`}
                     value={formData[fieldId]}
                     onChange={handleChange}
-                    placeholder={`Masukkan ${fieldId === "name" ? "Nama Produk" : fieldId === "purchase_cost" ? "Harga Beli" : fieldId === "price_sale" ? "Harga Jual" : fieldId === "unit" ? "Unit" : fieldId === "stock" ? "Stok" : "Stok Terjual"}`}
+                    placeholder={`Masukkan ${fieldId === "name" ? "Nama Produk" : fieldId === "purchase_cost" ? "Harga Beli" : fieldId === "price_sale" ? "Harga Jual" : fieldId === "unit" ? "Satuan" : fieldId === "stock" ? "Stok" : "Stok Terjual"}`}
                   />
                   {errors[fieldId] && (
                     <div
