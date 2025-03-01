@@ -40,7 +40,7 @@ const Report = (props) => {
         Swal.fire({
           icon: "error",
           title: "Error!",
-          text: error.response?.data?.message || "Failed to fetch reports.",
+          text: error.response?.data?.message || "Gagal mendapatkan data laporan.",
         });
       }
     } finally {
