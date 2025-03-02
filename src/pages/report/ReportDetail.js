@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import Cookies from "js-cookie";
 import { saveAs } from "file-saver";
+import Swal from "sweetalert2";
 
 const API_BASE_URL = "http://localhost:8080/api";
 
@@ -11,10 +13,21 @@ const ReportDetail = (props) => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const { id, methodName } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchReportData = async () => {
       try {
+        const token = Cookies.get("token");
+        if (!token) {
+          Swal.fire({
+            icon: "error",
+            title: "Authentication Error",
+            text: "Silakan Login terlebih dahulu.",
+          });
+          navigate("/login");
+          return;
+        }
         setLoading(true);
         const response = await axios.get(`${API_BASE_URL}/reports/${id}`, {
           withCredentials: true,
@@ -28,7 +41,7 @@ const ReportDetail = (props) => {
     };
 
     fetchReportData();
-  }, [id]);
+  }, [id, navigate]);
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat("id-ID", {

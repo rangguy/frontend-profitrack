@@ -14,13 +14,28 @@ const Method = (props) => {
     const fetchMethods = async () => {
       try {
         const token = Cookies.get("token");
+        if (!token) {
+          Swal.fire({
+            icon: "error",
+            title: "Authentication Error",
+            text: "Silakan Login terlebih dahulu.",
+          });
+          navigate("/login");
+          return;
+        }
+
         const response = await axios.get(`${API_BASE_URL}/methods`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
+
         setMethods(response.data);
       } catch (error) {
+        if (error.response?.status === 401) {
+          navigate("/login");
+        }
+
         console.error("Error fetching methods:", error);
         Swal.fire({
           icon: "error",
@@ -31,7 +46,7 @@ const Method = (props) => {
     };
 
     fetchMethods();
-  }, []);
+  }, [navigate]);
 
   const handleMethodClick = (id, name) => {
     navigate(`/methods/${id}/${name}`, { state: { id, name } });

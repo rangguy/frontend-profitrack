@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/form/Input";
 import Cookies from "js-cookie";
@@ -52,6 +52,19 @@ const AddProduct = ({ title }) => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (!token) {
+      Swal.fire({
+        icon: "error",
+        title: "Authentication Error",
+        text: "Silakan Login terlebih dahulu.",
+      });
+      navigate("/login");
+      return;
+    }
+  }, [navigate]);
 
   const validateField = (name, value) =>
     validationRules[name]?.(value, formData) || "";
@@ -176,7 +189,19 @@ const AddProduct = ({ title }) => {
                     }`}
                     value={formData[fieldId]}
                     onChange={handleChange}
-                    placeholder={`Masukkan ${fieldId === "name" ? "Nama Produk" : fieldId === "purchase_cost" ? "Harga Beli" : fieldId === "price_sale" ? "Harga Jual" : fieldId === "unit" ? "Satuan" : fieldId === "stock" ? "Stok" : "Stok Terjual"}`}
+                    placeholder={`Masukkan ${
+                      fieldId === "name"
+                        ? "Nama Produk"
+                        : fieldId === "purchase_cost"
+                        ? "Harga Beli"
+                        : fieldId === "price_sale"
+                        ? "Harga Jual"
+                        : fieldId === "unit"
+                        ? "Satuan"
+                        : fieldId === "stock"
+                        ? "Stok"
+                        : "Stok Terjual"
+                    }`}
                   />
                   {errors[fieldId] && (
                     <div

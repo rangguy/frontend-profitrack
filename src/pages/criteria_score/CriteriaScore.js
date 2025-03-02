@@ -71,7 +71,13 @@ const CriteriaScore = (props) => {
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
+        Swal.fire({
+          icon: "error",
+          title: "Authentication Error",
+          text: "Silakan Login terlebih dahulu.",
+        });
         navigate("/login");
+        return;
       } else {
         console.error("Error fetching criteria scores:", error);
       }
@@ -128,7 +134,7 @@ const CriteriaScore = (props) => {
       setLoading(false);
     }
   };
-  
+
   const handleUpdatePerhitungan = async () => {
     setLoading(true);
     try {
@@ -339,8 +345,11 @@ const CriteriaScore = (props) => {
               Hitung Nilai Kriteria
             </button>
 
-            <button className="btn btn-info mx-2" onClick={handleUpdatePerhitungan}>
-            <i className="fas fa-calculator me-2 mx-1"></i>
+            <button
+              className="btn btn-info mx-2"
+              onClick={handleUpdatePerhitungan}
+            >
+              <i className="fas fa-calculator me-2 mx-1"></i>
               Update Nilai Kriteria
             </button>
           </div>

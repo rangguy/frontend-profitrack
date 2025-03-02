@@ -4,12 +4,14 @@ import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
 import Input from "../../components/form/Input";
+import { useNavigate } from "react-router-dom";
 
 const API_BASE_URL = "http://localhost:8080/api";
 
 const Account = (props) => {
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     oldPassword: "",
     newPassword: "",
@@ -17,6 +19,16 @@ const Account = (props) => {
 
   useEffect(() => {
     const token = Cookies.get("token");
+    if (!token) {
+      Swal.fire({
+        icon: "error",
+        title: "Authentication Error",
+        text: "Silakan Login terlebih dahulu.",
+      });
+      navigate("/login");
+      return;
+    }
+
     if (token) {
       try {
         const decoded = jwtDecode(token);
@@ -25,7 +37,7 @@ const Account = (props) => {
         console.error("Error decoding token:", error);
       }
     }
-  }, []);
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { id, value } = e.target;

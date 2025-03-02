@@ -7,6 +7,7 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const API_BASE_URL = "http://localhost:8080/api";
 
@@ -31,7 +32,13 @@ const Category = (props) => {
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
+        Swal.fire({
+          icon: "error",
+          title: "Authentication Error",
+          text: "Silakan Login terlebih dahulu.",
+        });
         navigate("/login");
+        return;
       } else {
         console.error("Error fetching criterias:", error);
       }
@@ -47,7 +54,6 @@ const Category = (props) => {
   const handleEdit = (criteriaId) => {
     navigate(`/criterias/${criteriaId}`);
   };
-
 
   const actionBodyTemplate = (rowData) => {
     return (

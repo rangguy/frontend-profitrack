@@ -225,23 +225,18 @@ const SideNav = () => {
                     return match || location.pathname.startsWith("/account");
                   }}
                 >
-                  <i className="nav-icon fas fa-user" />{" "}
-                  <p>Data Akun</p>
+                  <i className="nav-icon fas fa-user" /> <p>Data Akun</p>
                 </NavLink>
               </li>
               <li className="nav-header">AKSI</li>
-              <li className="nav-item bg-red">
-                <a
-                  href="/#"
-                  className="nav-link"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleLogout();
-                  }}
+              <li className="nav-item">
+                <button
+                  onClick={handleLogout}
+                  className="nav-link logout-button bg-red"
                 >
                   <i className="nav-icon fas fa-sign-out-alt" />
                   <p>Logout</p>
-                </a>
+                </button>
               </li>
             </ul>
           </nav>

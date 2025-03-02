@@ -62,7 +62,7 @@ const EditCriteria = (props) => {
         Swal.fire({
           icon: "error",
           title: "Authentication Error",
-          text: "Please login to continue.",
+          text: "Silakan Login terlebih dahulu.",
         });
         navigate("/login");
         return;

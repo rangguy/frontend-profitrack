@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/form/Input";
 import Cookies from "js-cookie";
@@ -21,6 +21,19 @@ const AddCriteria = (props) => {
   });
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (!token) {
+      Swal.fire({
+        icon: "error",
+        title: "Authentication Error",
+        text: "Silakan Login terlebih dahulu.",
+      });
+      navigate("/login");
+      return;
+    }
+  }, [navigate]);
 
   const validCriteriaNames = [
     "Return On Investment",
@@ -138,16 +151,12 @@ const AddCriteria = (props) => {
     };
 
     try {
-      await axios.post(
-        `${API_BASE_URL}/criterias`,
-        requestBody,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.post(`${API_BASE_URL}/criterias`, requestBody, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       Swal.fire({
         icon: "success",

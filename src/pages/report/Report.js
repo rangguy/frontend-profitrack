@@ -35,12 +35,19 @@ const Report = (props) => {
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
+        Swal.fire({
+          icon: "error",
+          title: "Authentication Error",
+          text: "Silakan Login terlebih dahulu.",
+        });
         navigate("/login");
+        return;
       } else {
         Swal.fire({
           icon: "error",
           title: "Error!",
-          text: error.response?.data?.message || "Gagal mendapatkan data laporan.",
+          text:
+            error.response?.data?.message || "Gagal mendapatkan data laporan.",
         });
       }
     } finally {
@@ -171,7 +178,13 @@ const Report = (props) => {
     return (
       <div style={{ display: "flex", justifyContent: "center", gap: "8px" }}>
         <button
-          onClick={() => handleViewReport(rowData.id, rowData.method_name, rowData.report_code)}
+          onClick={() =>
+            handleViewReport(
+              rowData.id,
+              rowData.method_name,
+              rowData.report_code
+            )
+          }
           className="btn btn-primary btn-sm d-flex align-items-center"
           title="Lihat"
         >

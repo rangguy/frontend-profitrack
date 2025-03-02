@@ -68,7 +68,15 @@ const EditProduct = ({ title }) => {
   const fetchProductData = useCallback(async () => {
     try {
       const token = Cookies.get("token");
-      if (!token) throw new Error("Token not found");
+      if (!token) {
+        Swal.fire({
+          icon: "error",
+          title: "Authentication Error",
+          text: "Silakan Login terlebih dahulu.",
+        });
+        navigate("/login");
+        return;
+      }
 
       const response = await axios.get(`${API_BASE_URL}/products/${id}`, {
         headers: { Authorization: `Bearer ${token}` },

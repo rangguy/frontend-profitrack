@@ -20,7 +20,6 @@ const ScoreSMART = (props) => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Fetch all criteria names
   const fetchCriteriaNames = useCallback(async () => {
     try {
       const token = Cookies.get("token");
@@ -39,7 +38,6 @@ const ScoreSMART = (props) => {
     }
   }, []);
 
-  // Fetch all product names
   const fetchProductNames = useCallback(async () => {
     try {
       const token = Cookies.get("token");
@@ -58,7 +56,6 @@ const ScoreSMART = (props) => {
     }
   }, []);
 
-  // Fetch scores
   const fetchScores = useCallback(async () => {
     setLoading(true);
     try {
@@ -83,7 +80,6 @@ const ScoreSMART = (props) => {
     }
   }, [navigate, id]);
 
-  // Fetch final scores
   const fetchFinalScores = useCallback(async () => {
     setLoading(true);
     try {
@@ -108,8 +104,17 @@ const ScoreSMART = (props) => {
     }
   }, [navigate, id]);
 
-  // Initialize data
   useEffect(() => {
+    const token = Cookies.get("token");
+    if (!token) {
+      Swal.fire({
+        icon: "error",
+        title: "Authentication Error",
+        text: "Silakan Login terlebih dahulu.",
+      });
+      navigate("/login");
+      return;
+    }
     const initializeData = async () => {
       setLoading(true);
       await fetchCriteriaNames();
@@ -120,9 +125,8 @@ const ScoreSMART = (props) => {
     };
 
     initializeData();
-  }, [fetchCriteriaNames, fetchProductNames, fetchScores, fetchFinalScores]);
+  }, [fetchCriteriaNames, fetchProductNames, fetchScores, fetchFinalScores, navigate]);
 
-  // Transform scores into a format suitable for the DataTable
   const transformScores = () => {
     const transformedData = {};
     const criteriaSet = new Set();
@@ -152,7 +156,6 @@ const ScoreSMART = (props) => {
 
   const { finalData, criteria } = transformScores();
 
-  // Transform final scores
   const transformFinalScores = () => {
     const transformedData = {};
 

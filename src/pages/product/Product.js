@@ -34,7 +34,13 @@ const Product = (props) => {
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
+        Swal.fire({
+          icon: "error",
+          title: "Authentication Error",
+          text: "Silakan Login terlebih dahulu.",
+        });
         navigate("/login");
+        return;
       } else {
         console.error("Error fetching products:", error);
       }
@@ -77,14 +83,11 @@ const Product = (props) => {
 
       if (result.isConfirmed) {
         try {
-          await axios.delete(
-            `${API_BASE_URL}/products/${productId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
+          await axios.delete(`${API_BASE_URL}/products/${productId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
           setProducts(products.filter((products) => products.id !== productId));
 
@@ -138,15 +141,12 @@ const Product = (props) => {
   const handleExport = async () => {
     try {
       const token = Cookies.get("token");
-      const response = await axios.get(
-        `${API_BASE_URL}/products/export`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          responseType: "blob",
-        }
-      );
+      const response = await axios.get(`${API_BASE_URL}/products/export`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        responseType: "blob",
+      });
       const currentDate = new Date();
       const month = currentDate
         .toLocaleString("id-ID", { month: "long" })
