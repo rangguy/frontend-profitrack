@@ -42,13 +42,6 @@ const Report = (props) => {
         });
         navigate("/login");
         return;
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Error!",
-          text:
-            error.response?.data?.message || "Gagal mendapatkan data laporan.",
-        });
       }
     } finally {
       setLoading(false);
@@ -225,7 +218,13 @@ const Report = (props) => {
 
       <section className="content">
         <div className="container-fluid">
-          <DataTable value={reports} loading={loading} paginator rows={5}>
+          <DataTable
+            value={reports}
+            loading={loading}
+            paginator
+            rows={5}
+            emptyMessage="Data Laporan masih kosong"
+          >
             <Column field="method_name" header="Nama Metode" sortable></Column>
             <Column field="report_code" header="Kode Laporan" sortable></Column>
             <Column field="total_data" header="Total Data" sortable></Column>

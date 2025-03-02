@@ -167,7 +167,7 @@ const AddCriteria = (props) => {
       });
     } catch (error) {
       const errorMessage =
-        error.response?.data?.error || error.message || "Something went wrong!";
+        error.response?.data?.error || error.message || "Terjadi Kesalahan";
 
       Swal.fire({
         icon: "error",

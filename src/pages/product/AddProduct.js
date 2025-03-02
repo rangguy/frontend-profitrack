@@ -136,10 +136,13 @@ const AddProduct = ({ title }) => {
         text: "Produk berhasil ditambahkan",
       }).then(() => navigate("/products"));
     } catch (error) {
+      const errorMessage =
+        error.response?.data?.error || error.message || "Terjadi Kesalahan";
+
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error.response?.data?.error || "Terjadi kesalahan",
+        text: errorMessage,
       });
     } finally {
       setIsLoading(false);
