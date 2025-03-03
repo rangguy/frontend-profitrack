@@ -152,10 +152,12 @@ const ScoreMOORA = (props) => {
         };
       }
 
+      const formatNumber = (num) => num.toFixed(9).replace(/(\.0+|0+)$/, "");
+
       transformedData[product_id][`criteria_${criteria_id}_score_one`] =
-        score_one;
+        formatNumber(score_one);
       transformedData[product_id][`criteria_${criteria_id}_score_two`] =
-        score_two;
+        formatNumber(score_two);
       criteriaSet.add(criteria_id);
     });
 
