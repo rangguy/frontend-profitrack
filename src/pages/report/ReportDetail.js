@@ -50,6 +50,10 @@ const ReportDetail = (props) => {
     }).format(value);
   };
 
+  const formatNumber = (value) => {
+    return value.toFixed(9).replace(/(\.0+|0+)$/, "");
+  };
+
   const handlePrintPdf = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/reports/export/${id}`, {
@@ -117,7 +121,7 @@ const ReportDetail = (props) => {
               field="final_scores"
               header="Skor Akhir"
               sortable
-              body={(rowData) => rowData.final_scores}
+              body={(rowData) => formatNumber(rowData.final_scores)}
             />
             <Column
               field="product.purchase_cost"

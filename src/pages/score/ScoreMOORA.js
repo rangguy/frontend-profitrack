@@ -17,6 +17,7 @@ const ScoreMOORA = (props) => {
   const [loading, setLoading] = useState(true);
   const [criteriaNames, setCriteriaNames] = useState({});
   const [productNames, setProductNames] = useState({});
+  const [responseTime, setResponseTime] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -115,6 +116,10 @@ const ScoreMOORA = (props) => {
       navigate("/login");
       return;
     }
+    const savedResponseTime = localStorage.getItem("responseTime");
+    if (savedResponseTime) {
+      setResponseTime(savedResponseTime);
+    }
     const initializeData = async () => {
       setLoading(true);
       await fetchCriteriaNames();
@@ -125,7 +130,13 @@ const ScoreMOORA = (props) => {
     };
 
     initializeData();
-  }, [fetchCriteriaNames, fetchProductNames, fetchScores, fetchFinalScores, navigate]);
+  }, [
+    fetchCriteriaNames,
+    fetchProductNames,
+    fetchScores,
+    fetchFinalScores,
+    navigate,
+  ]);
 
   const transformScores = () => {
     const transformedData = {};
@@ -162,11 +173,13 @@ const ScoreMOORA = (props) => {
     finalScores.forEach((score) => {
       const { product_id, final_score } = score;
 
+      const formatNumber = (num) => num.toFixed(9).replace(/(\.0+|0+)$/, "");
+
       if (!transformedData[product_id]) {
         transformedData[product_id] = {
           id: product_id,
           name: productNames[product_id] || `Product ${product_id}`,
-          final_score: parseFloat(final_score),
+          final_score: formatNumber(final_score),
         };
       }
     });
@@ -201,6 +214,10 @@ const ScoreMOORA = (props) => {
           timer: 1500,
         });
       }
+
+      setResponseTime(response.data.processingTime);
+      localStorage.setItem("responseTime", response.data.processingTime);
+
       fetchScores();
       fetchFinalScores();
     } catch (error) {
@@ -269,6 +286,7 @@ const ScoreMOORA = (props) => {
           showConfirmButton: false,
           timer: 1500,
         });
+        localStorage.removeItem("responseTime");
         fetchScores();
         fetchFinalScores();
       }
@@ -331,6 +349,7 @@ const ScoreMOORA = (props) => {
               <button
                 className="btn btn-success mx-2"
                 onClick={handlePerhitunganMOORA}
+                disabled={scores.length > 0 && finalScores.length > 0}
               >
                 <i className="fas fa-cogs me-2 mx-1"></i>
                 Proses Perhitungan MOORA
@@ -345,6 +364,12 @@ const ScoreMOORA = (props) => {
                 Simpan Data Nilai Akhir
               </button>
             </div>
+          </div>
+          <div className="mt-3">
+            <strong>
+              <i>Response Time</i>:
+            </strong>{" "}
+            {responseTime ? `${responseTime}` : "0"}
           </div>
         </div>
       </div>
