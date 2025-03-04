@@ -293,7 +293,9 @@ const CriteriaScore = (props) => {
         };
       }
 
-      transformedData[product_id][`criteria_${criteria_id}`] = scoreValue;
+      const formatNumber = (num) => num.toFixed(9).replace(/(\.0+|0+)$/, "");
+
+      transformedData[product_id][`criteria_${criteria_id}`] = formatNumber(scoreValue);
       criteriaSet.add(criteria_id);
     });
 
