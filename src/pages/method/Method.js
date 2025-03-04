@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = process.env.REACT_APP_API_LOCAL;
 
 const Method = (props) => {
   const [methods, setMethods] = useState([]);

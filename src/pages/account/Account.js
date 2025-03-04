@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import Input from "../../components/form/Input";
 import { useNavigate } from "react-router-dom";
 
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = process.env.REACT_APP_API_LOCAL;
 
 const Account = (props) => {
   const [username, setUsername] = useState("");

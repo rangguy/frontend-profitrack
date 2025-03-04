@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = process.env.REACT_APP_API_LOCAL;
 
 const validationRules = {
   name: (value) => (!value?.trim() ? "Nama produk tidak boleh kosong" : ""),

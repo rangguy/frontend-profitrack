@@ -9,7 +9,7 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import Swal from "sweetalert2";
 
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = process.env.REACT_APP_API_LOCAL;
 
 const ScoreMOORA = (props) => {
   const [scores, setScores] = useState([]);
@@ -17,7 +17,7 @@ const ScoreMOORA = (props) => {
   const [loading, setLoading] = useState(true);
   const [criteriaNames, setCriteriaNames] = useState({});
   const [productNames, setProductNames] = useState({});
-  const [responseTime, setResponseTime] = useState(null);
+  const [responseTimeMOORA, setResponseTimeMOORA] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -116,9 +116,9 @@ const ScoreMOORA = (props) => {
       navigate("/login");
       return;
     }
-    const savedResponseTime = localStorage.getItem("responseTime");
+    const savedResponseTime = localStorage.getItem("responseTimeMOORA");
     if (savedResponseTime) {
-      setResponseTime(savedResponseTime);
+      setResponseTimeMOORA(savedResponseTime);
     }
     const initializeData = async () => {
       setLoading(true);
@@ -217,8 +217,8 @@ const ScoreMOORA = (props) => {
         });
       }
 
-      setResponseTime(response.data.processingTime);
-      localStorage.setItem("responseTime", response.data.processingTime);
+      setResponseTimeMOORA(response.data.processingTime);
+      localStorage.setItem("responseTimeMOORA", response.data.processingTime);
 
       fetchScores();
       fetchFinalScores();
@@ -288,7 +288,7 @@ const ScoreMOORA = (props) => {
           showConfirmButton: false,
           timer: 1500,
         });
-        localStorage.removeItem("responseTime");
+        localStorage.removeItem("responseTimeMOORA");
         fetchScores();
         fetchFinalScores();
       }
@@ -371,7 +371,7 @@ const ScoreMOORA = (props) => {
             <strong>
               <i>Response Time</i>:
             </strong>{" "}
-            {responseTime ? `${responseTime}` : "0"}
+            {responseTimeMOORA ? `${responseTimeMOORA}` : "0"}
           </div>
         </div>
       </div>

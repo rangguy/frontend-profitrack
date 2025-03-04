@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import Input from "../../components/form/Input";
 
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = process.env.REACT_APP_API_LOCAL;
 
 const EditCriteria = (props) => {
   const { id } = useParams();

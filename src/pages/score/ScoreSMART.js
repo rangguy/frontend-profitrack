@@ -9,7 +9,7 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import Swal from "sweetalert2";
 
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = process.env.REACT_APP_API_LOCAL;
 
 const ScoreSMART = (props) => {
   const [scores, setScores] = useState([]);
@@ -17,7 +17,7 @@ const ScoreSMART = (props) => {
   const [loading, setLoading] = useState(true);
   const [criteriaNames, setCriteriaNames] = useState({});
   const [productNames, setProductNames] = useState({});
-  const [responseTime, setResponseTime] = useState(null);
+  const [responseTimeSMART, setResponseTimeSMART] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -116,9 +116,9 @@ const ScoreSMART = (props) => {
       navigate("/login");
       return;
     }
-    const savedResponseTime = localStorage.getItem("responseTime");
+    const savedResponseTime = localStorage.getItem("responseTimeSMART");
     if (savedResponseTime) {
-      setResponseTime(savedResponseTime);
+      setResponseTimeSMART(savedResponseTime);
     }
     const initializeData = async () => {
       setLoading(true);
@@ -217,8 +217,8 @@ const ScoreSMART = (props) => {
         });
       }
 
-      setResponseTime(response.data.processingTime);
-      localStorage.setItem("responseTime", response.data.processingTime);
+      setResponseTimeSMART(response.data.processingTime);
+      localStorage.setItem("responseTimeSMART", response.data.processingTime);
 
       fetchScores();
       fetchFinalScores();
@@ -288,7 +288,7 @@ const ScoreSMART = (props) => {
           showConfirmButton: false,
           timer: 1500,
         });
-        localStorage.removeItem("responseTime");
+        localStorage.removeItem("responseTimeSMART");
         fetchScores();
         fetchFinalScores();
       }
@@ -375,7 +375,7 @@ const ScoreSMART = (props) => {
             <strong>
               <i>Response Time</i>:
             </strong>{" "}
-            {responseTime ? `${responseTime}` : "0"}
+            {responseTimeSMART ? `${responseTimeSMART}` : "0"}
           </div>
         </div>
       </div>

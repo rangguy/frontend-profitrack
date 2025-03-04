@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 import { saveAs } from "file-saver";
 import Swal from "sweetalert2";
 
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = process.env.REACT_APP_API_LOCAL;
 
 const ReportDetail = (props) => {
   const [reports, setReports] = useState([]);
