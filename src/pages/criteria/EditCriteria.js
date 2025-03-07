@@ -47,8 +47,8 @@ const EditCriteria = (props) => {
       return "Tipe kriteria tidak boleh kosong";
     }
 
-    if (!["benefit", "cost"].includes(value)) {
-      return "Tipe kriteria harus benefit atau cost";
+    if (!["Benefit", "Cost"].includes(value)) {
+      return "Tipe kriteria harus Benefit atau Cost";
     }
 
     return "";
@@ -311,8 +311,8 @@ const EditCriteria = (props) => {
                       onChange={handleChange}
                     >
                       <option value="">Pilih Tipe Kriteria</option>
-                      <option value="benefit">Benefit</option>
-                      <option value="cost">Cost</option>
+                      <option value="Benefit">Benefit</option>
+                      <option value="Cost">Cost</option>
                     </select>
                     {errors.type && (
                       <div

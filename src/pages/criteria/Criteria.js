@@ -6,7 +6,7 @@ import "primeicons/primeicons.css";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const API_BASE_URL = process.env.REACT_APP_API_LOCAL;
@@ -87,11 +87,6 @@ const Category = (props) => {
               </ol>
             </div>
           </div>
-          {/* Add Button */}
-          <Link to="/criterias/add" className="btn btn-success mb-3">
-            <i className="fas fa-plus me-2 mx-1"></i>
-            Tambah Kriteria
-          </Link>
         </div>
       </div>
       <section className="content">

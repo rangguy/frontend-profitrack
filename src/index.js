@@ -14,7 +14,6 @@ import Product from "./pages/product/Product";
 import Criteria from "./pages/criteria/Criteria";
 import ErrorNotFound from "./pages/error/ErrorNotFound";
 import ErrorServer from "./pages/error/ErrorServer";
-import AddCriteria from "./pages/criteria/AddCriteria";
 import EditCriteria from "./pages/criteria/EditCriteria";
 import AddProduct from "./pages/product/AddProduct.js";
 import Method from "./pages/method/Method.js";
@@ -74,10 +73,6 @@ const router = createBrowserRouter([
           {
             path: "/criterias",
             element: <Criteria title="Data Kriteria" />,
-          },
-          {
-            path: "/criterias/add",
-            element: <AddCriteria title="Tambah Data Kriteria" />,
           },
           {
             path: "/criterias/:id",
