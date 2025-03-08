@@ -35,8 +35,8 @@ const EditCriteria = (props) => {
       return "Bobot harus berupa angka";
     }
 
-    if (numValue < 0 || numValue > 6) {
-      return "Masukkan bobot antara 1 - 5";
+    if (numValue < 0 || numValue > 1) {
+      return "Masukkan bobot antara 0 - 1";
     }
 
     return "";
@@ -173,7 +173,6 @@ const EditCriteria = (props) => {
       return;
     }
 
-    // Cek perubahan data menggunakan fungsi baru
     if (!checkIfDataChanged()) {
       Swal.fire({
         icon: "error",
@@ -240,116 +239,146 @@ const EditCriteria = (props) => {
           </div>
         </div>
       </div>
-      <section className="content px-3">
+
+      <section className="content px-3 pb-3">
         <form onSubmit={handleSubmit}>
-          <div className="row">
-            <div className="col">
-              <div className="card card-primary">
-                <div className="card-header">
-                  <h3 className="card-title">Form Data Kriteria</h3>
-                  <div className="card-tools">
-                    <button
-                      type="button"
-                      className="btn btn-tool"
-                      data-card-widget="collapse"
-                      title="Collapse"
-                    >
-                      <i className="fas fa-minus" />
-                    </button>
+          <div className="card card-primary">
+            <div className="card-header">
+              <h3 className="card-title">Form Data Produk</h3>
+              <div className="card-tools">
+                <button
+                  type="button"
+                  className="btn btn-tool"
+                  data-card-widget="collapse"
+                  title="Collapse"
+                >
+                  <i className="fas fa-minus" />
+                </button>
+              </div>
+            </div>
+            <div className="card-body">
+              <div className="form-group">
+                <label htmlFor="criteriaName" className="font-weight-bold">
+                  Nama Kriteria
+                </label>
+                <select
+                  id="criteriaName"
+                  className="form-control"
+                  value={formData.criteriaName}
+                  onChange={handleChange}
+                  disabled
+                >
+                  <option value="">{formData.criteriaName}</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="weight" className="font-weight-bold">
+                  Bobot
+                </label>
+                <div className="input-group">
+                  <Input
+                    type="number"
+                    id="weight"
+                    name="weight"
+                    className={`form-control ${
+                      errors.weight ? "is-invalid" : ""
+                    }`}
+                    value={formData.weight}
+                    onChange={handleChange}
+                    placeholder="Masukkan bobot (0-1)"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                  />
+                  <div className="input-group-append">
+                    <span className="input-group-text">
+                      <i className="fas fa-balance-scale"></i>
+                    </span>
                   </div>
                 </div>
-                <div className="card-body">
-                  <div className="form-group">
-                    <label htmlFor="criteriaName">Nama Kriteria</label>
-                    <select
-                      id="criteriaName"
-                      className="form-control"
-                      value={formData.criteriaName}
-                      onChange={handleChange}
-                      disabled
-                    >
-                      <option value="">{formData.criteriaName}</option>
-                    </select>
+                {errors.weight && (
+                  <div
+                    className="invalid-feedback"
+                    style={{ display: "block" }}
+                  >
+                    {errors.weight}
                   </div>
+                )}
+                <div className="alert alert-info mt-2">
+                  <i className="fas fa-info-circle mr-2"></i>
+                  <strong>Keterangan:</strong> Nilai bobot menunjukkan
+                  persentase kepentingan kriteria ini dibandingkan kriteria
+                  lainnya. Nilai yang dimasukkan merupakan bobot yang telah
+                  dinormalisasi, sehingga jumlah seluruh bobot kriteria harus
+                  sama dengan 1 (atau 100%). Contoh: bobot 0.25 berarti kriteria
+                  ini memiliki tingkat kepentingan sebesar 25% dari total
+                  keseluruhan kriteria.
+                </div>
+              </div>
 
-                  <div className="form-group">
-                    <label htmlFor="weight">Bobot</label>
-                    <Input
-                      type="number"
-                      id="weight"
-                      name="weight"
-                      className={`form-control ${
-                        errors.weight ? "is-invalid" : ""
-                      }`}
-                      value={formData.weight}
-                      onChange={handleChange}
-                      placeholder="Masukkan bobot (0-1)"
-                      min="0"
-                      max="1"
-                    />
-                    {errors.weight && (
-                      <div
-                        className="invalid-feedback"
-                        style={{ display: "block" }}
-                      >
-                        {errors.weight}
-                      </div>
-                    )}
-                    <small className="form-text text-muted">
-                      Bobot harus berupa bilangan bulat antara 0 dan 1
-                    </small>
+              <div className="form-group">
+                <label htmlFor="type" className="font-weight-bold">
+                  Tipe
+                </label>
+                <select
+                  id="type"
+                  className={`form-control ${errors.type ? "is-invalid" : ""}`}
+                  value={formData.type}
+                  onChange={handleChange}
+                >
+                  <option value="">Pilih Tipe Kriteria</option>
+                  <option value="Benefit">Benefit</option>
+                  <option value="Cost">Cost</option>
+                </select>
+                {errors.type && (
+                  <div
+                    className="invalid-feedback"
+                    style={{ display: "block" }}
+                  >
+                    {errors.type}
                   </div>
-
-                  <div className="form-group">
-                    <label htmlFor="type">Tipe</label>
-                    <select
-                      id="type"
-                      className={`form-control ${
-                        errors.type ? "is-invalid" : ""
-                      }`}
-                      value={formData.type}
-                      onChange={handleChange}
-                    >
-                      <option value="">Pilih Tipe Kriteria</option>
-                      <option value="Benefit">Benefit</option>
-                      <option value="Cost">Cost</option>
-                    </select>
-                    {errors.type && (
-                      <div
-                        className="invalid-feedback"
-                        style={{ display: "block" }}
-                      >
-                        {errors.type}
-                      </div>
-                    )}
-                    <small className="form-text text-muted">
-                      Benefit: Semakin tinggi nilai semakin baik
-                      <br />
-                      Cost: Semakin rendah nilai semakin baik
-                    </small>
+                )}
+                <div className="mt-2">
+                  <div className="badge badge-success p-2 mr-2">
+                    <i className="fas fa-arrow-up mr-1"></i> Benefit: Semakin
+                    tinggi nilai semakin baik
+                  </div>
+                  <div className="badge badge-danger p-2">
+                    <i className="fas fa-arrow-down mr-1"></i> Cost: Semakin
+                    rendah nilai semakin baik
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="row">
-            <div className="col-12">
-              <Link to="/criterias" className="btn btn-secondary">
-                Batal
-              </Link>
-              <button
-                type="submit"
-                className="btn btn-success float-right"
-                disabled={
-                  isLoading ||
-                  !!errors.weight ||
-                  !!errors.type ||
-                  !formData.weight ||
-                  !formData.type
-                }
-              >
-                {isLoading ? "Menyimpan..." : "Ubah Data Kriteria"}
-              </button>
+            <div className="card-footer">
+              <div className="d-flex justify-content-between">
+                <Link to="/criterias" className="btn btn-secondary">
+                  <i className="fas fa-arrow-left mr-1"></i> Batal
+                </Link>
+                <button
+                  type="submit"
+                  className="btn btn-success"
+                  disabled={
+                    isLoading ||
+                    !!errors.weight ||
+                    !!errors.type ||
+                    !formData.weight ||
+                    !formData.type
+                  }
+                >
+                  {isLoading ? (
+                    <>
+                      <i className="fas fa-spinner fa-spin mr-1"></i>{" "}
+                      Menyimpan...
+                    </>
+                  ) : (
+                    <>
+                      <i className="fas fa-save mr-1"></i> Ubah Data Kriteria
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </form>

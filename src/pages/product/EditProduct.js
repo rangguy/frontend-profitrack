@@ -7,43 +7,36 @@ import axios from "axios";
 
 const API_BASE_URL = process.env.REACT_APP_API_LOCAL;
 
+const units = ["Pcs", "Kg", "Liter", "Box"];
+
 const validationRules = {
-  name: (value) => {
-    if (!value?.trim()) return "Nama produk tidak boleh kosong";
-    return "";
-  },
+  name: (value) => (!value?.trim() ? "Nama produk tidak boleh kosong" : ""),
   purchase_cost: (value) => {
     if (!value) return "Harga beli tidak boleh kosong";
     const cost = parseFloat(value);
-    if (isNaN(cost) || cost <= 0) return "Harga beli harus lebih dari 0";
-    return "";
+    return isNaN(cost) || cost <= 0 ? "Harga beli harus lebih dari 0" : "";
   },
   price_sale: (value, formData) => {
     if (!value) return "Harga jual tidak boleh kosong";
     const price = parseFloat(value);
     const cost = parseFloat(formData.purchase_cost);
     if (isNaN(price) || price <= 0) return "Harga jual harus lebih dari 0";
-    if (price < cost)
-      return "Harga jual tidak boleh lebih kecil dari harga beli";
-    return "";
+    return price < cost
+      ? "Harga jual tidak boleh lebih kecil dari harga beli"
+      : "";
   },
-  unit: (value) => {
-    if (!value?.trim()) return "Unit tidak boleh kosong";
-    return "";
-  },
+  unit: (value) => (!value?.trim() ? "Satuan tidak boleh kosong" : ""),
   stock: (value) => {
     if (!value) return "Stok tidak boleh kosong";
     const stock = parseInt(value);
-    if (isNaN(stock) || stock < 0) return "Stok tidak boleh negatif";
-    return "";
+    return isNaN(stock) || stock < 0 ? "Stok tidak boleh negatif" : "";
   },
   sold: (value, formData) => {
     if (!value) return "Stok terjual tidak boleh kosong";
     const sold = parseInt(value);
     const stock = parseInt(formData.stock);
     if (isNaN(sold) || sold < 0) return "Stok terjual tidak boleh negatif";
-    if (sold > stock) return "Stok terjual tidak boleh lebih besar dari stok";
-    return "";
+    return sold > stock ? "Stok terjual tidak boleh lebih besar dari stok" : "";
   },
 };
 
@@ -62,7 +55,7 @@ const EditProduct = ({ title }) => {
   const [originalData, setOriginalData] = useState(null);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [isValid, setIsValid] = useState(false);
+  const [touchedFields, setTouchedFields] = useState({});
   const navigate = useNavigate();
 
   const fetchProductData = useCallback(async () => {
@@ -92,7 +85,6 @@ const EditProduct = ({ title }) => {
         sold: productData.sold.toString(),
       });
       setOriginalData(productData);
-      setIsValid(true);
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -107,21 +99,12 @@ const EditProduct = ({ title }) => {
     fetchProductData();
   }, [fetchProductData]);
 
-  const validateField = (name, value) => {
-    const validationRule = validationRules[name];
-    return validationRule ? validationRule(value, formData) : "";
-  };
+  const validateField = (name, value) =>
+    validationRules[name]?.(value, formData) || "";
 
   const validateForm = () => {
     const newErrors = {};
     let isValid = true;
-
-    const allFieldsFilled = Object.values(formData).every(
-      (value) => value !== ""
-    );
-    if (!allFieldsFilled) {
-      isValid = false;
-    }
 
     Object.keys(formData).forEach((key) => {
       const error = validateField(key, formData[key]);
@@ -131,9 +114,22 @@ const EditProduct = ({ title }) => {
       }
     });
 
+    setErrors(newErrors);
+    const allTouched = {};
+    Object.keys(formData).forEach((key) => {
+      allTouched[key] = true;
+    });
+    setTouchedFields(allTouched);
+
     if (
       originalData &&
-      JSON.stringify(originalData) === JSON.stringify(formData)
+      JSON.stringify({
+        ...originalData,
+        purchase_cost: originalData.purchase_cost.toString(),
+        price_sale: originalData.price_sale.toString(),
+        stock: originalData.stock.toString(),
+        sold: originalData.sold.toString(),
+      }) === JSON.stringify(formData)
     ) {
       Swal.fire({
         icon: "error",
@@ -143,36 +139,46 @@ const EditProduct = ({ title }) => {
       return false;
     }
 
-    setErrors(newErrors);
-    setIsValid(isValid);
     return isValid;
   };
 
   const handleChange = (e) => {
     const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
 
-    setFormData((prev) => {
-      const newFormData = { ...prev, [id]: value };
+    setTouchedFields((prev) => ({ ...prev, [id]: true }));
 
-      const error = validateField(id, value);
-      setErrors((prev) => ({ ...prev, [id]: error }));
+    const error = validateField(id, value);
+    setErrors((prev) => ({ ...prev, [id]: error }));
+  };
 
-      const allFieldsFilled = Object.values(newFormData).every(
-        (val) => val !== ""
-      );
-      const hasNoErrors = Object.values({ ...errors, [id]: error }).every(
-        (err) => !err
-      );
+  const handleBlur = (e) => {
+    const { id } = e.target;
+    setTouchedFields((prev) => ({ ...prev, [id]: true }));
 
-      setIsValid(allFieldsFilled && hasNoErrors);
-
-      return newFormData;
-    });
+    const error = validateField(id, formData[id]);
+    setErrors((prev) => ({ ...prev, [id]: error }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) {
+      const errorFields = Object.keys(errors).filter((key) => errors[key]);
+      if (errorFields.length > 0) {
+        const errorMessages = errorFields
+          .map((field) => `- ${errors[field]}`)
+          .join("\n");
+
+        Swal.fire({
+          icon: "error",
+          title: "Validasi Error",
+          text: "Mohon periksa kembali input Anda:",
+          html: `<div class="text-left">${errorMessages.replace(
+            /\n/g,
+            "<br>"
+          )}</div>`,
+        });
+      }
       return;
     }
 
@@ -213,6 +219,7 @@ const EditProduct = ({ title }) => {
     } catch (error) {
       const errorMessage =
         error.response?.data?.error ||
+        error.message ||
         "Terjadi kesalahan saat memperbarui data";
       Swal.fire({
         icon: "error",
@@ -223,6 +230,12 @@ const EditProduct = ({ title }) => {
       setIsLoading(false);
     }
   };
+
+  const shouldShowError = (fieldName) => {
+    return touchedFields[fieldName] && errors[fieldName];
+  };
+
+  console.log(formData.unit);
 
   return (
     <div>
@@ -252,67 +265,169 @@ const EditProduct = ({ title }) => {
           <div className="card card-primary">
             <div className="card-header">
               <h3 className="card-title">Form Data Produk</h3>
+              <div className="card-tools">
+                <button
+                  type="button"
+                  className="btn btn-tool"
+                  data-card-widget="collapse"
+                  title="Collapse"
+                >
+                  <i className="fas fa-minus" />
+                </button>
+              </div>
             </div>
             <div className="card-body">
-              {Object.keys(initialFormData).map((fieldId) => (
-                <div className="form-group" key={fieldId}>
-                  <label htmlFor={fieldId}>
-                    {fieldId === "unit"
-                      ? "Satuan"
-                      : fieldId
-                          .split("_")
-                          .map(
-                            (word) =>
-                              word.charAt(0).toUpperCase() + word.slice(1)
-                          )
-                          .join(" ")}
-                  </label>
-                  <Input
-                    type={
-                      ["purchase_cost", "price_sale", "stock", "sold"].includes(
-                        fieldId
-                      )
-                        ? "number"
-                        : "text"
-                    }
-                    id={fieldId}
-                    className={`form-control ${
-                      errors[fieldId] ? "is-invalid" : ""
-                    }`}
-                    value={formData[fieldId]}
-                    onChange={handleChange}
-                    placeholder={`Masukkan ${fieldId
-                      .split("_")
-                      .map(
-                        (word) => word.charAt(0).toUpperCase() + word.slice(1)
-                      )
-                      .join(" ")}`}
-                  />
-                  {errors[fieldId] && (
-                    <div
-                      className="invalid-feedback"
-                      style={{ display: "block" }}
-                    >
-                      {errors[fieldId]}
-                    </div>
-                  )}
+              <div className="row">
+                <div className="col-md-8">
+                  <div className="form-group">
+                    <label>Nama Produk</label>
+                    <Input
+                      type="text"
+                      id="name"
+                      className={`form-control ${
+                        shouldShowError("name") ? "is-invalid" : ""
+                      }`}
+                      value={formData.name}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      placeholder="Masukkan Nama Produk"
+                    />
+                    {shouldShowError("name") && (
+                      <div className="invalid-feedback d-block">
+                        {errors.name}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label>Satuan</label>
+                    <select
+                      id="unit"
+                      className={`form-control ${
+                        shouldShowError("unit") ? "is-invalid" : ""
+                      }`}
+                      value={formData.unit}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    >
+                      <option value="">Pilih Satuan</option>
+                      {units.map((unit) => (
+                        <option key={unit} value={unit}>
+                          {unit}
+                        </option>
+                      ))}
+                    </select>
+                    {shouldShowError("unit") && (
+                      <div className="invalid-feedback d-block">
+                        {errors.unit}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
 
-          <div className="row mt-3">
-            <div className="col-12">
-              <Link to="/products" className="btn btn-secondary">
-                Batal
-              </Link>
-              <button
-                type="submit"
-                className="btn btn-success float-right"
-                disabled={isLoading || !isValid}
-              >
-                {isLoading ? "Menyimpan..." : "Perbarui Data Produk"}
-              </button>
+              <div className="row">
+                <div className="col-md-3">
+                  <div className="form-group">
+                    <label>Harga Beli</label>
+                    <Input
+                      type="number"
+                      id="purchase_cost"
+                      className={`form-control ${
+                        shouldShowError("purchase_cost") ? "is-invalid" : ""
+                      }`}
+                      value={formData.purchase_cost}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      placeholder="Harga Beli"
+                    />
+                    {shouldShowError("purchase_cost") && (
+                      <div className="invalid-feedback d-block">
+                        {errors.purchase_cost}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="col-md-3">
+                  <div className="form-group">
+                    <label>Harga Jual</label>
+                    <Input
+                      type="number"
+                      id="price_sale"
+                      className={`form-control ${
+                        shouldShowError("price_sale") ? "is-invalid" : ""
+                      }`}
+                      value={formData.price_sale}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      placeholder="Harga Jual"
+                    />
+                    {shouldShowError("price_sale") && (
+                      <div className="invalid-feedback d-block">
+                        {errors.price_sale}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="col-md-3">
+                  <div className="form-group">
+                    <label>Stok</label>
+                    <Input
+                      type="number"
+                      id="stock"
+                      className={`form-control ${
+                        shouldShowError("stock") ? "is-invalid" : ""
+                      }`}
+                      value={formData.stock}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      placeholder="Jumlah Stok"
+                    />
+                    {shouldShowError("stock") && (
+                      <div className="invalid-feedback d-block">
+                        {errors.stock}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="col-md-3">
+                  <div className="form-group">
+                    <label>Stok Terjual</label>
+                    <Input
+                      type="number"
+                      id="sold"
+                      className={`form-control ${
+                        shouldShowError("sold") ? "is-invalid" : ""
+                      }`}
+                      value={formData.sold}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      placeholder="Jumlah Terjual"
+                    />
+                    {shouldShowError("sold") && (
+                      <div className="invalid-feedback d-block">
+                        {errors.sold}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="row mt-4">
+                <div className="col-md-12 text-right">
+                  <Link to="/products" className="btn btn-secondary mr-2">
+                    Batal
+                  </Link>
+                  <button
+                    type="submit"
+                    className="btn btn-success"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Menyimpan..." : "Perbarui Data Produk"}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </form>
