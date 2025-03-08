@@ -244,7 +244,7 @@ const EditCriteria = (props) => {
         <form onSubmit={handleSubmit}>
           <div className="card card-primary">
             <div className="card-header">
-              <h3 className="card-title">Form Data Produk</h3>
+              <h3 className="card-title">Form Data Kriteria</h3>
               <div className="card-tools">
                 <button
                   type="button"
