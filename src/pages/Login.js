@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
@@ -11,9 +11,30 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [remember, setRemember] = useState(false);
 
   const { setJwtToken } = useOutletContext();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const savedRemember = localStorage.getItem("rememberMe") === "true";
+    if (savedRemember) {
+      setUsername(localStorage.getItem("username") || "");
+      setPassword(localStorage.getItem("password") || "");
+      setRemember(true);
+    }
+  }, []);
+
+  const handleRememberChange = (event) => {
+    const isChecked = event.target.checked;
+    setRemember(isChecked);
+    localStorage.setItem("rememberMe", isChecked);
+
+    if (!isChecked) {
+      localStorage.removeItem("username");
+      localStorage.removeItem("password");
+    }
+  };
 
   const validateForm = () => {
     const newErrors = {};
@@ -78,6 +99,11 @@ const Login = () => {
             timerProgressBar: true,
           });
 
+          if (remember) {
+            localStorage.setItem("username", username);
+            localStorage.setItem("password", password);
+          }
+
           navigate("/");
         } else {
           Swal.fire({
@@ -123,6 +149,7 @@ const Login = () => {
                   }`}
                   placeholder="Masukkan username"
                   required
+                  value={username} // Pastikan input terisi
                   onChange={(event) => {
                     setUsername(event.target.value);
                     if (errors.username) {
@@ -145,6 +172,7 @@ const Login = () => {
                   }`}
                   placeholder="Masukkan password"
                   required
+                  value={password} // Pastikan input terisi
                   onChange={(event) => {
                     setPassword(event.target.value);
                     if (errors.password) {
@@ -161,7 +189,12 @@ const Login = () => {
               <div className="row mt-3">
                 <div className="col-8">
                   <div className="icheck-primary">
-                    <input type="checkbox" id="remember" />
+                    <input
+                      type="checkbox"
+                      id="remember"
+                      checked={remember}
+                      onChange={handleRememberChange}
+                    />
                     <label htmlFor="remember">Ingat Saya</label>
                   </div>
                 </div>
@@ -172,9 +205,6 @@ const Login = () => {
                 </div>
               </div>
             </form>
-            <p className="mb-1 mt-2">
-              <a href="/#">Lupa Password</a>
-            </p>
           </div>
         </div>
       </div>
