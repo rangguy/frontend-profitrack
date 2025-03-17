@@ -212,8 +212,11 @@ const ScoreMOORA = (props) => {
           icon: "success",
           title: "Berhasil!",
           text: "Nilai MOORA berhasil dihitung",
+          toast: true,
+          position: "top-end",
           showConfirmButton: false,
-          timer: 1500,
+          timer: 2000,
+          timerProgressBar: true,
         });
       }
 
@@ -227,6 +230,10 @@ const ScoreMOORA = (props) => {
 
       if (error.response) {
         switch (error.response.status) {
+          case 401:
+            errorMessage = "Login terlebih dahulu";
+            navigate("/login");
+            break;
           case 403:
             errorMessage =
               "Anda tidak memiliki izin untuk menghitung nilai MOORA ini.";
@@ -281,12 +288,15 @@ const ScoreMOORA = (props) => {
       );
 
       if (response.status === 200) {
-        await Swal.fire({
+        Swal.fire({
           icon: "success",
           title: "Berhasil!",
           text: "Nilai MOORA berhasil dihapus dan disimpan ke laporan.",
+          toast: true,
+          position: "top-end",
           showConfirmButton: false,
           timer: 1500,
+          timerProgressBar: true,
         });
         localStorage.removeItem("responseTimeMOORA");
         fetchScores();

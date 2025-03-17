@@ -69,11 +69,16 @@ const Login = () => {
           setJwtToken(token);
           Swal.fire({
             icon: "success",
-            title: "Berhasil",
+            title: "Berhasil!",
             text: "Berhasil Masuk!",
-          }).then(() => {
-            navigate("/");
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
           });
+
+          navigate("/");
         } else {
           Swal.fire({
             icon: "error",

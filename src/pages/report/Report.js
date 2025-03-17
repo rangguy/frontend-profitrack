@@ -110,8 +110,11 @@ const Report = (props) => {
             icon: "success",
             title: "Berhasil!",
             text: "Laporan berhasil dihapus",
+            toast: true,
+            position: "top-end",
             showConfirmButton: false,
-            timer: 1500,
+            timer: 2000,
+            timerProgressBar: true,
           });
         } catch (error) {
           let errorMessage = "Terjadi kesalahan saat menghapus Laporan.";

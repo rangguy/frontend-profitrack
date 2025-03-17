@@ -103,9 +103,12 @@ const CriteriaScore = (props) => {
         Swal.fire({
           icon: "success",
           title: "Berhasil!",
-          text: "Nilai Kriteria berhasil dihitung",
+          text: "Nilai Kriteria Berhasil Dihitung!",
+          toast: true,
+          position: "top-end",
           showConfirmButton: false,
-          timer: 1500,
+          timer: 2000,
+          timerProgressBar: true,
         });
       }
       fetchCriteriaScores();
@@ -154,9 +157,12 @@ const CriteriaScore = (props) => {
         Swal.fire({
           icon: "success",
           title: "Berhasil!",
-          text: "Update Nilai Kriteria berhasil dihitung",
+          text: "Update Nilai Kriteria Berhasil Dihitung!",
+          toast: true,
+          position: "top-end",
           showConfirmButton: false,
-          timer: 1500,
+          timer: 2000,
+          timerProgressBar: true,
         });
       }
       fetchCriteriaScores();
@@ -295,7 +301,8 @@ const CriteriaScore = (props) => {
 
       const formatNumber = (num) => num.toFixed(9).replace(/(\.0+|0+)$/, "");
 
-      transformedData[product_id][`criteria_${criteria_id}`] = formatNumber(scoreValue);
+      transformedData[product_id][`criteria_${criteria_id}`] =
+        formatNumber(scoreValue);
       criteriaSet.add(criteria_id);
     });
 

@@ -162,9 +162,16 @@ const AddProduct = (props) => {
 
       Swal.fire({
         icon: "success",
-        title: "Berhasil",
-        text: "Produk berhasil ditambahkan",
-      }).then(() => navigate("/products"));
+        title: "Berhasil!",
+        text: "Produk Berhasil Ditambahkan!",
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+
+      navigate("/products");
     } catch (error) {
       const errorMessage =
         error.response?.data?.error || error.message || "Terjadi Kesalahan";

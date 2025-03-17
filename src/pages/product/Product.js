@@ -95,8 +95,11 @@ const Product = (props) => {
             icon: "success",
             title: "Berhasil!",
             text: "Produk berhasil dihapus",
+            toast: true,
+            position: "top-end",
             showConfirmButton: false,
-            timer: 1500,
+            timer: 2000,
+            timerProgressBar: true,
           });
         } catch (error) {
           let errorMessage = "Terjadi kesalahan saat menghapus Produk.";
@@ -200,8 +203,13 @@ const Product = (props) => {
       setFile(null);
       Swal.fire({
         icon: "success",
-        title: "Success",
+        title: "Berhasil!",
         text: response.data.message,
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
       });
     } catch (error) {
       if (error.response && error.response.data && error.response.data.error) {

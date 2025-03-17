@@ -213,9 +213,15 @@ const EditProduct = ({ title }) => {
 
       Swal.fire({
         icon: "success",
-        title: "Berhasil",
+        title: "Berhasil!",
         text: "Produk berhasil diperbarui",
-      }).then(() => navigate("/products"));
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+      navigate("/products");
     } catch (error) {
       const errorMessage =
         error.response?.data?.error ||

@@ -198,11 +198,15 @@ const EditCriteria = (props) => {
       });
       Swal.fire({
         icon: "success",
-        title: "Berhasil",
-        text: "Kriteria Berhasil Diubah",
-      }).then(() => {
-        navigate("/criterias");
+        title: "Berhasil!",
+        text: "Berhasil Mengubah Data Kriteria!",
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
       });
+      navigate("/criterias");
     } catch (error) {
       const errorMessage =
         error.response?.data?.error || error.message || "Something went wrong!";
