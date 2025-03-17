@@ -102,8 +102,13 @@ const Account = (props) => {
 
       Swal.fire({
         icon: "success",
-        title: "Berhasil",
+        title: "Berhasil!",
         text: "Password berhasil diubah",
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
       });
 
       setFormData({

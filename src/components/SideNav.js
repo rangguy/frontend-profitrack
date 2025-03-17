@@ -53,9 +53,12 @@ const SideNav = () => {
           Swal.fire({
             icon: "success",
             title: "Berhasil!",
-            text: "Berhasil Keluar Aplikasi!",
+            text: "Berhasil keluar aplikasi",
+            toast: true,
+            position: "top-end",
             showConfirmButton: false,
-            timer: 1500,
+            timer: 3000,
+            timerProgressBar: true,
           });
 
           navigate("/login");
