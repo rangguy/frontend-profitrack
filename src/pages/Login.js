@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useOutletContext } from "react-router-dom";
-import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import Input from "../components/form/Input";
 
@@ -13,7 +12,6 @@ const Login = () => {
   const [errors, setErrors] = useState({});
   const [remember, setRemember] = useState(false);
 
-  const { setJwtToken } = useOutletContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -79,39 +77,36 @@ const Login = () => {
       const data = response.data;
 
       if (data.error) {
+        let errorMessage = data.error;
+        if (errorMessage === "Username atau password salah") {
+          errorMessage = "Username atau password yang Anda masukkan salah.";
+        } else if (errorMessage === "failed to read body") {
+          errorMessage = "Gagal membaca data, coba lagi.";
+        }
+
         Swal.fire({
           icon: "error",
           title: "Gagal Login",
-          text: data.message,
+          text: errorMessage,
         });
       } else {
-        const token = Cookies.get("token");
-        if (token) {
-          setJwtToken(token);
-          Swal.fire({
-            icon: "success",
-            title: "Berhasil!",
-            text: "Berhasil Masuk!",
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-          });
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil!",
+          text: "Berhasil Masuk!",
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+        });
 
-          if (remember) {
-            localStorage.setItem("username", username);
-            localStorage.setItem("password", password);
-          }
-
-          navigate("/");
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Token Error",
-            text: "Failed to retrieve token.",
-          });
+        if (remember) {
+          localStorage.setItem("username", username);
+          localStorage.setItem("password", password);
         }
+
+        navigate("/");
       }
     } catch (error) {
       let message = error.message;
