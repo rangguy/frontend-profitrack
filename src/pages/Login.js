@@ -79,33 +79,38 @@ const Login = () => {
       const data = response.data;
 
       if (data.error) {
+        let errorMessage = data.error;
+        if (errorMessage === "Username atau password salah") {
+          errorMessage = "Username atau password yang Anda masukkan salah.";
+        } else if (errorMessage === "failed to read body") {
+          errorMessage = "Gagal membaca data, coba lagi.";
+        }
+
         Swal.fire({
           icon: "error",
           title: "Gagal Login",
-          text: data.message,
+          text: errorMessage,
         });
       } else {
         const token = Cookies.get("token");
-        if (token) {
-          setJwtToken(token);
-          Swal.fire({
-            icon: "success",
-            title: "Berhasil!",
-            text: "Berhasil Masuk!",
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-          });
+        setJwtToken(token);
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil!",
+          text: "Berhasil Masuk!",
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+        });
 
-          if (remember) {
-            localStorage.setItem("username", username);
-            localStorage.setItem("password", password);
-          }
-
-          navigate("/");
+        if (remember) {
+          localStorage.setItem("username", username);
+          localStorage.setItem("password", password);
         }
+
+        navigate("/");
       }
     } catch (error) {
       let message = error.message;
