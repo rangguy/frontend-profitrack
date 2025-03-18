@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import Input from "../components/form/Input";
@@ -13,7 +13,6 @@ const Login = () => {
   const [errors, setErrors] = useState({});
   const [remember, setRemember] = useState(false);
 
-  const { setJwtToken } = useOutletContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -93,7 +92,6 @@ const Login = () => {
         });
       } else {
         const token = Cookies.get("token");
-        setJwtToken(token);
         Swal.fire({
           icon: "success",
           title: "Berhasil!",
