@@ -1,0 +1,36 @@
+# Node.js dependencies
+node_modules
+
+# Next.js build outputs
+/build
+out
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Git repository files
+.git
+.gitignore
+
+# Environment variables
+.env
+
+# Documentation and other miscellaneous files
+README.md
+*.md
+
+# Optional: Exclude Docker-related files if not needed inside the container
+# Uncomment the following lines if you don't want to include these files in the build context
+Dockerfile
+docker-compose.yml
+
+# Exclude any other directories or files that are not necessary for the build
+# For example, test directories, local scripts, etc.
+tests/
+scripts/
