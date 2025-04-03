@@ -75,7 +75,7 @@ const Account = (props) => {
     }
 
     setLoading(true);
-    const token = Cookies.get("token");
+    const token = localStorage.getItem("token");
     if (!token) {
       Swal.fire({
         icon: "error",
