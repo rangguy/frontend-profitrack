@@ -21,7 +21,7 @@ const CriteriaScore = (props) => {
   // Fetch all criteria names
   const fetchCriteriaNames = useCallback(async () => {
     try {
-      const token = Cookies.get("token");
+      const token = localStorage.getItem("token");
       const response = await axios.get(`${API_BASE_URL}/criterias`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -40,7 +40,7 @@ const CriteriaScore = (props) => {
   // Fetch all product names
   const fetchProductNames = useCallback(async () => {
     try {
-      const token = Cookies.get("token");
+      const token = localStorage.getItem("token");
       const response = await axios.get(`${API_BASE_URL}/products`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -59,7 +59,7 @@ const CriteriaScore = (props) => {
   // Fetch criteria scores
   const fetchCriteriaScores = useCallback(async () => {
     try {
-      const token = Cookies.get("token");
+      const token = localStorage.getItem("token");
       const response = await axios.get(`${API_BASE_URL}/criteria_scores`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -87,7 +87,7 @@ const CriteriaScore = (props) => {
   const handlePerhitungan = async () => {
     setLoading(true);
     try {
-      const token = Cookies.get("token");
+      const token = localStorage.getItem("token");
 
       const response = await axios.post(
         `${API_BASE_URL}/criteria_scores`,
@@ -141,7 +141,7 @@ const CriteriaScore = (props) => {
   const handleUpdatePerhitungan = async () => {
     setLoading(true);
     try {
-      const token = Cookies.get("token");
+      const token = localStorage.getItem("token");
 
       const response = await axios.put(
         `${API_BASE_URL}/criteria_scores`,
@@ -193,7 +193,7 @@ const CriteriaScore = (props) => {
   };
 
   const handleDelete = async (criteriaScoreId) => {
-    const token = Cookies.get("token");
+    const token = localStorage.getItem("token");
 
     if (!token) {
       Swal.fire({
@@ -233,9 +233,12 @@ const CriteriaScore = (props) => {
         Swal.fire({
           icon: "success",
           title: "Berhasil!",
-          text: "Nilai kriteria berhasil dihapus",
+          text: "Nilai Kriteria Berhasil Dihapus!",
+          toast: true,
+          position: "top-end",
           showConfirmButton: false,
-          timer: 1500,
+          timer: 2000,
+          timerProgressBar: true,
         });
         fetchCriteriaScores();
       }

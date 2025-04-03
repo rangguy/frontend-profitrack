@@ -85,33 +85,27 @@ const Login = () => {
           text: data.message,
         });
       } else {
-        const token = Cookies.get("token");
-        if (token) {
-          setJwtToken(token);
-          Swal.fire({
-            icon: "success",
-            title: "Berhasil!",
-            text: "Berhasil Masuk!",
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-          });
+        localStorage.setItem("token", data.token);
 
-          if (remember) {
-            localStorage.setItem("username", username);
-            localStorage.setItem("password", password);
-          }
+        setJwtToken(data.token);
 
-          navigate("/");
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Token Error",
-            text: "Failed to retrieve token.",
-          });
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil!",
+          text: "Berhasil Masuk!",
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+        });
+
+        if (remember) {
+          localStorage.setItem("username", username);
+          localStorage.setItem("password", password);
         }
+
+        navigate("/");
       }
     } catch (error) {
       let message = error.message;

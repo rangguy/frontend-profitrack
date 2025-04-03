@@ -60,7 +60,7 @@ const EditProduct = ({ title }) => {
 
   const fetchProductData = useCallback(async () => {
     try {
-      const token = Cookies.get("token");
+      const token = localStorage.getItem("token");
       if (!token) {
         Swal.fire({
           icon: "error",
@@ -183,7 +183,7 @@ const EditProduct = ({ title }) => {
     }
 
     setIsLoading(true);
-    const token = Cookies.get("token");
+    const token = localStorage.getItem("token");
 
     if (!token) {
       Swal.fire({

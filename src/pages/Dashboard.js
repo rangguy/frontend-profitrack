@@ -15,7 +15,8 @@ const Dashboard = (props) => {
   });
 
   useEffect(() => {
-    const jwtToken = Cookies.get("token");
+    const jwtToken = localStorage.getItem("token");
+    console.log(jwtToken);
     if (!jwtToken) {
       navigate("/login");
     }

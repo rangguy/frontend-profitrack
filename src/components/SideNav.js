@@ -12,7 +12,7 @@ const SideNav = () => {
   useEffect(() => {
     const getUserFromToken = () => {
       try {
-        const token = Cookies.get("token");
+        const token = localStorage.getItem("token");
         if (token) {
           const decoded = jwtDecode(token);
           setUsername(decoded.Username);
@@ -27,7 +27,7 @@ const SideNav = () => {
   }, []);
 
   const handleLogout = async () => {
-    const token = Cookies.get("token");
+    const token = localStorage.getItem("token");
     try {
       const result = await Swal.fire({
         title: "Konfirmasi Keluar Aplikasi",
@@ -49,6 +49,7 @@ const SideNav = () => {
           });
 
           Cookies.remove("token");
+          localStorage.removeItem("token");
 
           Swal.fire({
             icon: "success",

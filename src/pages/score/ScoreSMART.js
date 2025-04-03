@@ -23,7 +23,7 @@ const ScoreSMART = (props) => {
 
   const fetchCriteriaNames = useCallback(async () => {
     try {
-      const token = Cookies.get("token");
+      const token = localStorage.getItem("token");
       const response = await axios.get(`${API_BASE_URL}/criterias`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -41,7 +41,7 @@ const ScoreSMART = (props) => {
 
   const fetchProductNames = useCallback(async () => {
     try {
-      const token = Cookies.get("token");
+      const token = localStorage.getItem("token");
       const response = await axios.get(`${API_BASE_URL}/products`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -60,7 +60,7 @@ const ScoreSMART = (props) => {
   const fetchScores = useCallback(async () => {
     setLoading(true);
     try {
-      const token = Cookies.get("token");
+      const token = localStorage.getItem("token");
       const response = await axios.get(`${API_BASE_URL}/scores/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -84,7 +84,7 @@ const ScoreSMART = (props) => {
   const fetchFinalScores = useCallback(async () => {
     setLoading(true);
     try {
-      const token = Cookies.get("token");
+      const token = localStorage.getItem("token");
       const response = await axios.get(`${API_BASE_URL}/final_scores/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -106,7 +106,7 @@ const ScoreSMART = (props) => {
   }, [navigate, id]);
 
   useEffect(() => {
-    const token = Cookies.get("token");
+    const token = localStorage.getItem("token");
     if (!token) {
       Swal.fire({
         icon: "error",
@@ -196,7 +196,7 @@ const ScoreSMART = (props) => {
   const handlePerhitunganSMART = async () => {
     setLoading(true);
     try {
-      const token = Cookies.get("token");
+      const token = localStorage.getItem("token");
       const response = await axios.post(
         `${API_BASE_URL}/scores/${id}/SMART`,
         {},
@@ -275,7 +275,7 @@ const ScoreSMART = (props) => {
         return;
       }
 
-      const token = Cookies.get("token");
+      const token = localStorage.getItem("token");
 
       const response = await axios.post(
         `${API_BASE_URL}/final_scores/${id}`,

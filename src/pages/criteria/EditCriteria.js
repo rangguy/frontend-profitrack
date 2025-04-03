@@ -56,8 +56,8 @@ const EditCriteria = (props) => {
 
   useEffect(() => {
     const fetchCriteriaDetail = async () => {
-      const token = Cookies.get("token");
-
+      const token = localStorage.getItem("token");
+      
       if (!token) {
         Swal.fire({
           icon: "error",

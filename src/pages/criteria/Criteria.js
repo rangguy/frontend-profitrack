@@ -19,7 +19,7 @@ const Category = (props) => {
   const fetchCriterias = useCallback(async () => {
     setLoading(true);
     try {
-      const token = Cookies.get("token");
+      const token = localStorage.getItem("token");
       const response = await axios.get(`${API_BASE_URL}/criterias`, {
         headers: {
           Authorization: `Bearer ${token}`,

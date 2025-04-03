@@ -57,7 +57,7 @@ const AddProduct = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = Cookies.get("token");
+    const token = localStorage.getItem("token");
     if (!token) {
       Swal.fire({
         icon: "error",
@@ -133,7 +133,7 @@ const AddProduct = (props) => {
     }
 
     setIsLoading(true);
-    const token = Cookies.get("token");
+    const token = localStorage.getItem("token");
     if (!token) {
       Swal.fire({
         icon: "error",

@@ -22,7 +22,7 @@ const Product = (props) => {
   const fetchProducts = useCallback(async () => {
     setLoading(true);
     try {
-      const token = Cookies.get("token");
+      const token = localStorage.getItem("token");
       const response = await axios.get(`${API_BASE_URL}/products`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -58,7 +58,7 @@ const Product = (props) => {
   };
 
   const handleDelete = async (productId) => {
-    const token = Cookies.get("token");
+    const token = localStorage.getItem("token");
 
     if (!token) {
       Swal.fire({
@@ -143,7 +143,7 @@ const Product = (props) => {
 
   const handleExport = async () => {
     try {
-      const token = Cookies.get("token");
+      const token = localStorage.getItem("token");
       const response = await axios.get(`${API_BASE_URL}/products/export`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -184,7 +184,7 @@ const Product = (props) => {
     }
 
     try {
-      const token = Cookies.get("token");
+      const token = localStorage.getItem("token");
       const formData = new FormData();
       formData.append("file", file);
 

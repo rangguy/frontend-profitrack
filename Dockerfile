@@ -5,15 +5,19 @@ FROM node:18-alpine AS build
 WORKDIR /app
 
 # Copy package.json dan package-lock.json ke dalam container
-COPY package.json ./
+COPY package.json package-lock.json ./
 
 # Install dependencies
 RUN npm install
 
-# Copy semua file ke dalam container
+# Copy semua file ke dalam container setelah npm install selesai
 COPY . .
 
-# Build aplikasi
+# Set ARG untuk build-time environment variables
+ARG REACT_APP_API_LOCAL
+ENV REACT_APP_API_LOCAL=$REACT_APP_API_LOCAL
+
+# Build aplikasi dengan environment variable
 RUN npm run build
 
 # Gunakan image nginx untuk menjalankan aplikasi

@@ -2,11 +2,12 @@ version: '3.8'
 
 services:
   frontend-profitrack:
-    build: .
+    build:
+      context: .
+      args:
+        REACT_APP_API_LOCAL: http://host.docker.internal:8080/api
     image: frontend-profitrack:latest
     container_name: frontend-profitrack
     restart: on-failure
     ports:
       - "3000:80"
-    environment:
-      - REACT_APP_API_LOCAL=http://host.docker.internal:8080/api

@@ -18,7 +18,7 @@ const ReportDetail = (props) => {
   useEffect(() => {
     const fetchReportData = async () => {
       try {
-        const token = Cookies.get("token");
+        const token = localStorage.getItem("token");
         if (!token) {
           Swal.fire({
             icon: "error",

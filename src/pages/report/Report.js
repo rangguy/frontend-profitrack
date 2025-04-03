@@ -16,7 +16,7 @@ const Report = (props) => {
   const fetchReports = useCallback(async () => {
     setLoading(true);
     try {
-      const token = Cookies.get("token");
+      const token = localStorage.getItem("token");
       const response = await axios.get(`${API_BASE_URL}/reports`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -54,7 +54,7 @@ const Report = (props) => {
 
   const fetchMethodName = async (methodId) => {
     try {
-      const token = Cookies.get("token");
+      const token = localStorage.getItem("token");
       const response = await axios.get(`${API_BASE_URL}/methods/${methodId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -73,7 +73,7 @@ const Report = (props) => {
   };
 
   const handleDeleteReport = async (reportId) => {
-    const token = Cookies.get("token");
+    const token = localStorage.getItem("token");
 
     if (!token) {
       Swal.fire({
