@@ -111,7 +111,7 @@ const SideNav = () => {
               />
             </div>
             <div className="info">
-              <Link to="/profile" className="d-block">
+              <Link to="/account" className="d-block">
                 {username}
               </Link>
             </div>
