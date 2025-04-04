@@ -5,6 +5,8 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import Swal from "sweetalert2";
 
+const API_BASE_URL = process.env.REACT_APP_API_LOCAL;
+
 const SideNav = () => {
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
@@ -42,7 +44,7 @@ const SideNav = () => {
 
       if (result.isConfirmed) {
         try {
-          await axios.get(`http://localhost:8080/api/logout`, {
+          await axios.get(`${API_BASE_URL}/logout`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
