@@ -16,31 +16,35 @@ const Dashboard = (props) => {
 
   useEffect(() => {
     const jwtToken = localStorage.getItem("token");
-    console.log(jwtToken);
+
+    const getToken = Cookies.get("token");
+    console.log("Coba token dari cookies: ", getToken);
+
     if (!jwtToken) {
       navigate("/login");
     }
 
     const fetchCounts = async () => {
       try {
-        const [productsRes, criteriaRes, reportsRes, usersRes] = await Promise.all([
-          axios.get(`${API_BASE_URL}/products/count`, {
-            headers: { Authorization: `Bearer ${jwtToken}` },
-            withCredentials: true,
-          }),
-          axios.get(`${API_BASE_URL}/criterias/count`, {
-            headers: { Authorization: `Bearer ${jwtToken}` },
-            withCredentials: true,
-          }),
-          axios.get(`${API_BASE_URL}/reports/count`, {
-            headers: { Authorization: `Bearer ${jwtToken}` },
-            withCredentials: true,
-          }),
-          axios.get(`${API_BASE_URL}/user/count`, {
-            headers: { Authorization: `Bearer ${jwtToken}` },
-            withCredentials: true,
-          }),
-        ]);
+        const [productsRes, criteriaRes, reportsRes, usersRes] =
+          await Promise.all([
+            axios.get(`${API_BASE_URL}/products/count`, {
+              headers: { Authorization: `Bearer ${jwtToken}` },
+              withCredentials: true,
+            }),
+            axios.get(`${API_BASE_URL}/criterias/count`, {
+              headers: { Authorization: `Bearer ${jwtToken}` },
+              withCredentials: true,
+            }),
+            axios.get(`${API_BASE_URL}/reports/count`, {
+              headers: { Authorization: `Bearer ${jwtToken}` },
+              withCredentials: true,
+            }),
+            axios.get(`${API_BASE_URL}/user/count`, {
+              headers: { Authorization: `Bearer ${jwtToken}` },
+              withCredentials: true,
+            }),
+          ]);
 
         setCounts({
           products: productsRes.data.count,

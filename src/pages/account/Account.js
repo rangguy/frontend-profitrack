@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
 import Input from "../../components/form/Input";
@@ -19,10 +18,6 @@ const Account = (props) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-
-    const getToken = Cookies.get("token")
-    console.log("Coba token dari cookies: ", getToken)
-
     if (!token) {
       Swal.fire({
         icon: "error",

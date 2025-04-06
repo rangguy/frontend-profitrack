@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import Input from "../components/form/Input";
 

@@ -3,7 +3,6 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import Cookies from "js-cookie";
 import { saveAs } from "file-saver";
 import Swal from "sweetalert2";
 

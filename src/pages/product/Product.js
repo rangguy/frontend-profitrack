@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from "react";
-import Cookies from "js-cookie";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { FileUpload } from "primereact/fileupload";
