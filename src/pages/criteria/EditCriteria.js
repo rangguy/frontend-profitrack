@@ -161,7 +161,7 @@ const EditCriteria = (props) => {
       return;
     }
 
-    const token = Cookies.get("token");
+    const token = localStorage.getItem("token");
 
     if (!token) {
       Swal.fire({
