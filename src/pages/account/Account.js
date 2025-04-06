@@ -19,6 +19,10 @@ const Account = (props) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+
+    const getToken = Cookies.get("token")
+    console.log("Coba token dari cookies: ", getToken)
+
     if (!token) {
       Swal.fire({
         icon: "error",
