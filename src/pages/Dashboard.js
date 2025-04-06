@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 import axios from "axios";
 
 const API_BASE_URL = process.env.REACT_APP_API_LOCAL;
@@ -16,9 +15,6 @@ const Dashboard = (props) => {
 
   useEffect(() => {
     const jwtToken = localStorage.getItem("token");
-
-    const getToken = Cookies.get("token");
-    console.log("Coba token dari cookies: ", getToken);
 
     if (!jwtToken) {
       navigate("/login");
