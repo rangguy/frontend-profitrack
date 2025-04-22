@@ -77,6 +77,29 @@ const Dashboard = (props) => {
         </div>
       </div>
 
+      <div className="mb-3 mx-2">
+        <div>
+          <strong>Sistem Pendukung Keputusan (SPK)</strong> ini dapat
+          melakukan <strong>penilaian kinerja produk</strong> dengan
+          menggunakan dua metode, yaitu <strong>SMART</strong>{" "}
+          (<i>Simple Multi Attribute Rating Technique</i>) dan <strong>MOORA</strong>{" "}
+          (<i>Multi-Objective Optimization by Ratio Analysis</i>).
+          Penilaian dilakukan berdasarkan tiga kriteria utama dari perspektif
+          keuangan:
+          <ul className="mb-0">
+            <li>
+              <strong>Return On Investment (ROI)</strong> – Mengukur persentase keuntungan yang diperoleh dibandingkan dengan investasi.
+            </li>
+            <li>
+              <strong>Net Profit Margin</strong> – Mengukur persentase laba terhadap penjualan.
+            </li>
+            <li>
+              <strong>Rasio Efisiensi</strong> – Mengukur persentase antara pengeluaran terhadap pendapatan.
+            </li>
+          </ul>
+        </div>
+      </div>
+
       {/* Main Content */}
       <section className="content">
         <div className="container-fluid">
