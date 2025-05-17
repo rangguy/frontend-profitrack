@@ -418,20 +418,19 @@ const EditProduct = ({ title }) => {
                   </div>
                 </div>
               </div>
-
-              <div className="row mt-4">
-                <div className="col-md-12 text-right">
-                  <Link to="/products" className="btn btn-secondary mr-2">
-                    Batal
-                  </Link>
-                  <button
-                    type="submit"
-                    className="btn btn-success"
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "Menyimpan..." : "Perbarui Data Produk"}
-                  </button>
-                </div>
+            </div>
+            <div className="card-footer">
+              <div className="d-flex justify-content-between">
+                <Link to="/products" className="btn btn-secondary">
+                  <i className="fas fa-arrow-left mr-1"></i> Batal
+                </Link>
+                <button
+                  type="submit"
+                  className="btn btn-success"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Menyimpan..." : "Perbarui Data Produk"}
+                </button>
               </div>
             </div>
           </div>

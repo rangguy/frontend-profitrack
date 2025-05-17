@@ -242,7 +242,7 @@ const AddProduct = (props) => {
                       value={formData.name}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      placeholder="Masukkan Nama Produk"
+                      placeholder="Produk A"
                     />
                     {shouldShowError("name") && (
                       <div className="invalid-feedback d-block">
@@ -292,7 +292,7 @@ const AddProduct = (props) => {
                       value={formData.purchase_cost}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      placeholder="Harga Beli"
+                      placeholder="12000"
                     />
                     {shouldShowError("purchase_cost") && (
                       <div className="invalid-feedback d-block">
@@ -313,7 +313,7 @@ const AddProduct = (props) => {
                       value={formData.price_sale}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      placeholder="Harga Jual"
+                      placeholder="13000"
                     />
                     {shouldShowError("price_sale") && (
                       <div className="invalid-feedback d-block">
@@ -334,7 +334,7 @@ const AddProduct = (props) => {
                       value={formData.stock}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      placeholder="Jumlah Stok"
+                      placeholder="200"
                     />
                     {shouldShowError("stock") && (
                       <div className="invalid-feedback d-block">
@@ -355,7 +355,7 @@ const AddProduct = (props) => {
                       value={formData.sold}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      placeholder="Jumlah Terjual"
+                      placeholder="100"
                     />
                     {shouldShowError("sold") && (
                       <div className="invalid-feedback d-block">
@@ -365,20 +365,42 @@ const AddProduct = (props) => {
                   </div>
                 </div>
               </div>
-
-              <div className="row mt-4">
-                <div className="col-md-12 text-right">
-                  <Link to="/products" className="btn btn-secondary mr-2">
-                    Batal
-                  </Link>
-                  <button
-                    type="submit"
-                    className="btn btn-success"
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "Menyimpan..." : "Simpan Data Produk"}
-                  </button>
-                </div>
+            </div>
+            <div className="card-footer">
+              <div className="d-flex justify-content-between">
+                <Link to="/products" className="btn btn-secondary">
+                  <i className="fas fa-arrow-left mr-1"></i> Batal
+                </Link>
+                <button
+                  type="submit"
+                  className="btn btn-success"
+                  disabled={
+                    isLoading ||
+                    !!errors.name ||
+                    !!errors.purchase_cost ||
+                    !!errors.price_sale ||
+                    !!errors.unit ||
+                    !!errors.stock ||
+                    !!errors.sold ||
+                    !formData.name ||
+                    !formData.purchase_cost ||
+                    !formData.price_sale ||
+                    !formData.unit ||
+                    !formData.stock ||
+                    !formData.sold
+                  }
+                >
+                  {isLoading ? (
+                    <>
+                      <i className="fas fa-spinner fa-spin mr-1"></i>{" "}
+                      Menyimpan...
+                    </>
+                  ) : (
+                    <>
+                      <i className="fas fa-save mr-1"></i> Simpan Data Produk
+                    </>
+                  )}
+                </button>
               </div>
             </div>
           </div>

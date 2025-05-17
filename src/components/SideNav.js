@@ -90,13 +90,13 @@ const SideNav = () => {
         {/* Brand Logo */}
         <a href="/" className="brand-link">
           <img
-            src="/dist/img/AdminLTELogo.png"
+            src="/dist/img/H.png"
             alt="AdminLTE"
             className="brand-image img-circle elevation-3"
             style={{ opacity: ".8" }}
           />
           <span className="brand-text font-weight-light">
-            SPK - SMART & MOORA
+            Toko Hety
           </span>
         </a>
         {/* Sidebar */}
