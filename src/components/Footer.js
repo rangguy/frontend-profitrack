@@ -1,19 +1,31 @@
 import React from "react";
 
-const  Footer = () => {
+const Footer = () => {
   return (
-    <div>
-      <footer className="main-footer">
-        <strong>
-          Copyright © 2025
-          <a href="https://rangguy.github.io/rangga/" target="blank"> Rangga Dwi Mahendra</a>. 
-        </strong>
-         All rights reserved.
-        <div className="float-right d-none d-sm-inline-block">
-          <b>Version</b> 1.0.0
+    <footer className="main-footer bg-light text-muted py-3 border-top mt-auto">
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <div className="mb-2 mb-md-0">
+          <strong>
+            &copy; 2025{" "}
+            <a
+              href="https://rangguy.github.io/rangga/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-decoration-none"
+            >
+              Rangga Dwi Mahendra
+            </a>
+          </strong>{" "}
+          &mdash; All rights reserved.
         </div>
-      </footer>
-    </div>
+        <div>
+          <span className="text-muted">
+            <strong>Version</strong> 1.0.0
+          </span>
+        </div>
+      </div>
+    </footer>
   );
-}
+};
+
 export default Footer;

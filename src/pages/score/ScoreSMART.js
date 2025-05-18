@@ -355,8 +355,8 @@ const ScoreSMART = (props) => {
               </ol>
             </div>
           </div>
-          <div className="d-flex justify-content-between align-items-center mb-2">
-            <div>
+          <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2 mb-2">
+            <div className="d-flex flex-wrap align-items-center gap-2">
               <Link className="btn btn-secondary" to="/methods">
                 <i className="fas fa-arrow-left me-2 mx-1"></i>
                 Kembali

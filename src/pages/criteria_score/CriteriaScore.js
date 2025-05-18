@@ -347,7 +347,7 @@ const CriteriaScore = (props) => {
               </ol>
             </div>
           </div>
-          <div className="d-flex flex-wrap mb-2">
+          <div className="d-flex flex-sm-wrap flex-nowrap overflow-auto mb-2">
             <button
               className="btn btn-success me-2"
               onClick={handlePerhitungan}
