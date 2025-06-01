@@ -1,5 +1,7 @@
 # 📊 Sistem Pendukung Keputusan – Penilaian Kinerja Produk dengan Metode SMART dan MOORA
 
+🌐 **Demo Website**: [https://frontend-profitrack.vercel.app](https://frontend-profitrack.vercel.app)
+
 Proyek ini merupakan implementasi **Sistem Pendukung Keputusan (SPK)** untuk membantu mengevaluasi kinerja produk berdasarkan perspektif keuangan. Sistem ini menggunakan dua metode, yaitu **SMART (Simple Multi-Attribute Rating Technique)** dan **MOORA (Multi-Objective Optimization on the Basis of Ratio Analysis)**.
 
 ---
