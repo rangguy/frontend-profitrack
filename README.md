@@ -1,3 +1,38 @@
+📊 Sistem Pendukung Keputusan – Penilaian Kinerja Produk dengan Metode SMART dan MOORA
+Proyek ini merupakan implementasi Sistem Pendukung Keputusan (SPK) untuk membantu mengevaluasi kinerja produk berdasarkan perspektif keuangan. Sistem ini menggunakan dua metode, yaitu SMART (Simple Multi-Attribute Rating Technique) dan MOORA (Multi-Objective Optimization on the Basis of Ratio Analysis).
+
+🎯 Tujuan
+Membantu pelaku usaha, analis keuangan, atau manajer produk dalam mengambil keputusan berbasis data mengenai performa produk, dengan mengandalkan tiga kriteria utama.
+
+📌 Kriteria Penilaian
+Return On Investment (ROI)
+Mengukur seberapa besar keuntungan yang diperoleh dibandingkan dengan investasi yang dikeluarkan.
+
+Net Profit Margin (NPM)
+Mengukur persentase keuntungan bersih terhadap total penjualan.
+
+Rasio Efisiensi
+Mengukur tingkat efisiensi dengan membandingkan pengeluaran terhadap pendapatan yang dihasilkan.
+
+⚙️ Metode yang Digunakan
+SMART (Simple Multi-Attribute Rating Technique)
+Merupakan metode pengambilan keputusan yang menggunakan pembobotan kriteria untuk menghasilkan skor akhir dari setiap alternatif (produk).
+
+MOORA (Multi-Objective Optimization on the Basis of Ratio Analysis)
+Metode optimasi yang menghitung rasio antara nilai kriteria dan nilai maksimum, lalu membandingkan total nilai benefit dan cost untuk menentukan peringkat alternatif.
+
+🛠️ Fitur Sistem
+Input dan manajemen data produk dan kriteria
+Perhitungan otomatis menggunakan metode SMART dan MOORA
+Perbandingan hasil antar metode
+Visualisasi hasil evaluasi dan peringkat produk
+
+🚀 Teknologi
+Backend: Go, https://github.com/rangguy/backend-profitrack
+Frontend: React
+Database: PostgreSQL
+Containerization: Docker
+
 a.	Tampilan Halaman Login
 Pada halaman login, admin harus memasukkan username dan password untuk mengakses sistem.
 
