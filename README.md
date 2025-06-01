@@ -1,70 +1,65 @@
-# Getting Started with Create React App
+a.	Tampilan Halaman Login
+Pada halaman login, admin harus memasukkan username dan password untuk mengakses sistem.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![image](https://github.com/user-attachments/assets/9ee3ca97-4541-46a3-b8ca-f0e8490fb05e)
 
-## Available Scripts
+b.	Tampilan Halaman Dashboard 
+Pada halaman dashboard admin dapat melihat jumlah data produk, jumlah data kriteria, jumlah data laporan, dan juga jumlah data user. Selain itu admin dapat menuju ke halaman yang diinginkan dengan mengklik tulisan “Lihat Detail”.
+ 
+![image](https://github.com/user-attachments/assets/7962241c-c9f9-49e1-bd0e-2e937de4c157)
 
-In the project directory, you can run:
+c.	Tampilan Halaman Akun
+Di halaman ini admin dapat merubah password dengan mengisi data password lama dan password baru.
+ 
+![image](https://github.com/user-attachments/assets/5fea70c2-112f-4bc0-9503-2e3c6933a338)
 
-### `npm start`
+d.	Tampilan Halaman Data Kriteria
+Halaman kriteria menampilkan data kriteria yang tersedia pada sistem.
+ 
+![image](https://github.com/user-attachments/assets/1d812a0a-99eb-4b44-b6f7-63e44a1619fb)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+e.	Tampilan Halaman Ubah Data Kriteria
+Pada halaman ubah data kriteria admin dapat mengubah data kriteria berupa bobot dan tipe dari kriteria.
+ 
+![image](https://github.com/user-attachments/assets/40fe0eef-01e0-4e41-8b45-edd62cb6faf4)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+f.	Tampilan Halaman Data Produk
+Pada halaman ini, admin bisa melihat semua data produk yang tersimpan dalam sistem. Selain itu, admin dapat mengunduh data dalam format Excel, menambahkan beberapa produk sekaligus melalui fitur impor dan ekspor Excel, serta menghapus produk yang tidak diperlukan.
+ 
+![image](https://github.com/user-attachments/assets/0869cb8f-2c83-4dad-98ff-b8857d50022c)
 
-### `npm test`
+g.	Tampilan Halaman Tambah Data Produk
+Di halaman ini admin dapat menambahkan data produk ke dalam sistem. Menambahkan data produk selain di halaman ini dapat dilakukan pada halaman sebelumnya dengan menggunakan fitur impor Excel.
+ 
+![image](https://github.com/user-attachments/assets/dad89168-43fa-4403-a068-758c0824de0c)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+h.	Tampilan Halaman Ubah Data Produk
+Pada halaman ini, admin dapat mengubah data produk.
+ 
+![image](https://github.com/user-attachments/assets/995fcfc7-303a-48b1-a5c9-2fabdda002d6)
 
-### `npm run build`
+i.	Tampilan Halaman Data Nilai Kriteria
+Di halaman ini, admin dapat melihat data nilai kriteria yang tersimpan dalam sistem, menghitung nilai kriteria, serta memperbarui nilainya jika diperlukan.
+ 
+![image](https://github.com/user-attachments/assets/e5954512-867d-4c5c-a616-cefeabf0208d)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+j.	Tampilan Halaman Hasil Perhitungan
+Pada halaman hasil perhitungan menampilkan data metode yang tersedia.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+![image](https://github.com/user-attachments/assets/957ee8f3-b6fe-41d8-bff2-152bd080f065)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+k.	Tampilan Halaman Hasil Perhitungan SMART dan MOORA
+Di halaman hasil perhitungan ini, admin dapat menjalankan perhitungan metode dan menyimpan nilai akhir ke dalam laporan sekaligus menghapus data hasil perhitungan.
+ 
+![image](https://github.com/user-attachments/assets/cde8fb4a-d0f2-4173-85b0-50c21b5a1e08)
 
-### `npm run eject`
+l.	Halaman Laporan
+Pada halaman laporan, admin dapat melihat dan menghapus data laporan yang telah dibuat sebelumnya.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+![image](https://github.com/user-attachments/assets/8f90bf56-d877-45d1-9461-ecd13feaf135)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+m.	Halaman Detail Laporan SMART dan MOORA
+Di halaman detail laporan ini, admin dapat melihat informasi lengkap dari laporan yang telah dibuat, termasuk peringkat, nilai akhir, dan detail data produk.
+ 
+![image](https://github.com/user-attachments/assets/aa5ea649-00b7-4d65-8035-fc960fec41db)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
